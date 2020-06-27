@@ -1,1 +1,1 @@
-#include <dialogs.h>
+#include "dialogs.h"

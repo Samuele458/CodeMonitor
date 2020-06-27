@@ -24,13 +24,19 @@
 #include <QMainWindow>
 #include <QDialog>
 
+
+//General window class
 class GeneralWindow : public QMainWindow {
     Q_OBJECT
 
     public:
+        GeneralWindow( QWidget* parent = nullptr );
+        ~GeneralWindow();
 
     protected:
-
+        virtual void apply_settings();
+        virtual void apply_slots();
+        virtual bool
 };
 
 #endif
