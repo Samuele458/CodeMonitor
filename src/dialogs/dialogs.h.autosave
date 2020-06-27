@@ -34,7 +34,7 @@ class GeneralWindow : public QMainWindow {
         ~GeneralWindow();
         
     protected:
-        virtual bool apply_settings();
+        virtual void apply_settings();
         virtual void apply_slots();
         virtual bool
 };
