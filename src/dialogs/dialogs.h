@@ -14,18 +14,15 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 	     --  CONTACTS --
- *  Email:		samuele.girgenti458@gmail.com
- *  Github: 	https://github.com/Samuele458
+ *  Email:      samuele.girgenti458@gmail.com
+ *  Github:     https://github.com/Samuele458
  */
-
-#ifndef DIALOGS_H
-#define DIALOGS_H
 
 #include <QMainWindow>
 #include <QDialog>
 
 
-//General window class
+//General window used for main window
 class GeneralWindow : public QMainWindow {
     Q_OBJECT
 
@@ -33,10 +30,19 @@ class GeneralWindow : public QMainWindow {
         GeneralWindow( QWidget* parent = nullptr );
         ~GeneralWindow();
 
+        //apply current settings (like language, teme, and other general settings
+        virtual void apply_settings() { }
+
+        //connect all principal widgets signals to the corresponding slots
+        virtual void apply_slots() { }
+
+        //configure the User Interface: allocating Widgets, layout, etc.
+        virtual void setup_ui() { }
     protected:
-        virtual void apply_settings();
-        virtual void apply_slots();
-        virtual bool
+
 };
 
-#endif
+
+
+
+
