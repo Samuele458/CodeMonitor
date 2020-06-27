@@ -19,14 +19,24 @@
  */
 
 #include <QApplication>
+#include <QFile>
+#include <QDir>
 #include "dialogs/mainwindow.h"
+#include "dialogs/dialogs.h"
 
 // main function
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
-    MainWindow w;
+    GeneralWindow w ;
+
+    //setting up stylesheets
+    QFile File(":/themes/default_style.qss");
+    File.open(QFile::ReadOnly);
+    QString StyleSheet = QLatin1String(File.readAll());
+    qApp->setStyleSheet( StyleSheet );
+
     w.show();
     return a.exec();
 

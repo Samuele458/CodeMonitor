@@ -1,0 +1,28 @@
+
+QPushButton {
+    background-color: rgb(103,103,103);
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 3px;
+    border-color: beige;
+    font: bold 14px;
+    min-width: 10em;
+    padding: 6px;
+    color: white;
+}
+
+QLineEdit {
+    border: 2px solid gray;
+    border-radius: 5px;
+    padding: 0 8px;
+    background: white;
+    selection-background-color: darkgray;
+}
+
+QLabel {
+    color: white;
+}
+
+QMainWindow {
+    background-color: white;
+}

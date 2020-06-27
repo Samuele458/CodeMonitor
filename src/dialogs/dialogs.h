@@ -20,16 +20,21 @@
 
 #include <QMainWindow>
 #include <QDialog>
+#include <QString>
+#include "common/managers.h"
 
 
-//General window used for main window
-class GeneralWindow : public QMainWindow {
-    Q_OBJECT
+//class in common between GeneralDialog and GeneralWindow.
+//It is used to manage settings, slots, and other.
+class WindowManager {
 
     public:
-        GeneralWindow( QWidget* parent = nullptr );
-        ~GeneralWindow();
 
+        WindowManager( QString settings_filename_str );
+
+        ~WindowManager() { };
+
+    protected:
         //apply current settings (like language, teme, and other general settings
         virtual void apply_settings() { }
 
@@ -38,8 +43,28 @@ class GeneralWindow : public QMainWindow {
 
         //configure the User Interface: allocating Widgets, layout, etc.
         virtual void setup_ui() { }
-    protected:
 
+        //settings manager
+        ManagerFromFile settings;
+};
+
+
+//General window used for main window
+class GeneralWindow : public QMainWindow, public WindowManager {
+    Q_OBJECT
+
+    public:
+        GeneralWindow( QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
+        ~GeneralWindow();
+
+};
+
+//general dialog
+class GeneralDialog : public QDialog, public WindowManager {
+    Q_OBJECT
+public:
+    GeneralDialog( QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
+    ~GeneralDialog();
 };
 
 
