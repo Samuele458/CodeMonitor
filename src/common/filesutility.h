@@ -21,6 +21,10 @@
 #ifndef FILES_UTILITY_H
 #define FILES_UTILITY_H
 #include <QString>
+#include <QStringList>
+#include <QSettings>
+#include <QFile>
+#include <QDir>
 
 class FilesUtilities {
 public:
@@ -28,7 +32,10 @@ public:
     ~FilesUtilities() { };
 
     //get file extention string. Es: C:/test.txt -> txt
-    static QString getFileExtention( QString filename );
+    static QString getFileExtension( QString filename );
+
+    //get programming language name from file extension
+    static QString getProgLangName( QString extension );
 
 };
 

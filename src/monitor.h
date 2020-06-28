@@ -27,6 +27,7 @@
 #include <QList>
 #include <QDebug>
 #include <QTextStream>
+#include <QSettings>
 
 #include "common/filesutility.h"
 
@@ -64,15 +65,7 @@ class ProgrammingLanguage : public Comment {
     public:
         ProgrammingLanguage() { };
 
-        ProgrammingLanguage( QString name_str,
-                             QString single_line_str,
-                             QString multi_line_start_str,
-                             QString multi_line_end_str,
-                             QStringList extentions_list );
-
-        ProgrammingLanguage( QString name_str,
-                             Comment comment,
-                             QStringList extensions_list );
+        ProgrammingLanguage( QString name_str );
 
         ~ProgrammingLanguage();
 
@@ -84,10 +77,12 @@ class ProgrammingLanguage : public Comment {
 
         //getter - setter methods
         QString getName() const;
-        QStringList getExtentions() const;
+        QStringList getExtensions() const;
         void setName( QString name_str );
-        void setExtentions( QStringList extensions_list );
+        void setExtensions( QStringList extensions_list );
 
+        //load parameters from
+        bool load();
 
     protected:
         QString name;

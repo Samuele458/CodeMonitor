@@ -75,27 +75,9 @@ void Comment::setMultiLineEnd( const QString multi_line_end_str ) {
 // ----- PROGRAMMING LANGUAGE CLASS -----
 
 
-ProgrammingLanguage::ProgrammingLanguage( QString name_str,
-                                          QString single_line_str,
-                                          QString multi_line_start_str,
-                                          QString multi_line_end_str,
-                                          QStringList extentions_list ) :
-    Comment( single_line_str,
-             multi_line_start_str,
-             multi_line_end_str ),
-    name( name_str ),
-    extentions( extentions_list )
-{
-
-}
-
-
-ProgrammingLanguage::ProgrammingLanguage( QString name_str,
-                                          Comment comment,
-                                          QStringList extensions_list ) :
-    Comment( comment ),
-    name( name_str ),
-    extentions( extensions_list )
+ProgrammingLanguage::ProgrammingLanguage( QString name_str ) :
+    Comment(),
+    name( name_str )
 {
 
 }
@@ -105,13 +87,16 @@ ProgrammingLanguage::~ProgrammingLanguage() {
 }
 
 //copy constructor
-ProgrammingLanguage::ProgrammingLanguage( const ProgrammingLanguage& other ) {
+ProgrammingLanguage::ProgrammingLanguage( const ProgrammingLanguage& other ) :
+    Comment( other )
+{
     name = other.name;
     extentions = other.extentions;
 }
 
 //assignment operator
 ProgrammingLanguage& ProgrammingLanguage::operator=( const ProgrammingLanguage& other ) {
+    Comment::operator=( other );
     name = other.name;
     extentions = other.extentions;
 
@@ -123,7 +108,7 @@ QString ProgrammingLanguage::getName() const {
     return name;
 }
 
-QStringList ProgrammingLanguage::getExtentions() const {
+QStringList ProgrammingLanguage::getExtensions() const {
     return extentions;
 }
 
@@ -131,8 +116,15 @@ void ProgrammingLanguage::setName( QString name_str ) {
     name = name_str;
 }
 
-void ProgrammingLanguage::setExtentions( QStringList extensions_list ) {
+void ProgrammingLanguage::setExtensions( QStringList extensions_list ) {
     extentions = extensions_list;
+}
+
+bool ProgrammingLanguage::load() {
+    QSettings prog_langs( QDir::currentPath() + "/programming_languages.ini", QSettings::IniFormat );
+    prog_langs.beginGroup( name );
+
+
 }
 
 
@@ -201,16 +193,23 @@ bool FileData::Examines() {
     size = 0;
     chars = 0;
     language_name = "";
+    QSettings settings( "programming_languages.ini", QSettings::IniFormat );
+    if( QFile::exists( filename ) ) {
 
-    qDebug() << "EXAMINING";
-    QFile file( filename );
-    if( file.open( QIODevice::ReadOnly ) ) {
-        while( !file.atEnd() ) {
-            qDebug() << file.readLine();
-            code_lines++;
+        qDebug() << "";
+        QFile file( filename );
+        if( file.open( QIODevice::ReadOnly ) ) {
+            language_name = FilesUtilities::getProgLangName(FilesUtilities::getFileExtension( filename ));
+
+            while( !file.atEnd() ) {
+                QString current_line = file.readLine();
+
+                code_lines++;
+            }
+            qDebug() << "LINEE TOTALI " << code_lines;
+            qDebug() << "Linguaggio " << language_name;
+
         }
-        qDebug() << "LINEE TOTALI " << code_lines;
-
     }
 
 

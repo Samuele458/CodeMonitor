@@ -46,7 +46,17 @@ int main(int argc, char *argv[])
     QFont monospace(family);
     QApplication::setFont( monospace );
 
-    FileData f("C:\\Users\\Yankoo\\Desktop\\test.txt");
+    if( !QFile::exists( QDir::currentPath() + "/programming_languages.ini" ) ) {
+        QFile default_file( ":/common/default_prog_lang.dat" );
+        if( default_file.open( QIODevice::ReadOnly ) ) {
+            QFile prog_langs_file( QDir::currentPath() + "/programming_languages.ini" );
+            if( prog_langs_file.open( QIODevice::WriteOnly | QIODevice::Truncate ) ) {
+                prog_langs_file.write( default_file.readAll() );
+            }
+        }
+    }
+
+    FileData f("C:\\Users\\Yankoo\\Desktop\\test.cpp");
     //w.show();
     return a.exec();
 

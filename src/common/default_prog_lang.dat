@@ -1,0 +1,11 @@
+[C%2B%2B]
+single_line_comment=//
+multi_line_comment_start=/*
+multi_line_comment_end=*/
+files_extensions=c cpp h hpp c++
+
+[PYTHON]
+single_line_comment=#
+multi_line_comment_start=%22%22%22
+multi_line_comment_end=%22%22%22
+

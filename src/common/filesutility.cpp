@@ -21,7 +21,7 @@
 #include "common/filesutility.h"
 
 //get file extention string. Es: C:/test.txt -> txt
-QString FilesUtilities::getFileExtention( QString filename ) {
+QString FilesUtilities::getFileExtension( QString filename ) {
     int point_index = filename.indexOf( "." );
     if( point_index != 0 ) {
         return filename.mid( point_index + 1,
@@ -30,3 +30,20 @@ QString FilesUtilities::getFileExtention( QString filename ) {
         return "";
     }
 }
+
+//get programming language name from file extension
+QString FilesUtilities::getProgLangName( QString extension ) {
+    QSettings prog_langs( QDir::currentPath() + "/programming_languages.ini", QSettings::IniFormat );
+    QStringList languages = prog_langs.childGroups();
+    for( int i = 0; i < languages.size(); ++i ) {
+        prog_langs.beginGroup( languages.at(i) );
+        QStringList extensions = prog_langs.value( "files_extensions" ).toString().split( " " );
+        if ( extensions.indexOf( extension ) != -1 ) {
+            prog_langs.endGroup();
+            return languages.at(i);
+        }
+        prog_langs.endGroup();
+    }
+    return "";
+}
+
