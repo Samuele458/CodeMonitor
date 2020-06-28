@@ -34,10 +34,7 @@ GeneralWindow::GeneralWindow( QWidget* parent, QString settings_filename_str ) :
     QMainWindow(parent),
     WindowManager( settings_filename_str )
 {
-    //configuring ui, settings, and slots
-    setup_ui();
-    apply_settings();
-    apply_slots();
+
 }
 
 
@@ -51,10 +48,7 @@ GeneralDialog::GeneralDialog( QWidget* parent, QString settings_filename_str ) :
     QDialog(parent),
     WindowManager( settings_filename_str )
 {
-    //configuring ui, settings, and slots
-    setup_ui();
-    apply_settings();
-    apply_slots();
+
 }
 
 

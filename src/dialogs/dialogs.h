@@ -17,10 +17,13 @@
  *  Email:      samuele.girgenti458@gmail.com
  *  Github:     https://github.com/Samuele458
  */
+#ifndef DIALOGS_H
+#define DIALOGS_H
 
 #include <QMainWindow>
 #include <QDialog>
 #include <QString>
+#include <QDebug>
 #include "common/managers.h"
 
 
@@ -61,13 +64,13 @@ class GeneralWindow : public QMainWindow, public WindowManager {
 
 //general dialog
 class GeneralDialog : public QDialog, public WindowManager {
-    Q_OBJECT
-public:
-    GeneralDialog( QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
-    ~GeneralDialog();
+        Q_OBJECT
+    public:
+        GeneralDialog( QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
+        ~GeneralDialog();
 };
 
-
+#endif
 
 
 

@@ -1,14 +1,19 @@
 
 QPushButton {
     background-color: rgb(103,103,103);
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 3px;
-    border-color: beige;
-    font: bold 14px;
-    min-width: 10em;
+    font: 20px;
+    min-width: 4em;
     padding: 6px;
     color: white;
+}
+
+QPushButton:hover {
+    background-color: rgb(255, 162, 0);
+}
+
+
+QListWidget {
+    background-color: rgb(150,150,150)
 }
 
 QLineEdit {
@@ -23,6 +28,11 @@ QLabel {
     color: white;
 }
 
-QMainWindow {
+QDialog {
     background-color: white;
 }
+
+QMainWindow {
+    background-color: rgb(51,51,51);
+}
+

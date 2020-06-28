@@ -21,21 +21,29 @@
 #include <QApplication>
 #include <QFile>
 #include <QDir>
-#include "dialogs/mainwindow.h"
-#include "dialogs/dialogs.h"
+#include <QFont>
+#include <QFontDatabase>
+
+#include "dialogs/cm_welcomedialog.h"
 
 // main function
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
-    GeneralWindow w ;
+    CM_WelcomeDialog w ;
 
     //setting up stylesheets
     QFile File(":/themes/default_style.qss");
     File.open(QFile::ReadOnly);
     QString StyleSheet = QLatin1String(File.readAll());
     qApp->setStyleSheet( StyleSheet );
+
+    //configuring main font (monofonto.ttf located in resurce file)
+    int id = QFontDatabase::addApplicationFont(":/fonts/monofonto.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont monospace(family);
+    QApplication::setFont( monospace );
 
     w.show();
     return a.exec();
