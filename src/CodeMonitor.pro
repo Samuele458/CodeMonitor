@@ -16,17 +16,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    common/filesutility.cpp \
     common/managers.cpp \
     dialogs/cm_mainwindow.cpp \
     dialogs/cm_welcomedialog.cpp \
     dialogs/dialogs.cpp \
-    main.cpp
+    main.cpp \
+    monitor.cpp
 
 HEADERS += \
+    common/filesutility.h \
     common/managers.h \
     dialogs/cm_mainwindow.h \
     dialogs/cm_welcomedialog.h \
-    dialogs/dialogs.h
+    dialogs/dialogs.h \
+    monitor.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

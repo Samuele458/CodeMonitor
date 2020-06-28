@@ -47,7 +47,13 @@ void CM_WelcomeDialog::apply_settings() {
 
 //connect all principal widgets signals to the corresponding slots
 void CM_WelcomeDialog::apply_slots() {
-
+    //connecting signals to slots
+    connect( ExitButton, SIGNAL(clicked()), this, SLOT(ExitButtonClicked()) );
+    connect( SettingsButton, SIGNAL(clicked()), this, SLOT(SettingsButtonClicked()) );
+    connect( NewMonitorButton, SIGNAL(clicked()), this, SLOT(NewMonitorButtonClicked()) );
+    connect( EditMonitorButton, SIGNAL(clicked()), this, SLOT(EditMonitorButtonClicked()) );
+    connect( OpenMonitorButton, SIGNAL(clicked()), this, SLOT(OpenMonitorButtonClicked()) );
+    connect( DeleteMonitorButton, SIGNAL(clicked()), this, SLOT(DeleteMonitorButtonCLicked()) );
 }
 
 //configure the User Interface: allocating Widgets, layout, etc.
@@ -109,11 +115,12 @@ void CM_WelcomeDialog::OpenMonitorButtonClicked() {
 
 }
 
-
+//Edit monitor button clicked
 void CM_WelcomeDialog::EditMonitorButtonClicked() {
 
 }
 
+//delete monitor button clicked
 void CM_WelcomeDialog::DeleteMonitorButtonCLicked() {
 
 }

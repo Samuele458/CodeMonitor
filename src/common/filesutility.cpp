@@ -18,36 +18,15 @@
  *  Github:     https://github.com/Samuele458
  */
 
-#include <QApplication>
-#include <QFile>
-#include <QDir>
-#include <QFont>
-#include <QFontDatabase>
+#include "common/filesutility.h"
 
-#include "dialogs/cm_welcomedialog.h"
-#include "monitor.h"
-
-// main function
-int main(int argc, char *argv[])
-{
-
-    QApplication a(argc, argv);
-    CM_WelcomeDialog w ;
-
-    //setting up stylesheets
-    QFile File(":/themes/default_style.qss");
-    File.open(QFile::ReadOnly);
-    QString StyleSheet = QLatin1String(File.readAll());
-    qApp->setStyleSheet( StyleSheet );
-
-    //configuring main font (monofonto.ttf located in resurce file)
-    int id = QFontDatabase::addApplicationFont(":/fonts/monofonto.ttf");
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont monospace(family);
-    QApplication::setFont( monospace );
-
-    FileData f("C:\\Users\\Yankoo\\Desktop\\test.txt");
-    //w.show();
-    return a.exec();
-
+//get file extention string. Es: C:/test.txt -> txt
+QString FilesUtilities::getFileExtention( QString filename ) {
+    int point_index = filename.indexOf( "." );
+    if( point_index != 0 ) {
+        return filename.mid( point_index + 1,
+                             filename.size() - point_index - 1 );
+    } else {
+        return "";
+    }
 }
