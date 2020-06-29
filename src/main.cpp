@@ -25,7 +25,7 @@
 #include <QFontDatabase>
 #include "dialogs/cm_welcomedialog.h"
 #include "monitor.h"
-
+#include "common/textsanitizer.h"
 // main function
 int main(int argc, char *argv[])
 {
@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+
 
     FileData f("C:\\Users\\Yankoo\\Desktop\\test.cpp");
     //w.show();

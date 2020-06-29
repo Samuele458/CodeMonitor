@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     common/filesutility.cpp \
     common/managers.cpp \
+    common/textsanitizer.cpp \
     dialogs/cm_mainwindow.cpp \
     dialogs/cm_welcomedialog.cpp \
     dialogs/dialogs.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
 HEADERS += \
     common/filesutility.h \
     common/managers.h \
+    common/textsanitizer.h \
     dialogs/cm_mainwindow.h \
     dialogs/cm_welcomedialog.h \
     dialogs/dialogs.h \

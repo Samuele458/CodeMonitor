@@ -120,10 +120,21 @@ void ProgrammingLanguage::setExtensions( QStringList extensions_list ) {
     extentions = extensions_list;
 }
 
+//load programming language data from file
 bool ProgrammingLanguage::load() {
     QSettings prog_langs( QDir::currentPath() + "/programming_languages.ini", QSettings::IniFormat );
-    prog_langs.beginGroup( name );
-
+    if( prog_langs.childGroups().indexOf( name ) != -1 ) {
+        prog_langs.beginGroup( name );
+        single_line = prog_langs.value( "single_line_comment" ).toString();
+        multi_line_start = prog_langs.value( "multi_line_comment_start" ).toString();
+        multi_line_end = prog_langs.value( "multi_line_comment_end" ).toString();
+        extentions = prog_langs.value( "files_extensions" ).toString().split( " " );
+        prog_langs.endGroup();
+        return true;
+    } else {
+        //programming language not found
+        return false;
+    }
 
 }
 
@@ -187,27 +198,70 @@ FileData& FileData::operator=( const FileData& other ) {
 //examines file
 bool FileData::Examines() {
 
+    //resetting data viariables.
     code_lines = 0;
     comment_lines = 0;
     total_lines = 0;
     size = 0;
     chars = 0;
     language_name = "";
-    QSettings settings( "programming_languages.ini", QSettings::IniFormat );
-    if( QFile::exists( filename ) ) {
 
-        qDebug() << "";
+    if( QFile::exists( filename ) ) {
         QFile file( filename );
         if( file.open( QIODevice::ReadOnly ) ) {
-            language_name = FilesUtilities::getProgLangName(FilesUtilities::getFileExtension( filename ));
+            ProgrammingLanguage prog_lang( FilesUtilities::getProgLangName( FilesUtilities::getFileExtension( filename ) ) );
+            prog_lang.load();
 
             while( !file.atEnd() ) {
                 QString current_line = file.readLine();
+                int sl_index = current_line.indexOf( prog_lang.getSingleLine() );
+                if( sl_index > 0 ) {
+                    qDebug() << "Stringa verificata" << current_line.mid( 0, sl_index );
+                    if( TextSanitizer::check_string( current_line.mid( 0, sl_index ), TextSanitizer::TYPES::VOID ) ) {
+                        ++comment_lines;
+                        qDebug() << "COMMENTO" << current_line;
+                    } else {
+                        ++code_lines;
+                        qDebug() << "CODICE" << current_line;
 
-                code_lines++;
+                    }
+                } else if( sl_index == 0 ) {
+                    ++comment_lines;
+                    qDebug() << "COMMENTO_" << current_line;
+
+                } else  {
+                    int ml_index = current_line.indexOf( prog_lang.getMultiLineStart() );
+                    if( ml_index >= 0 ) {
+                        if( ml_index == 0 ) {
+                            ++comment_lines;
+                            do {
+                                qDebug() << "LINEA CORRENTE: " << current_line;
+
+                                int ml_end_index = current_line.indexOf( prog_lang.getMultiLineEnd() );
+                                if( ml_end_index != -1 ) {
+                                    break;
+                                } else {
+                                    ++total_lines;
+                                    ++comment_lines;
+                                    current_line = file.readLine();
+                                }
+                            } while( !file.atEnd() );
+                        } else if( ml_index > 0 ) {
+
+                        }
+                    } else {
+                        ++code_lines;
+                    qDebug() << "CODICE_" << current_line;
+                    }
+                }
+                total_lines++;
             }
-            qDebug() << "LINEE TOTALI " << code_lines;
-            qDebug() << "Linguaggio " << language_name;
+            qDebug() << "LINEE COMMENTO " << comment_lines;
+            qDebug() << "LINEE CODICE " << code_lines;
+            qDebug() << "LINEE TOTALI " << total_lines;
+            qDebug() << "Linguaggio " << prog_lang.getName() ;
+            qDebug() << "Linguaggio " << prog_lang.getExtensions() ;
+            qDebug() << "Linguaggio " << prog_lang.getMultiLineStart() ;
 
         }
     }

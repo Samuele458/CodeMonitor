@@ -30,6 +30,7 @@
 #include <QSettings>
 
 #include "common/filesutility.h"
+#include "common/textsanitizer.h"
 
 class Comment {
     public:
