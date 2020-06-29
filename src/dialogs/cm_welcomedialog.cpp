@@ -23,10 +23,46 @@
 CM_WelcomeDialog::CM_WelcomeDialog( QWidget* parent, QString settings_filename_str ) :
     GeneralWindow( parent, settings_filename_str )
 {
+    if( !QDir( QDir::currentPath() + "/data" ).exists() ) {
+        QDir local( QDir::currentPath() );
+        local.mkdir("data" );
+    }
+
+    if( !QDir( QDir::currentPath() + "/data/monitors" ).exists() ) {
+        QDir local( QDir::currentPath() + "/data" );
+        local.mkdir("monitors" );
+    }
+
+    //setting up database
+    db = new QSqlDatabase;
+    db->addDatabase( "QSQLITE", "main" );
+    monitors_db = new QSqlDatabase;
+    *monitors_db = QSqlDatabase::database( "main" );
+    monitors_db->setDatabaseName( QDir::currentPath() + "/data/monitors.db" );
+
+
+    if( !QFile::exists( QDir::currentPath() + "/data/monitors.db" ) ) {
+        //creating new database
+        qDebug() << monitors_db->open();
+        QSqlQuery query( *monitors_db );
+        qDebug() << query.exec( "CREATE TABLE monitors ("
+                    "ID_monitor INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
+                    "monitor_name TEXT NOT NULL UNIQUE,"
+                    "monitor_files_table TEXT NOT NULL UNIQUE,"
+                    "monitor_data_table TEXT NOT NULL UNIQUE "
+                    ")" );
+
+    } else {
+       monitors_db->open();
+    }
+
     //setting up dialog, and settings
     this->setup_ui();
     this->apply_settings();
     this->apply_slots();
+
+
+
 
 }
 
@@ -42,6 +78,16 @@ void CM_WelcomeDialog::apply_settings() {
     DeleteMonitorButton->setText( tr( "Delete Monitor" ) );
     EditMonitorButton->setText( tr( "Edit Monitor" ) );
     OpenMonitorButton->setText( tr( "Open Monitor" ) );
+    MonitorLabel->setText( tr("Monitors") );
+
+    MonitorLabel->setAlignment( Qt::AlignCenter );
+
+    //Setting up monitor list
+    QSqlQuery query( *monitors_db );
+    query.exec( "SELECT monitor_name FROM monitors" );
+    while( query.next() ) {
+        MonitorWidget->addItem( query.record().value(0).toString() );
+    }
 
 }
 
@@ -61,6 +107,8 @@ void CM_WelcomeDialog::setup_ui() {
     MainLayout = new QHBoxLayout;
     ButtonsLayout = new QGridLayout;
     MonitorWidget = new QListWidget;
+    MonitorLabel = new QLabel;
+    MonitorLayout = new QVBoxLayout;
     SettingsButton = new QPushButton;
     ExitButton = new QPushButton;
     NewMonitorButton = new QPushButton;
@@ -76,7 +124,10 @@ void CM_WelcomeDialog::setup_ui() {
     ButtonsLayout->addWidget( SettingsButton, 4, 0 );
     ButtonsLayout->addWidget( ExitButton, 4, 1 );
 
-    MainLayout->addWidget(MonitorWidget);
+    MonitorLayout->addWidget( MonitorLabel );
+    MonitorLayout->addWidget( MonitorWidget );
+
+    MainLayout->addLayout(MonitorLayout);
     MainLayout->addLayout(ButtonsLayout);
     MainLayout->setMargin(3);
 
@@ -107,7 +158,10 @@ void CM_WelcomeDialog::ExitButtonClicked() {
 
 //New monitor button clicked: create new monitor
 void CM_WelcomeDialog::NewMonitorButtonClicked() {
-
+    //creating new monitor
+    InputBox* box = new InputBox( tr("New monitor"),
+                                  tr("Enter monitor name:") );
+    box->exec();
 }
 
 //Open Monitor Button clicked: Open selected monitor

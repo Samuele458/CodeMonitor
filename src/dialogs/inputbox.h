@@ -18,44 +18,64 @@
  *  Github:     https://github.com/Samuele458
  */
 
-#ifndef CM_WELCOMEDIALOG_H
-#define CM_WELCOMEDIALOG_H
+#ifndef INPUTBOX_H
+#define INPUTBOX_H
 
 #include <QString>
-#include <QStringList>
-#include <QFile>
-#include <QDir>
-#include <QPushButton>
 #include <QLabel>
-#include <QListWidget>
 #include <QLayout>
 #include <QGridLayout>
-#include <QHBoxLayout>
-#include <QDebug>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlRecord>
-
+#include <QPushButton>
+#include <QLineEdit>
 #include "dialogs/dialogs.h"
-#include "dialogs/inputbox.h"
+#include "common/textsanitizer.h"
 
-
-class CM_WelcomeDialog : public GeneralWindow {
+class InputBox : public GeneralDialog {
     Q_OBJECT
 
     public:
-        CM_WelcomeDialog( QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
-        ~CM_WelcomeDialog();
+        InputBox( QString title_str,
+                  QString message_str,
+                  QWidget* parent = nullptr,
+                  QString settings_filename_str = "config.ini"  );
 
-    private slots:
-        void SettingsButtonClicked();
-        void ExitButtonClicked();
-        void NewMonitorButtonClicked();
-        void OpenMonitorButtonClicked();
-        void EditMonitorButtonClicked();
-        void DeleteMonitorButtonCLicked();
+        ~InputBox();
+
+
+        //getter - setter methods
+        void setTitle( QString title_str );
+        QString getTitle() const;
+        void setMessage( QString message_str );
+        QString getMessage() const;
+
+        QString getInputStr() const;
+
+        void setInputType( int type );
+        int getInputType() const;
+
+    protected slots:
+        void confirm_button_clicked();
+        void cancel_button_clicked();
+
 
     protected:
+
+        //widgets
+        QGridLayout* MainLayout;
+        QLabel* EnterMessageLabel;
+        QLineEdit* InputLine;
+        QPushButton* ConfirmButton;
+        QPushButton* CancelButton;
+
+        //data
+        QString title;
+        QString message;
+        QString input;
+
+        int input_type;
+
+        //------ ui methods ------
+
         //apply current settings (like language, teme, and other general settings
         void apply_settings() override;
 
@@ -65,25 +85,6 @@ class CM_WelcomeDialog : public GeneralWindow {
         //configure the User Interface: allocating Widgets, layout, etc.
         void setup_ui() override;
 
-
-        //widgets
-        QWidget* MainWidget;
-        QHBoxLayout* MainLayout;
-        QGridLayout* ButtonsLayout;
-        QVBoxLayout* MonitorLayout;
-        QLabel* MonitorLabel;
-        QListWidget* MonitorWidget;
-        QPushButton* SettingsButton;
-        QPushButton* ExitButton;
-        QPushButton* NewMonitorButton;
-        QPushButton* OpenMonitorButton;
-        QPushButton* EditMonitorButton;
-        QPushButton* DeleteMonitorButton;
-
-        //database
-        QSqlDatabase* db;
-
-        QSqlDatabase* monitors_db;
 
 
 };

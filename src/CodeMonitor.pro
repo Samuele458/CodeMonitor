@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,6 +22,7 @@ SOURCES += \
     dialogs/cm_mainwindow.cpp \
     dialogs/cm_welcomedialog.cpp \
     dialogs/dialogs.cpp \
+    dialogs/inputbox.cpp \
     main.cpp \
     monitor.cpp
 
@@ -32,6 +33,7 @@ HEADERS += \
     dialogs/cm_mainwindow.h \
     dialogs/cm_welcomedialog.h \
     dialogs/dialogs.h \
+    dialogs/inputbox.h \
     monitor.h
 
 # Default rules for deployment.

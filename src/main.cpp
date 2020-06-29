@@ -57,8 +57,8 @@ int main(int argc, char *argv[])
 
 
 
-    FileData f("C:\\Users\\Yankoo\\Desktop\\test.py");
-    //w.show();
+    //FileData f("C:\\Users\\Yankoo\\Desktop\\test.py");
+    w.show();
     return a.exec();
 
 }

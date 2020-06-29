@@ -2,7 +2,7 @@
 QPushButton {
     background-color: rgb(103,103,103);
     font: 20px;
-    min-width: 4em;
+    min-width: 6em;
     padding: 6px;
     color: white;
 }
@@ -13,7 +13,20 @@ QPushButton:hover {
 
 
 QListWidget {
-    background-color: rgb(150,150,150)
+    background-color: rgb(230,230,230);
+    show-decoration-selected: 1; /* make the selection span the entire width of the view */
+}
+
+QListWidget::item:selected:!active {
+    background-color: rgb(255, 162, 0);
+}
+
+QListWidget::item:selected:active {
+    background-color: rgb(255, 162, 0);
+}
+
+QListWidget::item:hover {
+    background-color: rgb(255, 162, 0);
 }
 
 QLineEdit {
@@ -29,7 +42,7 @@ QLabel {
 }
 
 QDialog {
-    background-color: white;
+    background-color: rgb(51,51,51);
 }
 
 QMainWindow {
