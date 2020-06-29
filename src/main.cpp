@@ -23,7 +23,7 @@
 #include <QDir>
 #include <QFont>
 #include <QFontDatabase>
-
+#include <QString>
 #include "dialogs/cm_welcomedialog.h"
 #include "monitor.h"
 
