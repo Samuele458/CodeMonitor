@@ -234,10 +234,13 @@ bool FileData::Examines() {
                     if( ml_index >= 0 ) {
                         if( ml_index == 0 ) {
                             ++comment_lines;
+                            unsigned int start_lines = total_lines;
                             do {
                                 qDebug() << "LINEA CORRENTE: " << current_line;
-
-                                int ml_end_index = current_line.indexOf( prog_lang.getMultiLineEnd() );
+                                int ml_end_index;
+                                if( start_lines == total_lines )
+                                    ml_end_index = current_line.indexOf( prog_lang.getMultiLineEnd(), ml_index + prog_lang.getMultiLineStart().size() );
+                                else ml_end_index = current_line.indexOf( prog_lang.getMultiLineEnd() );
                                 if( ml_end_index != -1 ) {
                                     break;
                                 } else {
@@ -261,7 +264,7 @@ bool FileData::Examines() {
             qDebug() << "LINEE TOTALI " << total_lines;
             qDebug() << "Linguaggio " << prog_lang.getName() ;
             qDebug() << "Linguaggio " << prog_lang.getExtensions() ;
-            qDebug() << "Linguaggio " << prog_lang.getMultiLineStart() ;
+            qDebug() << "Linguaggio " << prog_lang.getMultiLineStart() << prog_lang.getMultiLineStart().size() ;
 
         }
     }
