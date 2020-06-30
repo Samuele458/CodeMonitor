@@ -48,6 +48,9 @@ class CM_WelcomeDialog : public GeneralWindow {
         CM_WelcomeDialog( QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
         ~CM_WelcomeDialog();
 
+        //get all monitors entries
+        QStringList monitorsList() const;
+
     private slots:
         void SettingsButtonClicked();
         void ExitButtonClicked();

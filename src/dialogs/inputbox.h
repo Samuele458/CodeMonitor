@@ -54,13 +54,15 @@ class InputBox : public GeneralDialog {
 
         void setInputType( int type );
         int getInputType() const;
+        void setMaxLen( int len );
+        int getMaxLen() const;
 
         bool wasFormConfirmed() const;
 
     protected slots:
         void confirm_button_clicked();
         void cancel_button_clicked();
-
+        void line_text_changed( const QString& text_str );
 
     protected:
 
@@ -77,6 +79,7 @@ class InputBox : public GeneralDialog {
         QString input;
 
         int input_type;
+        int max_len;
 
         bool form_confirmed;
 

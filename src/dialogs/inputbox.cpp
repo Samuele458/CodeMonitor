@@ -14,6 +14,7 @@ InputBox::InputBox( QString title_str,
                  TextSanitizer::TYPES::DIGIT;
 
     form_confirmed = false;
+    max_len = 30;
 
     //setting up ui
     setup_ui();
@@ -46,6 +47,14 @@ QString InputBox::getMessage() const {
 
 QString InputBox::getInputStr() const {
     return input;
+}
+
+void InputBox::setMaxLen( int len ){
+    max_len = len;
+}
+
+int InputBox::getMaxLen() const{
+    return max_len;
 }
 
 bool InputBox::wasFormConfirmed() const {
@@ -86,6 +95,7 @@ void InputBox::setup_ui() {
 void InputBox::apply_slots() {
     connect( ConfirmButton, SIGNAL(clicked()), this, SLOT(confirm_button_clicked()));
     connect( CancelButton, SIGNAL(clicked()), this, SLOT(cancel_button_clicked()));
+    connect( InputLine, SIGNAL(textChanged(const QString&)), this, SLOT(line_text_changed(const QString&) ) );
 }
 
 void InputBox::confirm_button_clicked() {
@@ -101,6 +111,16 @@ void InputBox::confirm_button_clicked() {
 void InputBox::cancel_button_clicked() {
     form_confirmed = false;
     this->close();
+}
+
+void InputBox::line_text_changed( const QString& text_str ) {
+    if( !TextSanitizer::check_string( text_str, input_type ) ) {
+        InputLine->setText( text_str.mid( 0, text_str.size()-1 ) );
+    }
+
+    if( InputLine->text().size() > max_len ) {
+        InputLine->setText( text_str.mid( 0, text_str.size()-1 ) );
+    }
 }
 
 
