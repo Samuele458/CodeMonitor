@@ -206,12 +206,12 @@ void CM_WelcomeDialog::NewMonitorButtonClicked() {
                 //database created
 
                 QSqlQuery query( local_db );
-                query.exec( "CREATE TABLE monitor_"+monitor_name+"_data ("
+                query.exec( "CREATE TABLE monitor_data ("
                             "ID_view INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
                             "date TEXT NOT NULL UNIQUE"
                             ")");
 
-                query.exec( "CREATE TABLE monitor_"+monitor_name+"_files ("
+                query.exec( "CREATE TABLE monitor_files ("
                             "ID_file INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
                             "file_path TEXT NOT NULL UNIQUE"
                             ")" );
@@ -254,10 +254,47 @@ void CM_WelcomeDialog::OpenMonitorButtonClicked() {
 //Edit monitor button clicked
 void CM_WelcomeDialog::EditMonitorButtonClicked() {
     if( MonitorWidget->selectedItems().size() != 0 ) {
+        QString old_monitor_name = MonitorWidget->selectedItems().at(0)->text();
+
+        InputBox* box = new InputBox( tr("New monitor"),
+                                      tr("Enter monitor name:") );
+        box->exec();
+
+        //checking if form is accepted
+        if( box->wasFormConfirmed() ) {
+
+            qDebug() << monitorsList() << box->getInputStr();
+            if( monitorsList().indexOf( box->getInputStr() ) == -1 ) {
+                QString new_monitor_name = box->getInputStr();
+
+                //renaming database filename
+                QFile::rename( QDir::currentPath() + "/data/monitors/" + old_monitor_name + ".db",
+                               QDir::currentPath() + "/data/monitors/" + new_monitor_name + ".db" );
+
+
+                //changing main database
+                QSqlQuery query( *monitors_db );
+
+                qDebug() <<query.exec( "UPDATE monitors "
+                            "SET monitor_name=\""+new_monitor_name+"\","
+                            "monitor_files_table=\"monitor_"+new_monitor_name+"_files\", "
+                            "monitor_data_table=\"monitor_"+new_monitor_name+"_data\" "
+                            "WHERE monitor_name=\""+old_monitor_name+"\" " );
+
+            } else {
+                QMessageBox::warning( this,
+                                      tr("Error"),
+                                      tr("Monitor already exists!"));
+            }
+        }
+
+        delete box;
 
     } else {
         QMessageBox::warning( this, tr("Error"), tr("No monitor selected!") );
     }
+
+    refresh_monitor_widget();
 }
 
 //delete monitor button clicked
