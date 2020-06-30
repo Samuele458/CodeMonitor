@@ -82,12 +82,8 @@ void CM_WelcomeDialog::apply_settings() {
 
     MonitorLabel->setAlignment( Qt::AlignCenter );
 
-    //Setting up monitor list
-    QSqlQuery query( *monitors_db );
-    query.exec( "SELECT monitor_name FROM monitors" );
-    while( query.next() ) {
-        MonitorWidget->addItem( query.record().value(0).toString() );
-    }
+    //refresh monitor list
+    refresh_monitor_widget();
 
 }
 
@@ -144,6 +140,17 @@ void CM_WelcomeDialog::setup_ui() {
     ExitButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 }
 
+
+void CM_WelcomeDialog::refresh_monitor_widget() {
+    //Setting up monitor list
+    QSqlQuery query( *monitors_db );
+    qDebug() << query.exec( "SELECT monitor_name FROM monitors" );
+    while( query.next() ) {
+        MonitorWidget->addItem( query.record().value(0).toString() );
+    }
+}
+
+
 // ---- slots ----
 
 //settings button clicked
@@ -162,6 +169,47 @@ void CM_WelcomeDialog::NewMonitorButtonClicked() {
     InputBox* box = new InputBox( tr("New monitor"),
                                   tr("Enter monitor name:") );
     box->exec();
+
+
+    //checking if form is accepted
+    if( box->wasFormConfirmed() ) {
+        //form confirmed
+        QString monitor_name = box->getInputStr();
+        QSqlDatabase local_db = QSqlDatabase::database( "main" );
+        local_db.setDatabaseName( QDir::currentPath() + "/data/monitors/" + monitor_name + ".db" );
+
+        if( local_db.open() ) {
+            //database created
+
+            QSqlQuery query( local_db );
+            query.exec( "CREATE TABLE monitor_"+monitor_name+"_data ("
+                        "ID_view INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
+                        "date TEXT NOT NULL UNIQUE"
+                        ")");
+
+            query.exec( "CREATE TABLE monitor_"+monitor_name+"_files ("
+                        "ID_file INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
+                        "file_path TEXT NOT NULL UNIQUE"
+                        ")" );
+
+
+            local_db.close();
+            local_db.setDatabaseName( QDir::currentPath() + "/data/monitors.db" );
+            local_db.open();
+
+            query.exec( "INSERT INTO monitors (monitor_name, monitor_files_table, monitor_data_table) "
+                        "VALUES (\""+monitor_name+"\",\"monitor_"+monitor_name+"_files\",\"monitor_"+monitor_name+"_data\")" );
+
+
+        } else {
+           QMessageBox::critical( this, tr("Error"), tr("Error: couldn't create new monitor") );
+        }
+
+    }
+
+    //refreshing monitors list
+    refresh_monitor_widget();
+
 }
 
 //Open Monitor Button clicked: Open selected monitor

@@ -27,6 +27,8 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QMessageBox>
+
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
 
@@ -53,6 +55,8 @@ class InputBox : public GeneralDialog {
         void setInputType( int type );
         int getInputType() const;
 
+        bool wasFormConfirmed() const;
+
     protected slots:
         void confirm_button_clicked();
         void cancel_button_clicked();
@@ -73,6 +77,8 @@ class InputBox : public GeneralDialog {
         QString input;
 
         int input_type;
+
+        bool form_confirmed;
 
         //------ ui methods ------
 

@@ -35,6 +35,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QMessageBox>
 
 #include "dialogs/dialogs.h"
 #include "dialogs/inputbox.h"
@@ -64,6 +65,10 @@ class CM_WelcomeDialog : public GeneralWindow {
 
         //configure the User Interface: allocating Widgets, layout, etc.
         void setup_ui() override;
+
+
+        //refresh monitors list
+        void refresh_monitor_widget();
 
 
         //widgets

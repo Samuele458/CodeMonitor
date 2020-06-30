@@ -13,6 +13,8 @@ InputBox::InputBox( QString title_str,
     input_type = TextSanitizer::TYPES::LETTER |
                  TextSanitizer::TYPES::DIGIT;
 
+    form_confirmed = false;
+
     //setting up ui
     setup_ui();
     apply_settings();
@@ -46,6 +48,9 @@ QString InputBox::getInputStr() const {
     return input;
 }
 
+bool InputBox::wasFormConfirmed() const {
+    return form_confirmed;
+}
 
 
 //apply current settings (like language, teme, and other general settings
@@ -84,11 +89,18 @@ void InputBox::apply_slots() {
 }
 
 void InputBox::confirm_button_clicked() {
-
+    if( InputLine->text() != "" ) {
+        form_confirmed = true;
+        input = InputLine->text();
+        this->close();
+    } else {
+        QMessageBox::warning( this, tr("Error"), tr("Enter a monitor name!") );
+    }
 }
 
 void InputBox::cancel_button_clicked() {
-
+    form_confirmed = false;
+    this->close();
 }
 
 
