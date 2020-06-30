@@ -39,6 +39,7 @@
 
 #include "dialogs/dialogs.h"
 #include "dialogs/inputbox.h"
+#include "dialogs/cm_mainwindow.h"
 
 
 class CM_WelcomeDialog : public GeneralWindow {

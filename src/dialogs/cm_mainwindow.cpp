@@ -18,3 +18,83 @@
  *  Github:     https://github.com/Samuele458
  */
 
+#include "dialogs/cm_mainwindow.h"
+
+CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
+                   QWidget* parent,
+                   QString settings_filename_str ) :
+    GeneralWindow( parent, settings_filename_str ),
+    monitor_name( monitor_name_str )
+{
+
+    //setting up gui
+    setup_ui();
+    apply_settings();
+    apply_slots();
+
+}
+
+CodeMonitorWindow::~CodeMonitorWindow() {
+
+}
+
+//configure the User Interface: allocating Widgets, layout, etc.
+void CodeMonitorWindow::setup_ui() {
+
+    MainWidget = new QWidget;
+    MainLayout = new QHBoxLayout;
+    CentralSplitter = new QSplitter;
+    LeftWidget = new QWidget;
+    RightWidget = new QWidget;
+    LeftLayout = new QVBoxLayout;
+    MonitorNameLabel = new QLabel;
+    MonitorTree = new QTreeWidget;
+    RightLayout = new QVBoxLayout;
+    RightSplitterLayout = new QVBoxLayout;
+    RightSplitter = new QSplitter;
+    MonitorTable = new QTableWidget;
+    DataGroup = new QGroupBox;
+    ButtonsLayout = new QHBoxLayout;
+    AddFileButton = new QPushButton;
+    AddFolderButton = new QPushButton;
+    SettingsButton = new QPushButton;
+
+    //---- left side ----
+    LeftLayout->addWidget( MonitorNameLabel );
+    LeftLayout->addWidget( MonitorTree );
+
+    //---- right side ----
+    RightSplitter->addWidget( MonitorTable );
+    RightSplitter->addWidget( DataGroup );
+    RightSplitter->setOrientation( Qt::Vertical );
+
+    RightSplitterLayout->addWidget(RightSplitter);
+    RightLayout->addLayout( RightSplitterLayout );
+    ButtonsLayout->addWidget( AddFileButton );
+    ButtonsLayout->addWidget( AddFolderButton );
+    ButtonsLayout->addWidget( SettingsButton );
+    RightLayout->addLayout( ButtonsLayout );
+
+
+    LeftWidget->setLayout( LeftLayout );
+    RightWidget->setLayout( RightLayout );
+    CentralSplitter->addWidget( LeftWidget );
+    CentralSplitter->addWidget( RightWidget );
+    MainLayout->addWidget( CentralSplitter );
+    MainWidget->setLayout( MainLayout );
+    this->setCentralWidget( MainWidget );
+
+
+}
+
+//apply current settings (like language, teme, and other general settings
+void CodeMonitorWindow::apply_settings() {
+
+}
+
+//connect all principal widgets signals to the corresponding slots
+void CodeMonitorWindow::apply_slots() {
+
+}
+
+

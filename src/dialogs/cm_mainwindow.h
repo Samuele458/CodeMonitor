@@ -17,3 +17,75 @@
  *  Email:      samuele.girgenti458@gmail.com
  *  Github:     https://github.com/Samuele458
  */
+
+#include <QMainWindow>
+#include <QLayout>
+#include <QPushButton>
+#include <QTableWidget>
+#include <QLineEdit>
+#include <QLabel>
+#include <QList>
+#include <QString>
+#include <QStringList>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QSplitter>
+#include <QTreeWidget>
+#include <QGroupBox>
+
+#include "dialogs/dialogs.h"
+#include "common/textsanitizer.h"
+
+class CodeMonitorWindow : public GeneralWindow {
+    Q_OBJECT
+
+    public:
+        CodeMonitorWindow( QString monitor_name_str, QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
+        ~CodeMonitorWindow();
+
+    //protected slots:
+
+
+    protected:
+        //apply current settings (like language, teme, and other general settings
+        void apply_settings() override;
+
+        //connect all principal widgets signals to the corresponding slots
+        void apply_slots() override;
+
+        //configure the User Interface: allocating Widgets, layout, etc.
+        void setup_ui() override;
+
+
+        //data
+        QString monitor_name;
+
+
+        //widgets
+        QWidget* MainWidget;
+        QHBoxLayout* MainLayout;
+        QSplitter* CentralSplitter;
+        QWidget* LeftWidget;
+        QWidget* RightWidget;
+        QVBoxLayout* LeftLayout;
+        QLabel* MonitorNameLabel;
+        QTreeWidget* MonitorTree;
+        QVBoxLayout* RightLayout;
+        QVBoxLayout* RightSplitterLayout;
+        QSplitter* RightSplitter;
+        QTableWidget* MonitorTable;
+        QGroupBox* DataGroup;
+        QHBoxLayout* ButtonsLayout;
+        QPushButton* AddFileButton;
+        QPushButton* AddFolderButton;
+        QPushButton* SettingsButton;
+
+};
+
+
+
+
+

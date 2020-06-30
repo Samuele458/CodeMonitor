@@ -47,9 +47,7 @@ CM_WelcomeDialog::CM_WelcomeDialog( QWidget* parent, QString settings_filename_s
         QSqlQuery query( *monitors_db );
         qDebug() << query.exec( "CREATE TABLE monitors ("
                     "ID_monitor INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
-                    "monitor_name TEXT NOT NULL UNIQUE,"
-                    "monitor_files_table TEXT NOT NULL UNIQUE,"
-                    "monitor_data_table TEXT NOT NULL UNIQUE "
+                    "monitor_name TEXT NOT NULL UNIQUE "
                     ")" );
 
     } else {
@@ -221,8 +219,8 @@ void CM_WelcomeDialog::NewMonitorButtonClicked() {
                 local_db.setDatabaseName( QDir::currentPath() + "/data/monitors.db" );
                 local_db.open();
 
-                query.exec( "INSERT INTO monitors (monitor_name, monitor_files_table, monitor_data_table) "
-                            "VALUES (\""+monitor_name+"\",\"monitor_"+monitor_name+"_files\",\"monitor_"+monitor_name+"_data\")" );
+                query.exec( "INSERT INTO monitors (monitor_name) "
+                            "VALUES (\""+monitor_name+"\")" );
 
 
             } else {
@@ -245,7 +243,8 @@ void CM_WelcomeDialog::NewMonitorButtonClicked() {
 //Open Monitor Button clicked: Open selected monitor
 void CM_WelcomeDialog::OpenMonitorButtonClicked() {
     if( MonitorWidget->selectedItems().size() != 0 ) {
-
+        CodeMonitorWindow* cm_window = new CodeMonitorWindow( MonitorWidget->selectedItems().at(0)->text() );
+        cm_window->show();
     } else {
         QMessageBox::warning( this, tr("Error"), tr("No monitor selected!") );
     }
@@ -276,9 +275,7 @@ void CM_WelcomeDialog::EditMonitorButtonClicked() {
                 QSqlQuery query( *monitors_db );
 
                 qDebug() <<query.exec( "UPDATE monitors "
-                            "SET monitor_name=\""+new_monitor_name+"\","
-                            "monitor_files_table=\"monitor_"+new_monitor_name+"_files\", "
-                            "monitor_data_table=\"monitor_"+new_monitor_name+"_data\" "
+                            "SET monitor_name=\""+new_monitor_name+"\" "
                             "WHERE monitor_name=\""+old_monitor_name+"\" " );
 
             } else {
