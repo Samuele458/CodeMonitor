@@ -20,6 +20,9 @@
 
 #include "monitor.h"
 
+/*  Class:          Comment
+ *  Description:    Describes a coment type
+ */
 Comment::Comment( QString single_line_str,
                   QString multi_line_start_str,
                   QString multi_line_end_str )
@@ -73,7 +76,9 @@ void Comment::setMultiLineEnd( const QString multi_line_end_str ) {
 
 
 // ----- PROGRAMMING LANGUAGE CLASS -----
-
+/*  Class:          ProgrammingLanguage
+ *  Description:    Programming Languages informations. It contains comments informations
+ */
 
 ProgrammingLanguage::ProgrammingLanguage( QString name_str ) :
     Comment(),
@@ -142,7 +147,9 @@ bool ProgrammingLanguage::load() {
 
 
 //----- FILEDATA CLASS -----
-
+/*  Class:          FileData
+ *  Description:    Manage data for one file
+ */
 FileData::FileData() {
     file_examined = false;
     filename = "";
@@ -316,6 +323,9 @@ unsigned int FileData::getChars() const {
 }
 
 //----- VIEW CLASS -----
+/*  Class:          View
+ *  Description:    Single data view of multiple files
+ */
 View::View() {
 
 }
@@ -354,3 +364,90 @@ QStringList View::getFilenames() const {
 QList<FileData> View::getData() const {
     return data;
 }
+
+
+
+
+/*  Class:          Monitor
+ *  Description:    Describes a coment type
+ */
+
+Monitor::Monitor( QString monitor_name_str ) {
+    name = monitor_name_str;
+    db = new QSqlDatabase;
+    *db = QSqlDatabase::database( "main" );
+    db->setDatabaseName( QDir::currentPath() + "/data/monitors/" + name + ".db" );
+    db->open();
+    load();
+}
+
+Monitor::~Monitor() {
+
+}
+
+//copy constructor
+Monitor::Monitor( const Monitor& other ) {
+    name = other.name;
+    current_files = other.current_files;
+    views = other.views;
+}
+
+//assignment operator
+Monitor& Monitor::operator=( const Monitor& other ) {
+    name = other.name;
+    current_files = other.current_files;
+    views = other.views;
+
+    return *this;
+}
+
+//getter  setter methods
+QString Monitor::getMonitorName() const {
+    return name;
+}
+
+void Monitor::setMonitorName( const QString name_str ) {
+    name = name_str;
+}
+
+QList<View> Monitor::getAllViews() const {
+    return views;
+}
+
+QStringList Monitor::getCurrentFilespath() const {
+    return current_files;
+}
+
+void Monitor::setCurrentFilespath( const QStringList files ) {
+    current_files = files;
+}
+
+//load data from db
+bool Monitor::load() {
+
+    //check if db was correctly opened
+    if( db->isOpen() ) {
+        //database is open
+        QSqlQuery query( *db );
+
+        query.exec( "SELECT file_path FROM monitor_files" );
+        while( query.next() ) {
+            current_files.push_back(query.record().value(0).toString());
+        }
+
+        return true;
+    } else {
+        //database isn't open
+        return false;
+    }
+
+}
+
+
+
+
+
+
+
+
+

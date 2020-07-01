@@ -38,6 +38,7 @@
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
+#include "monitor.h"
 
 class CodeMonitorWindow : public GeneralWindow {
     Q_OBJECT
@@ -62,7 +63,7 @@ class CodeMonitorWindow : public GeneralWindow {
 
         //data
         QString monitor_name;
-
+        Monitor monitor;
 
         //widgets
         QWidget* MainWidget;

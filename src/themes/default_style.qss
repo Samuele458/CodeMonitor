@@ -11,6 +11,9 @@ QPushButton:hover {
     background-color: rgb(255, 162, 0);
 }
 
+QGroupBox {
+    color: white;
+}
 
 QListWidget {
     background-color: rgb(230,230,230);

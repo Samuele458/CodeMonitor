@@ -24,9 +24,10 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
                    QWidget* parent,
                    QString settings_filename_str ) :
     GeneralWindow( parent, settings_filename_str ),
-    monitor_name( monitor_name_str )
+    monitor_name( monitor_name_str ),
+    monitor( monitor_name_str )
 {
-
+    qDebug() << monitor.getCurrentFilespath();
     //setting up gui
     setup_ui();
     apply_settings();
@@ -84,12 +85,19 @@ void CodeMonitorWindow::setup_ui() {
     MainWidget->setLayout( MainLayout );
     this->setCentralWidget( MainWidget );
 
+    MainLayout->setMargin(0);
+    RightLayout->setMargin(3);
+    LeftLayout->setMargin(3);
 
 }
 
 //apply current settings (like language, teme, and other general settings
 void CodeMonitorWindow::apply_settings() {
-
+    MonitorNameLabel->setText( tr("Monitor: ") + monitor_name );
+    AddFileButton->setText( tr("Add file") );
+    AddFolderButton->setText( tr("Add folder") );
+    SettingsButton->setText( tr("Settigs") );
+    DataGroup->setTitle( tr("Informations" ) );
 }
 
 //connect all principal widgets signals to the corresponding slots

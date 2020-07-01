@@ -28,10 +28,18 @@
 #include <QDebug>
 #include <QTextStream>
 #include <QSettings>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlError>
 
 #include "common/filesutility.h"
 #include "common/textsanitizer.h"
 
+
+/*  Class:          Comment
+ *  Description:    Describes a coment type
+ */
 class Comment {
     public:
         Comment() { };
@@ -61,6 +69,9 @@ class Comment {
 };
 
 
+/*  Class:          ProgrammingLanguage
+ *  Description:    Programming Languages informations. It contains comments informations
+ */
 class ProgrammingLanguage : public Comment {
 
     public:
@@ -91,6 +102,9 @@ class ProgrammingLanguage : public Comment {
 
 };
 
+/*  Class:          FileData
+ *  Description:    Manage data for one file
+ */
 class FileData {
     public:
         FileData();
@@ -132,6 +146,9 @@ class FileData {
 
 };
 
+/*  Class:          View
+ *  Description:    Single data view of multiple files
+ */
 class View {
     public:
         View();
@@ -153,7 +170,44 @@ class View {
 
 };
 
+/*  Class:          Monitor
+ *  Description:    Describes a coment type
+ */
 class Monitor {
+    public:
+        Monitor( QString monitor_name_str );
+        ~Monitor();
+
+        //copy constructor
+        Monitor( const Monitor& other );
+
+        //assignment operator
+        Monitor& operator=( const Monitor& other );
+
+
+        //getter  setter methods
+        QString getMonitorName() const;
+        void setMonitorName( const QString name_str );
+
+        QList<View> getAllViews() const;
+
+        QStringList getCurrentFilespath() const;
+        void setCurrentFilespath( const QStringList files );
+
+
+        //--- other ---
+        bool load();
+
+
+
+    protected:
+        QString name;
+        QStringList current_files;
+        QList<View> views;
+
+        QSqlDatabase* db;
+
+
 
 };
 
