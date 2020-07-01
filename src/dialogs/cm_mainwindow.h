@@ -54,6 +54,7 @@ class CodeMonitorWindow : public GeneralWindow {
         void add_file_button_clicked();
         void settings_button_clicked();
         void add_folder_button_clicked();
+        void monitor_now_button_clicked();
 
     protected:
         //apply current settings (like language, teme, and other general settings
@@ -88,12 +89,17 @@ class CodeMonitorWindow : public GeneralWindow {
         QPushButton* AddFileButton;
         QPushButton* AddFolderButton;
         QPushButton* SettingsButton;
+        QPushButton* MonitorNowButton;
 
 
 
         //other ---
 
         void refreshTree();
+        QStringList filesToShow;
+        void setFilesToShow();
+        void checkTreeItemsState( QTreeWidgetItem* item );
+
 
 };
 

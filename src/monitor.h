@@ -127,6 +127,7 @@ class FileData {
         unsigned int getCodeLines() const;
         unsigned int getCommentLines() const;
         unsigned int getTotalLines() const;
+        unsigned int getVoidLines() const;
         unsigned int getSize() const;
         unsigned int getChars() const;
 
@@ -137,6 +138,7 @@ class FileData {
         unsigned int code_lines;        //numeber of code lines
         unsigned int comment_lines;     //number of comment lines
         unsigned int total_lines;       //number of total lines
+        unsigned int void_lines;
         unsigned int size;              //size of file (in byte)
         unsigned int chars;             //number of total chars
         QString language_name;
@@ -192,9 +194,10 @@ class Monitor {
         QList<View> getAllViews() const;
 
         QStringList getCurrentFilespath() const;
-        void setCurrentFilespath( const QStringList files );
         void addFilespath( const QStringList files );
 
+        //monitor all files
+        void MonitorNow();
 
         //--- other ---
         bool load();

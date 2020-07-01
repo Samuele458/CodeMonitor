@@ -108,6 +108,7 @@ void CodeMonitorWindow::apply_slots() {
     connect( MonitorTree, SIGNAL(itemClicked(QTreeWidgetItem*, int )), this, SLOT(monitor_tree_item_clicked( QTreeWidgetItem*, int  )) );
     connect( AddFileButton, SIGNAL(clicked()), this, SLOT(add_file_button_clicked() ) );
     connect( AddFolderButton, SIGNAL(clicked()), this, SLOT(add_folder_button_clicked() ) );
+    connect( MonitorNowButton, SIGNAL(clicked()), this, SLOT(monitor_now_button_clicked() ) );
 }
 
 
@@ -162,6 +163,8 @@ void CodeMonitorWindow::refreshTree() {
 
 void CodeMonitorWindow::monitor_tree_item_clicked( QTreeWidgetItem* item, int column ) {
     qDebug() << "REFRESH DEI DATI";
+    setFilesToShow();
+    qDebug() << filesToShow.size();
 }
 
 void CodeMonitorWindow::add_file_button_clicked() {
@@ -212,6 +215,42 @@ void CodeMonitorWindow::add_folder_button_clicked() {
 
 }
 
+//set files to be showed in the ui
+void CodeMonitorWindow::setFilesToShow() {
+
+    //clearing files list
+    filesToShow.clear();
+
+    //searching files in the tree
+    for( int i = 0; i < MonitorTree->topLevelItemCount(); ++i ) {
+        QTreeWidgetItem* item = MonitorTree->topLevelItem(i);
+        checkTreeItemsState( item );
+    }
+
+}
+
+//check any single ui
+void CodeMonitorWindow::checkTreeItemsState( QTreeWidgetItem* item ) {
+    if( item->toolTip(0) == "" ) {
+        //current has not a tool tip.
+        //tool tip contains filepath if item is a file.
+        for( int i = 0; i < item->childCount(); ++i ) {
+            checkTreeItemsState( item->child(i) );
+        }
+    } else {
+        //current item is a child, so a file
+
+        //add file only if ite is checked
+        if( item->checkState(0) == Qt::Checked )
+            //getting filename path from tool tip
+            filesToShow.push_back( item->toolTip(0) );
+
+    }
+}
+
+void CodeMonitorWindow::monitor_now_button_clicked() {
+    monitor.
+}
 
 
 

@@ -158,6 +158,7 @@ FileData::FileData() {
     code_lines = 0;
     comment_lines = 0;
     total_lines = 0;
+    void_lines = 0;
     size = 0;
     chars = 0;
     language_name = "";
@@ -179,6 +180,7 @@ FileData::FileData( const FileData& other ) {
     code_lines = other.code_lines;
     comment_lines = other.comment_lines;
     total_lines = other.total_lines;
+    void_lines = other.void_lines;
     size = other.size;
     chars = other.chars;
     language_name = other.language_name;
@@ -192,6 +194,7 @@ FileData& FileData::operator=( const FileData& other ) {
     code_lines = other.code_lines;
     comment_lines = other.comment_lines;
     total_lines = other.total_lines;
+    void_lines = other.void_lines;
     size = other.size;
     chars = other.chars;
     language_name = other.language_name;
@@ -209,6 +212,7 @@ bool FileData::Examines() {
     code_lines = 0;
     comment_lines = 0;
     total_lines = 0;
+    void_lines = 0;
     size = 0;
     chars = 0;
     language_name = "";
@@ -311,8 +315,13 @@ unsigned int FileData::getCommentLines() const {
 }
 
 unsigned int FileData::getTotalLines() const {
-    return code_lines + comment_lines;
+    return total_lines;
 }
+
+unsigned int FileData::getVoidLines() const {
+    return void_lines;
+}
+
 
 unsigned int FileData::getSize() const {
     return size;
@@ -418,14 +427,16 @@ QStringList Monitor::getCurrentFilespath() const {
     return current_files;
 }
 
-void Monitor::setCurrentFilespath( const QStringList files ) {
-    current_files = files;
-}
-
 void Monitor::addFilespath( const QStringList files ) {
     foreach( QString file, files ) {
         if( current_files.indexOf( file ) == -1 ) {
             current_files.push_back( file );
+            if( db->isOpen() ) {
+                QSqlQuery query( *db );
+
+                query.exec( "INSERT INTO monitor_files (file_path) "
+                            "VALUES (\"" + file + "\") "  );
+            }
         }
     }
 }
@@ -451,6 +462,10 @@ bool Monitor::load() {
 
 }
 
+//monitor all files
+void Monitor::MonitorNow() {
+
+}
 
 
 

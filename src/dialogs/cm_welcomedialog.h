@@ -89,6 +89,7 @@ class CM_WelcomeDialog : public GeneralWindow {
         QPushButton* EditMonitorButton;
         QPushButton* DeleteMonitorButton;
 
+
         //database
         QSqlDatabase* db;
 
