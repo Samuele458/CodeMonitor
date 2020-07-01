@@ -422,6 +422,14 @@ void Monitor::setCurrentFilespath( const QStringList files ) {
     current_files = files;
 }
 
+void Monitor::addFilespath( const QStringList files ) {
+    foreach( QString file, files ) {
+        if( current_files.indexOf( file ) == -1 ) {
+            current_files.push_back( file );
+        }
+    }
+}
+
 //load data from db
 bool Monitor::load() {
 

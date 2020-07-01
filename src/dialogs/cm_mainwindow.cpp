@@ -98,11 +98,124 @@ void CodeMonitorWindow::apply_settings() {
     AddFolderButton->setText( tr("Add folder") );
     SettingsButton->setText( tr("Settigs") );
     DataGroup->setTitle( tr("Informations" ) );
+
+    refreshTree();
 }
 
 //connect all principal widgets signals to the corresponding slots
 void CodeMonitorWindow::apply_slots() {
 
+    connect( MonitorTree, SIGNAL(itemClicked(QTreeWidgetItem*, int )), this, SLOT(monitor_tree_item_clicked( QTreeWidgetItem*, int  )) );
+    connect( AddFileButton, SIGNAL(clicked()), this, SLOT(add_file_button_clicked() ) );
+    connect( AddFolderButton, SIGNAL(clicked()), this, SLOT(add_folder_button_clicked() ) );
 }
+
+
+void CodeMonitorWindow::refreshTree() {
+    MonitorTree->clear();
+
+    QTreeWidgetItem *topLevelItem = NULL;
+    foreach (const QString &fileName, monitor.getCurrentFilespath() )
+    {
+        QStringList splitFileName = fileName.split("/");
+        if (MonitorTree->findItems(splitFileName[0], Qt::MatchFixedString).isEmpty())
+        {
+            topLevelItem = new QTreeWidgetItem;
+            topLevelItem->setCheckState( 0, Qt::Unchecked );
+            topLevelItem->setFlags( topLevelItem->flags() | Qt::ItemIsTristate | Qt::ItemIsUserCheckable );
+            topLevelItem->setText(0, splitFileName[0]);
+            MonitorTree->addTopLevelItem(topLevelItem);
+        }
+
+        QTreeWidgetItem *parentItem = topLevelItem;
+
+        for (int i = 1; i < splitFileName.size() - 1; ++i)
+        {
+            bool thisDirectoryExists = false;
+            for (int j = 0; j < parentItem->childCount(); ++j)
+            {
+                if (splitFileName[i] == parentItem->child(j)->text(0))
+                {
+                    thisDirectoryExists = true;
+                    parentItem = parentItem->child(j);
+                    break;
+                }
+            }
+
+            if (!thisDirectoryExists)
+            {
+                parentItem = new QTreeWidgetItem(parentItem);
+                parentItem->setCheckState( 0, Qt::Unchecked );
+                parentItem->setFlags( parentItem->flags() | Qt::ItemIsTristate | Qt::ItemIsUserCheckable );
+                parentItem->setText(0, splitFileName[i]);
+            }
+        }
+
+        QTreeWidgetItem *childItem = new QTreeWidgetItem(parentItem);
+        childItem->setCheckState( 0, Qt::Unchecked );
+        childItem->setFlags( childItem->flags() | Qt::ItemIsUserCheckable );
+        childItem->setText(0, splitFileName.last());
+        childItem->setToolTip(0, fileName );
+    }
+}
+
+
+void CodeMonitorWindow::monitor_tree_item_clicked( QTreeWidgetItem* item, int column ) {
+    qDebug() << "REFRESH DEI DATI";
+}
+
+void CodeMonitorWindow::add_file_button_clicked() {
+
+    //file dialog to choose one or more files
+    QFileDialog dialog( this );
+
+    dialog.setNameFilter( tr("All Files (*.*)") );
+    dialog.setViewMode( QFileDialog::Detail );
+    dialog.setFileMode( QFileDialog::ExistingFiles );
+
+    QStringList fileNames;
+    if (dialog.exec())
+        fileNames = dialog.selectedFiles();
+
+    if( fileNames.size() > 0 ) {
+        monitor.addFilespath( fileNames );
+        refreshTree();
+    }
+}
+
+void CodeMonitorWindow::settings_button_clicked() {
+
+}
+
+void CodeMonitorWindow::add_folder_button_clicked() {
+
+    //file dialog to choose one or more files
+    QFileDialog dialog( this );
+
+    dialog.setNameFilter( tr("All Files (*.*)") );
+    dialog.setViewMode( QFileDialog::Detail );
+    dialog.setFileMode( QFileDialog::DirectoryOnly );
+
+    QStringList dir;
+    if (dialog.exec())
+        dir = dialog.selectedFiles();
+
+    if( dir.size() > 0 ) {
+        QStringList fileNames;
+        QDirIterator it(dir.at(0), QStringList() << "*.*", QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext()) {
+            fileNames << it.next();
+        }
+        monitor.addFilespath( fileNames );
+        refreshTree();
+    }
+
+}
+
+
+
+
+
+
 
 

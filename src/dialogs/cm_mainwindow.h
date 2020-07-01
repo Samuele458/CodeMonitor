@@ -35,6 +35,8 @@
 #include <QSplitter>
 #include <QTreeWidget>
 #include <QGroupBox>
+#include <QFileDialog>
+#include <QDirIterator>
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
@@ -47,8 +49,11 @@ class CodeMonitorWindow : public GeneralWindow {
         CodeMonitorWindow( QString monitor_name_str, QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
         ~CodeMonitorWindow();
 
-    //protected slots:
-
+    protected slots:
+        void monitor_tree_item_clicked( QTreeWidgetItem* item, int column );
+        void add_file_button_clicked();
+        void settings_button_clicked();
+        void add_folder_button_clicked();
 
     protected:
         //apply current settings (like language, teme, and other general settings
@@ -83,6 +88,12 @@ class CodeMonitorWindow : public GeneralWindow {
         QPushButton* AddFileButton;
         QPushButton* AddFolderButton;
         QPushButton* SettingsButton;
+
+
+
+        //other ---
+
+        void refreshTree();
 
 };
 

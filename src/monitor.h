@@ -193,6 +193,7 @@ class Monitor {
 
         QStringList getCurrentFilespath() const;
         void setCurrentFilespath( const QStringList files );
+        void addFilespath( const QStringList files );
 
 
         //--- other ---
