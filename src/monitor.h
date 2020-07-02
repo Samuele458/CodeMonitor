@@ -110,6 +110,7 @@ class FileData {
     public:
         FileData();
         FileData( QString filename_str );
+        FileData( QString filename_str, QString data_str );
         ~FileData();
 
         //copy constructor
@@ -120,8 +121,11 @@ class FileData {
 
         bool Examines();          //examin file
         bool wasFileExamined();
-        bool isTextFile();
 
+        //evaluate programming language name
+        void evaluateProgLang();
+
+        //getter-setter methods
         void setFilename( QString filename_str );
         QString getFilename() const;
 
@@ -131,8 +135,16 @@ class FileData {
         unsigned int getVoidLines() const;
         unsigned int getSize() const;
         unsigned int getChars() const;
+        void setCodeLines( unsigned int value );
+        void setCommentLines( unsigned int value );
+        void setTotalLines( unsigned int value );
+        void setVoidLines( unsigned int value );
+        void setSize( unsigned int value );
+        void setChars( unsigned int value );
+
 
         QString getDataString() const;
+        void fillByData( QString data_str);
 
     protected:
         QString filename;
@@ -146,7 +158,6 @@ class FileData {
         QString language_name;
 
         bool file_examined;
-        bool is_text_file;
 
 };
 
@@ -157,25 +168,28 @@ class View {
     public:
         View();
         View( QStringList filenames_list );
+        View( QStringList filenames_list,
+              QStringList data_strings,
+              QDateTime date );
         ~View();
 
         View( const View& other );
         View& operator=( const View& other );
 
+        //examines all files
         void examinesAll();
 
+        //getter - setter methods
         QStringList getFilenames() const;
         QList<FileData> getData() const;
         QDateTime getDateTime() const;
-
         QStringList getDataStrings() const;
-
         FileData getFileData( QString filename, bool* ok = nullptr );
 
+        void addFile( const QString filename );
+
     protected:
-        QStringList filenames;
         QList<FileData> data;
-        QStringList data_strings;
         QDateTime date_time;
 
 

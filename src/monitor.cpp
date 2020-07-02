@@ -152,8 +152,8 @@ bool ProgrammingLanguage::load() {
  */
 FileData::FileData() {
     file_examined = false;
+
     filename = "";
-    is_text_file = false;
 
     code_lines = 0;
     comment_lines = 0;
@@ -168,6 +168,12 @@ FileData::FileData( QString filename_str ) :
     filename( filename_str )
 {
     Examines();
+}
+
+FileData::FileData( QString filename_str, QString data_str ) :
+    filename( filename_str )
+{
+    fillByData( data_str );
 }
 
 FileData::~FileData() {
@@ -185,7 +191,6 @@ FileData::FileData( const FileData& other ) {
     chars = other.chars;
     language_name = other.language_name;
     file_examined = other.file_examined;
-    is_text_file = other.is_text_file;
 }
 
 //assignment operator
@@ -199,7 +204,6 @@ FileData& FileData::operator=( const FileData& other ) {
     chars = other.chars;
     language_name = other.language_name;
     file_examined = other.file_examined;
-    is_text_file = other.is_text_file;
 
     return *this;
 }
@@ -208,7 +212,7 @@ FileData& FileData::operator=( const FileData& other ) {
 //examines file
 bool FileData::Examines() {
 
-    //resetting data viariables.
+    //resetting data variables.
     code_lines = 0;
     comment_lines = 0;
     total_lines = 0;
@@ -264,13 +268,6 @@ bool FileData::Examines() {
                 }
                 total_lines++;
             }
-            /*qDebug() << "LINEE COMMENTO " << comment_lines;
-            qDebug() << "LINEE CODICE " << code_lines;
-            qDebug() << "LINEE TOTALI " << total_lines;
-            qDebug() << "Linguaggio " << prog_lang.getName() ;
-            qDebug() << "Linguaggio " << prog_lang.getExtensions() ;
-            qDebug() << "Linguaggio " << prog_lang.getMultiLineStart() << prog_lang.getMultiLineStart().size() ;
-            */
         }
         file_examined = true;
     } else {
@@ -290,10 +287,15 @@ bool FileData::wasFileExamined() {
     return file_examined;
 }
 
-//check if file is text file
-bool FileData::isTextFile() {
-    return is_text_file;
+//evaluate programming language name
+void FileData::evaluateProgLang() {
+    ProgrammingLanguage prog_lang( FilesUtilities::getProgLangName( FilesUtilities::getFileExtension( filename ) ) );
+    prog_lang.load();
+    language_name = prog_lang.getName();
 }
+
+
+//    getter  -  setter    methods
 
 void FileData::setFilename( QString filename_str ) {
     filename = filename_str;
@@ -328,6 +330,30 @@ unsigned int FileData::getChars() const {
     return chars;
 }
 
+void FileData::setCodeLines( unsigned int value ) {
+    code_lines = value;
+}
+
+void FileData::setCommentLines( unsigned int value ) {
+    comment_lines = value;
+}
+
+void FileData::setTotalLines( unsigned int value ) {
+    total_lines = value;
+}
+
+void FileData::setVoidLines( unsigned int value ) {
+    void_lines = value;
+}
+
+void FileData::setSize( unsigned int value ) {
+    size = value;
+}
+
+void FileData::setChars( unsigned int value ) {
+    chars = value;
+}
+
 //return all Filedata data in a string fromatted
 QString FileData::getDataString() const {
     return QString::number( code_lines ) + "-" +
@@ -336,6 +362,18 @@ QString FileData::getDataString() const {
            QString::number( void_lines ) + "-" +
            QString::number( size ) + "-" +
            QString::number( chars );
+}
+
+
+void FileData::fillByData( QString data_str) {
+    QStringList values = data_str.split("-");
+    code_lines = values.at(0).toUInt();
+    comment_lines = values.at(1).toUInt();
+    total_lines = values.at(2).toUInt();
+    void_lines = values.at(3).toUInt();
+    size = values.at(4).toUInt();
+    chars = values.at(5).toUInt();
+
 }
 
 
@@ -349,8 +387,18 @@ View::View() {
 }
 
 View::View( QStringList filenames_list ) {
-    filenames = filenames_list;
+    foreach( QString file, filenames_list ) {
+        data.push_back( QFile)
+    }
     examinesAll();
+}
+
+View::View( QStringList filenames_list,
+            QStringList data_strings,
+            QDateTime date )
+{
+    date_time = date;
+
 }
 
 View::~View() {
@@ -408,8 +456,6 @@ QStringList View::getDataStrings() const {
 }
 
 FileData View::getFileData( QString filename, bool* ok  ) {
-    qDebug() << "FILES: " << filenames.size();
-    qDebug() << "DATA: " << data.size();
     if( filenames.indexOf( filename ) != -1 ) {
         if( ok != nullptr )
             *ok = true;
@@ -420,6 +466,13 @@ FileData View::getFileData( QString filename, bool* ok  ) {
         return FileData();
     }
 }
+
+
+void View::addFile( const QString filename ) {
+    data.push_back( FileData() );
+    data_strings.push_back( data.last().getDataString() );
+}
+
 
 
 
@@ -547,9 +600,6 @@ bool Monitor::saveData() {
         query.exec( "DROP TABLE monitor_data" );
         query.exec( query_text );
 
-
-
-
         foreach( View current_view, views ) {
             query_text = "INSERT INTO monitor_data (date";
             foreach( QString file, files_id_from_files ) {
@@ -564,28 +614,10 @@ bool Monitor::saveData() {
             qDebug() << query.exec(query_text);
         }
 
-
-
-
-
-
-
         return true;
     } else {
         return false;
     }
-
-
-
-
-    //aggiornare colonne:
-    //prendere colonne attuali
-    //prendere lista dei file
-    //confrontare gli id
-
-
-    //puire tabella
-    //salvare i nuovi dati
 }
 
 
