@@ -59,6 +59,7 @@ void CodeMonitorWindow::setup_ui() {
     AddFileButton = new QPushButton;
     AddFolderButton = new QPushButton;
     SettingsButton = new QPushButton;
+    MonitorNowButton = new QPushButton;
 
     //---- left side ----
     LeftLayout->addWidget( MonitorNameLabel );
@@ -73,6 +74,7 @@ void CodeMonitorWindow::setup_ui() {
     RightLayout->addLayout( RightSplitterLayout );
     ButtonsLayout->addWidget( AddFileButton );
     ButtonsLayout->addWidget( AddFolderButton );
+    ButtonsLayout->addWidget( MonitorNowButton );
     ButtonsLayout->addWidget( SettingsButton );
     RightLayout->addLayout( ButtonsLayout );
 
@@ -164,6 +166,7 @@ void CodeMonitorWindow::refreshTree() {
 void CodeMonitorWindow::monitor_tree_item_clicked( QTreeWidgetItem* item, int column ) {
     qDebug() << "REFRESH DEI DATI";
     setFilesToShow();
+    refresh_monitor_table();
     qDebug() << filesToShow.size();
 }
 
@@ -249,10 +252,58 @@ void CodeMonitorWindow::checkTreeItemsState( QTreeWidgetItem* item ) {
 }
 
 void CodeMonitorWindow::monitor_now_button_clicked() {
-    monitor.
+    monitor.MonitorNow();
+    refresh_monitor_table();
 }
 
+void CodeMonitorWindow::refresh_monitor_table() {
 
+    MonitorTable->setRowCount(0);
+    MonitorTable->setColumnCount(4);
+    MonitorTable->setHorizontalHeaderLabels( QStringList() << tr("Total lines") <<
+                                                              tr("Code lines") <<
+                                                              tr("Comment lines") <<
+                                                              tr("Void lines") );
+    MonitorTable->verticalHeader()->setVisible(false);
+    MonitorTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    MonitorTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    MonitorTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    MonitorTable->setShowGrid(false);
+
+    foreach( View current_view, monitor.getAllViews() ) {
+        unsigned int code_lines = 0;        //numeber of code lines
+        unsigned int comment_lines = 0;     //number of comment lines
+        unsigned int total_lines = 0;       //number of total lines
+        unsigned int void_lines = 0;
+        qDebug() << "VIEW";
+
+        foreach( QString file, filesToShow ) {
+            qDebug() << "FILE";
+            FileData current_file = current_view.getFileData( file );
+            qDebug() << "FILE OTTENUTO";
+            code_lines += current_file.getCodeLines();
+            comment_lines += current_file.getCommentLines();
+            total_lines += current_file.getTotalLines();
+            void_lines += current_file.getVoidLines();
+        }
+        //MonitorTable->setRowCount( MonitorTable->rowCount() + 1 );
+        MonitorTable->insertRow( MonitorTable->rowCount() );
+        MonitorTable->setItem( MonitorTable->rowCount() - 1,
+                               0,
+                               new QTableWidgetItem( QString::number( total_lines ) ) );
+        MonitorTable->setItem( MonitorTable->rowCount() - 1,
+                               1,
+                               new QTableWidgetItem( QString::number( code_lines ) ) );
+        MonitorTable->setItem( MonitorTable->rowCount() - 1,
+                               2,
+                               new QTableWidgetItem( QString::number( comment_lines ) ) );
+        MonitorTable->setItem( MonitorTable->rowCount() - 1,
+                               3,
+                               new QTableWidgetItem( QString::number( void_lines ) ) );
+
+    }
+
+}
 
 
 

@@ -37,6 +37,7 @@
 #include <QGroupBox>
 #include <QFileDialog>
 #include <QDirIterator>
+#include <QHeaderView>
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
@@ -99,6 +100,7 @@ class CodeMonitorWindow : public GeneralWindow {
         QStringList filesToShow;
         void setFilesToShow();
         void checkTreeItemsState( QTreeWidgetItem* item );
+        void refresh_monitor_table();
 
 
 };

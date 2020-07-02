@@ -32,6 +32,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
+#include <QDateTime>
 
 #include "common/filesutility.h"
 #include "common/textsanitizer.h"
@@ -131,6 +132,7 @@ class FileData {
         unsigned int getSize() const;
         unsigned int getChars() const;
 
+        QString getDataString() const;
 
     protected:
         QString filename;
@@ -164,10 +166,17 @@ class View {
 
         QStringList getFilenames() const;
         QList<FileData> getData() const;
+        QDateTime getDateTime() const;
+
+        QStringList getDataStrings() const;
+
+        FileData getFileData( QString filename, bool* ok = nullptr );
 
     protected:
         QStringList filenames;
         QList<FileData> data;
+        QStringList data_strings;
+        QDateTime date_time;
 
 
 };

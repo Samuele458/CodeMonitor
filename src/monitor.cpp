@@ -227,18 +227,14 @@ bool FileData::Examines() {
                 QString current_line = file.readLine();
                 int sl_index = current_line.indexOf( prog_lang.getSingleLine() );
                 if( sl_index > 0 ) {
-                    qDebug() << "Stringa verificata" << current_line.mid( 0, sl_index );
                     if( TextSanitizer::check_string( current_line.mid( 0, sl_index ), TextSanitizer::TYPES::VOID ) ) {
                         ++comment_lines;
-                        qDebug() << "COMMENTO" << current_line;
                     } else {
                         ++code_lines;
-                        qDebug() << "CODICE" << current_line;
 
                     }
                 } else if( sl_index == 0 ) {
                     ++comment_lines;
-                    qDebug() << "COMMENTO_" << current_line;
 
                 } else  {
                     int ml_index = current_line.indexOf( prog_lang.getMultiLineStart() );
@@ -247,7 +243,6 @@ bool FileData::Examines() {
                             ++comment_lines;
                             unsigned int start_lines = total_lines;
                             do {
-                                qDebug() << "LINEA CORRENTE: " << current_line;
                                 int ml_end_index;
                                 if( start_lines == total_lines )
                                     ml_end_index = current_line.indexOf( prog_lang.getMultiLineEnd(), ml_index + prog_lang.getMultiLineStart().size() );
@@ -265,19 +260,21 @@ bool FileData::Examines() {
                         }
                     } else {
                         ++code_lines;
-                    qDebug() << "CODICE_" << current_line;
                     }
                 }
                 total_lines++;
             }
-            qDebug() << "LINEE COMMENTO " << comment_lines;
+            /*qDebug() << "LINEE COMMENTO " << comment_lines;
             qDebug() << "LINEE CODICE " << code_lines;
             qDebug() << "LINEE TOTALI " << total_lines;
             qDebug() << "Linguaggio " << prog_lang.getName() ;
             qDebug() << "Linguaggio " << prog_lang.getExtensions() ;
             qDebug() << "Linguaggio " << prog_lang.getMultiLineStart() << prog_lang.getMultiLineStart().size() ;
-
+            */
         }
+        file_examined = true;
+    } else {
+        file_examined = false;
     }
 
 
@@ -331,6 +328,18 @@ unsigned int FileData::getChars() const {
     return chars;
 }
 
+//return all Filedata data in a string fromatted
+QString FileData::getDataString() const {
+    return QString::number( code_lines ) + "-" +
+           QString::number( comment_lines ) + "-" +
+           QString::number( total_lines ) + "-" +
+           QString::number( void_lines ) + "-" +
+           QString::number( size ) + "-" +
+           QString::number( chars );
+}
+
+
+
 //----- VIEW CLASS -----
 /*  Class:          View
  *  Description:    Single data view of multiple files
@@ -363,6 +372,16 @@ View& View::operator=( const View& other ) {
 
 void View::examinesAll() {
     data.clear();
+    data_strings.clear();
+    QDateTime::currentDateTime().toString( "yyyy-MM-dd-hh-mm-ss-zzz");
+    foreach( QString filename, filenames ) {
+        FileData current_file( filename );
+        if( !current_file.Examines() ) {
+            qDebug() << "Error: " << filename << "mm";
+        }
+        data.push_back( current_file );
+        data_strings.push_back( current_file.getDataString() );
+    }
     //...
 }
 
@@ -374,6 +393,27 @@ QList<FileData> View::getData() const {
     return data;
 }
 
+QDateTime View::getDateTime() const {
+    return date_time;
+}
+
+QStringList View::getDataStrings() const {
+    return data_strings;
+}
+
+FileData View::getFileData( QString filename, bool* ok  ) {
+    qDebug() << "FILES: " << filenames.size();
+    qDebug() << "DATA: " << data.size();
+    if( filenames.indexOf( filename ) != -1 ) {
+        if( ok != nullptr )
+            *ok = true;
+        return data.at( filenames.indexOf( filename ) );
+    } else {
+        if( ok != nullptr )
+            *ok = false;
+        return FileData();
+    }
+}
 
 
 
@@ -464,7 +504,10 @@ bool Monitor::load() {
 
 //monitor all files
 void Monitor::MonitorNow() {
-
+    qDebug() << QDateTime::currentDateTime().toString( "yyyy-MM-dd-hh-mm-ss-zzz");
+    View newView( current_files );
+    views.push_back( newView );
+    qDebug() << newView.getDataStrings();
 }
 
 
