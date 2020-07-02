@@ -68,6 +68,8 @@ class CodeMonitorWindow : public GeneralWindow {
         void setup_ui() override;
 
 
+        void closeEvent( QCloseEvent* event ) override;
+
         //data
         QString monitor_name;
         Monitor monitor;

@@ -361,19 +361,24 @@ View::~View() {
 View::View( const View& other ) {
     filenames = other.filenames;
     data = other.data;
+    data_strings = other.data_strings;
+    date_time = other.date_time;
 }
 
 //assignent operator
 View& View::operator=( const View& other ) {
     filenames = other.filenames;
     data = other.data;
+    data_strings = other.data_strings;
+    date_time = other.date_time;
     return *this;
 }
 
 void View::examinesAll() {
+    qDebug() << "ESAMIANDO UNA VIEW ---";
     data.clear();
     data_strings.clear();
-    QDateTime::currentDateTime().toString( "yyyy-MM-dd-hh-mm-ss-zzz");
+    date_time = QDateTime::currentDateTime();
     foreach( QString filename, filenames ) {
         FileData current_file( filename );
         if( !current_file.Examines() ) {
@@ -382,6 +387,7 @@ void View::examinesAll() {
         data.push_back( current_file );
         data_strings.push_back( current_file.getDataString() );
     }
+    qDebug() << "DATA STRING: " << data_strings;
     //...
 }
 
@@ -508,6 +514,78 @@ void Monitor::MonitorNow() {
     View newView( current_files );
     views.push_back( newView );
     qDebug() << newView.getDataStrings();
+}
+
+//save data to database file
+bool Monitor::saveData() {
+
+
+    //check if db is opened
+    if( db->isOpen() ) {
+
+        //files ids from tables
+        QStringList files_id_from_files;
+
+
+        QSqlQuery query( *db );
+
+
+        query.exec( "SELECT ID_file from monitor_files");
+        while( query.next() ) {
+            files_id_from_files.push_back( "file"+query.record().value(0).toString() );
+        }
+
+        QString query_text;
+
+        query_text += "CREATE TABLE monitor_data ("
+                      "ID_view INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
+                      "date TEXT NOT NULL UNIQUE";
+        foreach( QString file, files_id_from_files ) {
+            query_text += ", "+file+" TEXT NOT NULL";
+        }
+        query_text += ")";
+        query.exec( "DROP TABLE monitor_data" );
+        query.exec( query_text );
+
+
+
+
+        foreach( View current_view, views ) {
+            query_text = "INSERT INTO monitor_data (date";
+            foreach( QString file, files_id_from_files ) {
+                query_text += "," + file;
+            }
+            query_text += ") VALUES (\""+current_view.getDateTime().toString( "yyyy-MM-dd-hh-mm-ss-zzz")+"\"";
+            foreach( QString data, current_view.getDataStrings() ) {
+                query_text += ",\""+data+"\"";
+            }
+            query_text += ")";
+            qDebug() << query_text << current_view.getDataStrings().size();
+            qDebug() << query.exec(query_text);
+        }
+
+
+
+
+
+
+
+        return true;
+    } else {
+        return false;
+    }
+
+
+
+
+    //aggiornare colonne:
+    //prendere colonne attuali
+    //prendere lista dei file
+    //confrontare gli id
+
+
+    //puire tabella
+    //salvare i nuovi dati
 }
 
 

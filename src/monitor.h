@@ -211,6 +211,8 @@ class Monitor {
         //--- other ---
         bool load();
 
+        bool saveData();
+
 
 
     protected:

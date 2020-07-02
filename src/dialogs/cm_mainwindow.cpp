@@ -305,6 +305,10 @@ void CodeMonitorWindow::refresh_monitor_table() {
 
 }
 
+void CodeMonitorWindow::closeEvent( QCloseEvent* event )  {
+    monitor.saveData();
+}
+
 
 
 
