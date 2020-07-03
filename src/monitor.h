@@ -186,7 +186,14 @@ class View {
         QStringList getDataStrings() const;
         FileData getFileData( QString filename, bool* ok = nullptr );
 
+        //add file and examines it
         void addFile( const QString filename );
+
+        //add file from other FileData object
+        void addFile( const FileData file );
+
+        //add file from other
+        void addFile( const QString filename, QString data_string );
 
     protected:
         QList<FileData> data;

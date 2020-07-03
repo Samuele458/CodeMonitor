@@ -388,7 +388,8 @@ View::View() {
 
 View::View( QStringList filenames_list ) {
     foreach( QString file, filenames_list ) {
-        data.push_back( QFile)
+        data.push_back( FileData() );
+        data.last().setFilename( file );
     }
     examinesAll();
 }
@@ -397,8 +398,16 @@ View::View( QStringList filenames_list,
             QStringList data_strings,
             QDateTime date )
 {
-    date_time = date;
 
+    //filenames and data array, must have the same length
+    if( filenames_list.size() == data_strings.size() ) {
+        date_time = date;
+
+        for( int i = 0; i < filenames_list.size(); ++i ) {
+            data.push_back( FileData( filenames_list.at(i),
+                                      data_strings.at(i) ) );
+        }
+    }
 }
 
 View::~View() {
@@ -407,39 +416,29 @@ View::~View() {
 
 //copy constructor
 View::View( const View& other ) {
-    filenames = other.filenames;
     data = other.data;
-    data_strings = other.data_strings;
     date_time = other.date_time;
 }
 
 //assignent operator
 View& View::operator=( const View& other ) {
-    filenames = other.filenames;
     data = other.data;
-    data_strings = other.data_strings;
     date_time = other.date_time;
     return *this;
 }
 
 void View::examinesAll() {
-    qDebug() << "ESAMIANDO UNA VIEW ---";
-    data.clear();
-    data_strings.clear();
     date_time = QDateTime::currentDateTime();
-    foreach( QString filename, filenames ) {
-        FileData current_file( filename );
-        if( !current_file.Examines() ) {
-            qDebug() << "Error: " << filename << "mm";
-        }
-        data.push_back( current_file );
-        data_strings.push_back( current_file.getDataString() );
+    for( int i = 0; i < data.size(); ++i ) {
+       data[i].Examines();
     }
-    qDebug() << "DATA STRING: " << data_strings;
-    //...
 }
 
 QStringList View::getFilenames() const {
+    QStringList filenames;
+    foreach( FileData file, data ) {
+        filenames << file.getFilename();
+    }
     return filenames;
 }
 
@@ -452,27 +451,49 @@ QDateTime View::getDateTime() const {
 }
 
 QStringList View::getDataStrings() const {
-    return data_strings;
-}
+    QStringList data_strings;
+    foreach( FileData file, data ) {
+        data_strings << file.getDataString();
+    }
+    return data_strings;}
 
 FileData View::getFileData( QString filename, bool* ok  ) {
-    if( filenames.indexOf( filename ) != -1 ) {
-        if( ok != nullptr )
-            *ok = true;
-        return data.at( filenames.indexOf( filename ) );
+
+    int index = -1;
+
+    for( int i = 0; i < data.size(); ++i ) {
+        if( data.at(i).getFilename() == filename ) {
+            index = i;
+            break;
+        }
+    }
+
+    if( ok != nullptr ) {
+        *ok = index != -1;
+    }
+
+    if( index != -1 ) {
+        return data.at( index );
     } else {
-        if( ok != nullptr )
-            *ok = false;
         return FileData();
     }
 }
 
 
+//add file and examines it
 void View::addFile( const QString filename ) {
-    data.push_back( FileData() );
-    data_strings.push_back( data.last().getDataString() );
+    data.push_back( FileData(filename) );
 }
 
+//add file from other FileData object
+void View::addFile( const FileData file ) {
+    data.push_back( file );
+}
+
+//add file from other
+void View::addFile( const QString filename, QString data_string ) {
+    data.push_back( FileData(filename, data_string) );
+}
 
 
 
@@ -530,12 +551,6 @@ void Monitor::addFilespath( const QStringList files ) {
     foreach( QString file, files ) {
         if( current_files.indexOf( file ) == -1 ) {
             current_files.push_back( file );
-            if( db->isOpen() ) {
-                QSqlQuery query( *db );
-
-                query.exec( "INSERT INTO monitor_files (file_path) "
-                            "VALUES (\"" + file + "\") "  );
-            }
         }
     }
 }
@@ -563,10 +578,9 @@ bool Monitor::load() {
 
 //monitor all files
 void Monitor::MonitorNow() {
-    qDebug() << QDateTime::currentDateTime().toString( "yyyy-MM-dd-hh-mm-ss-zzz");
     View newView( current_files );
     views.push_back( newView );
-    qDebug() << newView.getDataStrings();
+    qDebug() << newView.getDataStrings() << current_files;
 }
 
 //save data to database file
@@ -583,11 +597,21 @@ bool Monitor::saveData() {
         QSqlQuery query( *db );
 
 
+        query.exec( "DROP TABLE monitor_files");
+        query.exec( "CREATE TABLE monitor_files ("
+                    "ID_file INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
+                    "file_path TEXT NOT NULL UNIQUE"
+                    ")" );
+        foreach( QString filename, current_files ) {
+            query.exec( "INSERT INTO monitor_files (file_path) VALUES (\"" + filename + "\")");
+        }
+
+
         query.exec( "SELECT ID_file from monitor_files");
         while( query.next() ) {
             files_id_from_files.push_back( "file"+query.record().value(0).toString() );
         }
-
+        query.exec( "DROP TABLE monitor_data" );
         QString query_text;
 
         query_text += "CREATE TABLE monitor_data ("
@@ -597,7 +621,7 @@ bool Monitor::saveData() {
             query_text += ", "+file+" TEXT NOT NULL";
         }
         query_text += ")";
-        query.exec( "DROP TABLE monitor_data" );
+
         query.exec( query_text );
 
         foreach( View current_view, views ) {
@@ -606,9 +630,20 @@ bool Monitor::saveData() {
                 query_text += "," + file;
             }
             query_text += ") VALUES (\""+current_view.getDateTime().toString( "yyyy-MM-dd-hh-mm-ss-zzz")+"\"";
-            foreach( QString data, current_view.getDataStrings() ) {
-                query_text += ",\""+data+"\"";
+
+            bool fileIsPresent;
+
+            foreach( QString filename, current_files ) {
+
+                FileData current_file = current_view.getFileData( filename, &fileIsPresent );
+                if( fileIsPresent ) {
+                    query_text += ",\""+current_file.getDataString()+"\"";
+                } else {
+                    query_text += ",\""+FileData().getDataString()+"\"";
+                }
+
             }
+
             query_text += ")";
             qDebug() << query_text << current_view.getDataStrings().size();
             qDebug() << query.exec(query_text);
