@@ -617,30 +617,43 @@ bool Monitor::saveData() {
     //check if db is opened
     if( db->isOpen() ) {
 
+        //progress dialog for showing saving progress
+        QProgressDialog progress(tr("Saving %1 monitor...").arg( "\""+ name + "\"" ), tr("Cancel"), 0, current_files.size()+views.size(), nullptr);
+        progress.setWindowModality(Qt::WindowModal);
+
+        //progress bar counter
+        int prog_count = 0;
+
         //files ids from tables
         QStringList files_id_from_files;
 
-
+        //query object
         QSqlQuery query( *db );
 
+        //string used to contains complex queries
+        QString query_text;
 
+        //clearing old monitor_files table
         query.exec( "DROP TABLE monitor_files");
         query.exec( "CREATE TABLE monitor_files ("
                     "ID_file INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
                     "file_path TEXT NOT NULL UNIQUE"
                     ")" );
+
+        //filling monitor_files table
         foreach( QString filename, current_files ) {
             query.exec( "INSERT INTO monitor_files (file_path) VALUES (\"" + filename + "\")");
+            progress.setValue(++prog_count);
         }
 
-
+        //creating columns name, ex: file1, file2, ..., file45
         query.exec( "SELECT ID_file from monitor_files");
         while( query.next() ) {
             files_id_from_files.push_back( "file"+query.record().value(0).toString() );
         }
-        query.exec( "DROP TABLE monitor_data" );
-        QString query_text;
 
+        //clearing monitor_data table, and creating a new table with all needed columns (one for each file to save)
+        query.exec( "DROP TABLE monitor_data" );
         query_text += "CREATE TABLE monitor_data ("
                       "ID_view INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
                       "date TEXT NOT NULL UNIQUE";
@@ -648,9 +661,9 @@ bool Monitor::saveData() {
             query_text += ", "+file+" TEXT NOT NULL";
         }
         query_text += ")";
-
         query.exec( query_text );
 
+        //filling monitor_data
         foreach( View current_view, views ) {
             query_text = "INSERT INTO monitor_data (date";
             foreach( QString file, files_id_from_files ) {
@@ -672,12 +685,14 @@ bool Monitor::saveData() {
             }
 
             query_text += ")";
-            qDebug() << query_text << current_view.getDataStrings().size();
-            qDebug() << query.exec(query_text);
+            query.exec(query_text);
+            progress.setValue(++prog_count);
         }
+        progress.setValue( views.size() + current_files.size() );
 
         return true;
     } else {
+        QMessageBox::critical( nullptr, tr("Error"), tr("Error: Couldn't save monitor." ) );
         return false;
     }
 }

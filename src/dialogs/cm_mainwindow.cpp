@@ -33,6 +33,8 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
     apply_settings();
     apply_slots();
 
+    saved = true;
+
 }
 
 CodeMonitorWindow::~CodeMonitorWindow() {
@@ -186,6 +188,7 @@ void CodeMonitorWindow::add_file_button_clicked() {
     if( fileNames.size() > 0 ) {
         monitor.addFilespath( fileNames );
         refreshTree();
+        saved = false;
     }
 }
 
@@ -214,6 +217,7 @@ void CodeMonitorWindow::add_folder_button_clicked() {
         }
         monitor.addFilespath( fileNames );
         refreshTree();
+        saved = false;
     }
 
 }
@@ -254,6 +258,7 @@ void CodeMonitorWindow::checkTreeItemsState( QTreeWidgetItem* item ) {
 void CodeMonitorWindow::monitor_now_button_clicked() {
     monitor.MonitorNow();
     refresh_monitor_table();
+    saved = false;
 }
 
 void CodeMonitorWindow::refresh_monitor_table() {
@@ -275,18 +280,14 @@ void CodeMonitorWindow::refresh_monitor_table() {
         unsigned int comment_lines = 0;     //number of comment lines
         unsigned int total_lines = 0;       //number of total lines
         unsigned int void_lines = 0;
-        qDebug() << "VIEW";
 
         foreach( QString file, filesToShow ) {
-            qDebug() << "FILE";
             FileData current_file = current_view.getFileData( file );
-            qDebug() << "FILE OTTENUTO";
             code_lines += current_file.getCodeLines();
             comment_lines += current_file.getCommentLines();
             total_lines += current_file.getTotalLines();
             void_lines += current_file.getVoidLines();
         }
-        //MonitorTable->setRowCount( MonitorTable->rowCount() + 1 );
         MonitorTable->insertRow( MonitorTable->rowCount() );
         MonitorTable->setItem( MonitorTable->rowCount() - 1,
                                0,
@@ -306,6 +307,32 @@ void CodeMonitorWindow::refresh_monitor_table() {
 }
 
 void CodeMonitorWindow::closeEvent( QCloseEvent* event )  {
+    if( saved == true )
+        //db saved
+        event->accept();
+    else {
+        //db not saved yet
+
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, tr("Save"), tr("Save %1 monitor before closing?").arg( "\"" + monitor.getMonitorName() + "\""),
+                                      QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+        if( reply == QMessageBox::Yes ) {
+            //YES button clicked
+            save();
+            event->accept();
+        } else if( reply == QMessageBox::No ) {
+            //NO button clicked
+            event->ignore();
+        } else {
+            //CANCEL button clicked
+            event->accept();
+        }
+    }
+}
+
+//save data to database
+void CodeMonitorWindow::save() {
+
     monitor.saveData();
 }
 

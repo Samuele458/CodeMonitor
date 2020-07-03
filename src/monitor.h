@@ -33,6 +33,8 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QDateTime>
+#include <QMessageBox>
+#include <QProgressDialog>
 
 #include "common/filesutility.h"
 #include "common/textsanitizer.h"
@@ -206,6 +208,7 @@ class View {
  *  Description:    Describes a coment type
  */
 class Monitor {
+    Q_OBJECT
     public:
         Monitor( QString monitor_name_str );
         ~Monitor();

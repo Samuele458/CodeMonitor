@@ -38,6 +38,9 @@
 #include <QFileDialog>
 #include <QDirIterator>
 #include <QHeaderView>
+#include <QMessageBox>
+#include <QCloseEvent>
+#include <QProgressDialog>
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
@@ -103,6 +106,10 @@ class CodeMonitorWindow : public GeneralWindow {
         void setFilesToShow();
         void checkTreeItemsState( QTreeWidgetItem* item );
         void refresh_monitor_table();
+        void save();
+
+        //keep trace of save state.
+        bool saved;
 
 
 };
