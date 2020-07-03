@@ -563,10 +563,37 @@ bool Monitor::load() {
         //database is open
         QSqlQuery query( *db );
 
-        query.exec( "SELECT file_path FROM monitor_files" );
+        //file columns name
+        QStringList columns;
+
+        query.exec( "SELECT ID_file, file_path FROM monitor_files" );
+
+
+        QString query_text = "SELECT  ";
         while( query.next() ) {
-            current_files.push_back(query.record().value(0).toString());
+            columns.push_back( "file"+query.record().value(0).toString() );
+            current_files.push_back(query.record().value(1).toString());
+            query_text += columns.last()+",";
         }
+        query_text += "date FROM monitor_data";
+        qDebug() << query_text;
+        query.exec( query_text );
+        while( query.next() ) {
+            QStringList files_data_strings;
+            int i;
+            for( i = 0; i < current_files.size(); ++i ) {
+                files_data_strings << query.record().value(i).toString();
+            }
+
+            views.push_back( View( current_files,
+                                   files_data_strings,
+                                   QDateTime::fromString( query.record().value(i).toString(),
+                                                          "yyyy-MM-dd-hh-mm-ss-zzz" ) ) );
+            qDebug() << views.last().getDataStrings();
+
+        }
+        //SELECT  FROM monitor_data
+
 
         return true;
     } else {
