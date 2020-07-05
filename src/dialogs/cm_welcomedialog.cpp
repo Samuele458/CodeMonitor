@@ -23,6 +23,7 @@
 CM_WelcomeDialog::CM_WelcomeDialog( QWidget* parent, QString settings_filename_str ) :
     GeneralWindow( parent, settings_filename_str )
 {
+    this->resize( 800, 400 );
     if( !QDir( QDir::currentPath() + "/data" ).exists() ) {
         QDir local( QDir::currentPath() );
         local.mkdir("data" );

@@ -206,8 +206,9 @@ class View {
 
 /*  Class:          Monitor
  *  Description:    Describes a coment type
+ *                  It inherits from QObject to allow the use of QTranslator
  */
-class Monitor {
+class Monitor : public QObject {
     Q_OBJECT
     public:
         Monitor( QString monitor_name_str );

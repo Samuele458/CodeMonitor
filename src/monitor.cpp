@@ -21,7 +21,7 @@
 #include "monitor.h"
 
 /*  Class:          Comment
- *  Description:    Describes a coment type
+ *  Description:    Describes a coment type.
  */
 Comment::Comment( QString single_line_str,
                   QString multi_line_start_str,

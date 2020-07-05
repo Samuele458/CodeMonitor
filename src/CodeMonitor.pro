@@ -22,9 +22,11 @@ SOURCES += \
     dialogs/cm_mainwindow.cpp \
     dialogs/cm_welcomedialog.cpp \
     dialogs/dialogs.cpp \
+    dialogs/filesdialog.cpp \
     dialogs/inputbox.cpp \
     main.cpp \
-    monitor.cpp
+    monitor.cpp \
+    widgets/widgets_utilities.cpp
 
 HEADERS += \
     common/filesutility.h \
@@ -33,8 +35,10 @@ HEADERS += \
     dialogs/cm_mainwindow.h \
     dialogs/cm_welcomedialog.h \
     dialogs/dialogs.h \
+    dialogs/filesdialog.h \
     dialogs/inputbox.h \
-    monitor.h
+    monitor.h \
+    widgets/widgets_utilities.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

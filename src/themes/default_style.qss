@@ -52,3 +52,7 @@ QMainWindow {
     background-color: rgb(51,51,51);
 }
 
+QTableWidget {
+    font: 16px;
+}
+

@@ -27,6 +27,8 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
     monitor_name( monitor_name_str ),
     monitor( monitor_name_str )
 {
+    this->resize( 500, 400 );
+    this->showMaximized();
     qDebug() << monitor.getCurrentFilespath();
     //setting up gui
     setup_ui();
@@ -186,9 +188,18 @@ void CodeMonitorWindow::add_file_button_clicked() {
         fileNames = dialog.selectedFiles();
 
     if( fileNames.size() > 0 ) {
-        monitor.addFilespath( fileNames );
-        refreshTree();
-        saved = false;
+        FilesDialog* files_dialog = new FilesDialog( fileNames );
+
+        files_dialog->exec();
+
+        if( files_dialog->wasFormConfirmed() ) {
+
+            monitor.addFilespath( files_dialog->getOutputFilenames() );
+            refreshTree();
+            saved = false;
+        }
+
+        delete files_dialog;
     }
 }
 
@@ -210,14 +221,25 @@ void CodeMonitorWindow::add_folder_button_clicked() {
         dir = dialog.selectedFiles();
 
     if( dir.size() > 0 ) {
+
         QStringList fileNames;
         QDirIterator it(dir.at(0), QStringList() << "*.*", QDir::Files, QDirIterator::Subdirectories);
         while (it.hasNext()) {
             fileNames << it.next();
         }
-        monitor.addFilespath( fileNames );
-        refreshTree();
-        saved = false;
+
+        FilesDialog* files_dialog = new FilesDialog( fileNames );
+
+        files_dialog->exec();
+
+        if( files_dialog->wasFormConfirmed() ) {
+            monitor.addFilespath( files_dialog->getOutputFilenames() );
+            refreshTree();
+            saved = false;
+        }
+
+        delete files_dialog;
+
     }
 
 }
@@ -322,10 +344,10 @@ void CodeMonitorWindow::closeEvent( QCloseEvent* event )  {
             event->accept();
         } else if( reply == QMessageBox::No ) {
             //NO button clicked
-            event->ignore();
+            event->accept();
         } else {
             //CANCEL button clicked
-            event->accept();
+            event->ignore();
         }
     }
 }
