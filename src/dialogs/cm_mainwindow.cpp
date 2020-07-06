@@ -35,6 +35,8 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
     apply_settings();
     apply_slots();
 
+    refresh_monitor_table();
+
     saved = true;
 
 }
@@ -95,6 +97,11 @@ void CodeMonitorWindow::setup_ui() {
     RightLayout->setMargin(3);
     LeftLayout->setMargin(3);
 
+
+    //menus
+    createActions();
+    createMenus();
+
 }
 
 //apply current settings (like language, teme, and other general settings
@@ -104,6 +111,8 @@ void CodeMonitorWindow::apply_settings() {
     AddFolderButton->setText( tr("Add folder") );
     SettingsButton->setText( tr("Settigs") );
     DataGroup->setTitle( tr("Informations" ) );
+
+    MonitorTree->setHeaderLabels( QStringList() << tr("Files") );
 
     refreshTree();
 }
@@ -291,6 +300,13 @@ void CodeMonitorWindow::refresh_monitor_table() {
                                                               tr("Code lines") <<
                                                               tr("Comment lines") <<
                                                               tr("Void lines") );
+    MonitorTable->setColumnWidth(0,250);
+    MonitorTable->setColumnWidth(1,250);
+    MonitorTable->setColumnWidth(2,250);
+    MonitorTable->setColumnWidth(3,250);
+
+    MonitorTable->horizontalHeader()->setStretchLastSection( true );
+
     MonitorTable->verticalHeader()->setVisible(false);
     MonitorTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     MonitorTable->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -323,7 +339,6 @@ void CodeMonitorWindow::refresh_monitor_table() {
         MonitorTable->setItem( MonitorTable->rowCount() - 1,
                                3,
                                new QTableWidgetItem( QString::number( void_lines ) ) );
-
     }
 
 }
@@ -354,11 +369,113 @@ void CodeMonitorWindow::closeEvent( QCloseEvent* event )  {
 
 //save data to database
 void CodeMonitorWindow::save() {
-
+    saved = true;
     monitor.saveData();
 }
 
+//create actions used in menus
+void CodeMonitorWindow::createActions() {
+
+    //exit action
+    exitAct = new QAction( tr( "&Exit" ), this );
+    exitAct->setShortcut( QKeySequence::Quit );
+    exitAct->setStatusTip( tr( "Close CodeMonitor" ) );
+    connect( exitAct, &QAction::triggered, this, &CodeMonitorWindow::exit_slot );
+
+    //save action
+    saveAct = new QAction( tr( "&Save"), this );
+    saveAct->setShortcut( QKeySequence::Save );
+    saveAct->setStatusTip( tr( "Save monitor" ) );
+    connect( saveAct, &QAction::triggered, this, &CodeMonitorWindow::save_slot );
+
+    //add file action
+    addFileAct = new QAction( tr( "&Add file"), this );
+    addFileAct->setStatusTip( tr( "Add one or more files to monitor" ) );
+    connect( addFileAct, &QAction::triggered, this, &CodeMonitorWindow::add_file_slot );
+
+    //add folder action
+    addFolderAct = new QAction( tr( "&Add folder"), this );
+    addFolderAct->setStatusTip( tr( "Add all files contained in a folder" ) );
+    connect( addFolderAct, &QAction::triggered, this, &CodeMonitorWindow::add_folder_slot );
+
+    //remove file action
+    removeFileAct = new QAction( tr( "&Remove file"), this );
+    removeFileAct->setShortcut( QKeySequence::Delete );
+    removeFileAct->setStatusTip( tr( "Remove selected file" ) );
+    connect( removeFileAct, &QAction::triggered, this, &CodeMonitorWindow::remove_file_slot );
+
+    //general settings action
+    generalSettingsAct = new QAction( tr( "&General settings"), this );
+    generalSettingsAct->setStatusTip( tr( "Open general settings dialog" ) );
+    connect( generalSettingsAct, &QAction::triggered, this, &CodeMonitorWindow::general_settings_slot );
+
+    //add folder action
+    monitorSettingsAct = new QAction( tr( "&Monitor settings"), this );
+    monitorSettingsAct->setStatusTip( tr( "Open monitor settings dialog" ) );
+    connect( monitorSettingsAct, &QAction::triggered, this, &CodeMonitorWindow::monitor_settings_slot );
+
+    //add folder action
+    monitorSettingsAct = new QAction( tr( "&Monitor settings"), this );
+    monitorSettingsAct->setStatusTip( tr( "Open monitor settings dialog" ) );
+    connect( monitorSettingsAct, &QAction::triggered, this, &CodeMonitorWindow::monitor_settings_slot );
+
+    //add folder action
+    aboutAct = new QAction( tr( "&About"), this );
+    aboutAct->setStatusTip( tr( "About Code Monitor" ) );
+    connect( aboutAct, &QAction::triggered, this, &CodeMonitorWindow::about_slot );
 
 
+}
+
+//create menus
+void CodeMonitorWindow::createMenus() {
+    FileMenu = menuBar()->addMenu( tr( "&File" ) );
+    FileMenu->addAction( saveAct );
+    FileMenu->addAction( exitAct );
+
+    MonitorMenu = menuBar()->addMenu( tr( "&Monitor" ) );
+    MonitorMenu->addAction( addFileAct );
+    MonitorMenu->addAction( addFolderAct );
+    MonitorMenu->addAction( removeFileAct );
+
+    SettingsMenu = menuBar()->addMenu( tr( "&Settings" ) );
+    SettingsMenu->addAction( generalSettingsAct );
+    SettingsMenu->addAction( monitorSettingsAct );
+
+
+}
+
+//---- menu slots -----
+
+void CodeMonitorWindow::exit_slot() {
+    this->close();
+}
+
+void CodeMonitorWindow::save_slot() {
+    this->save();
+}
+void CodeMonitorWindow::add_file_slot() {
+
+}
+
+void CodeMonitorWindow::add_folder_slot() {
+
+}
+
+void CodeMonitorWindow::remove_file_slot() {
+
+}
+
+void CodeMonitorWindow::general_settings_slot() {
+
+}
+
+void CodeMonitorWindow::monitor_settings_slot() {
+
+}
+
+void CodeMonitorWindow::about_slot() {
+
+}
 
 

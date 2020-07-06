@@ -67,6 +67,8 @@ protected:
     QPushButton* ConfirmButton;
     QTableWidget* FilesTable;
     QLabel* TitleLabel;
+    QLabel* ValidFilesLabel;
+    QLabel* InvalidFilesLabel;
 
 
     bool form_confirmed;

@@ -41,6 +41,9 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QProgressDialog>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
@@ -61,6 +64,17 @@ class CodeMonitorWindow : public GeneralWindow {
         void add_folder_button_clicked();
         void monitor_now_button_clicked();
 
+        //menu slots
+        void exit_slot();
+        void save_slot();
+        void add_file_slot();
+        void add_folder_slot();
+        void remove_file_slot();
+        void general_settings_slot();
+        void monitor_settings_slot();
+        void about_slot();
+
+
     protected:
         //apply current settings (like language, teme, and other general settings
         void apply_settings() override;
@@ -71,7 +85,7 @@ class CodeMonitorWindow : public GeneralWindow {
         //configure the User Interface: allocating Widgets, layout, etc.
         void setup_ui() override;
 
-
+        //reimplementation of close event
         void closeEvent( QCloseEvent* event ) override;
 
         //data
@@ -98,16 +112,33 @@ class CodeMonitorWindow : public GeneralWindow {
         QPushButton* SettingsButton;
         QPushButton* MonitorNowButton;
 
+        //menus
+        QMenu* FileMenu;
+        QMenu* MonitorMenu;
+        QMenu* SettingsMenu;
+        QMenu* InfoMenu;
+
+        //Actions
+        QAction* exitAct;
+        QAction* saveAct;
+        QAction* addFileAct;
+        QAction* addFolderAct;
+        QAction* removeFileAct;
+        QAction* generalSettingsAct;
+        QAction* monitorSettingsAct;
+        QAction* aboutAct;
 
 
         //other ---
-
-        void refreshTree();
         QStringList filesToShow;
+
+        void refreshTree();  
         void setFilesToShow();
         void checkTreeItemsState( QTreeWidgetItem* item );
         void refresh_monitor_table();
         void save();
+        void createActions();
+        void createMenus();
 
         //keep trace of save state.
         bool saved;

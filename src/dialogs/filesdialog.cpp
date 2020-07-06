@@ -51,13 +51,18 @@ void FilesDialog::setup_ui() {
     ConfirmButton = new QPushButton;
     FilesTable = new QTableWidget;
     TitleLabel = new QLabel;
+    ValidFilesLabel = new QLabel;
+    InvalidFilesLabel = new QLabel;
 
     ButtonsLayout->addStretch();
     ButtonsLayout->addWidget( ConfirmButton );
     ButtonsLayout->addWidget( CancelButton );
     MainLayout->addWidget( TitleLabel );
     MainLayout->addWidget( FilesTable );
+    MainLayout->addWidget( ValidFilesLabel );
+    MainLayout->addWidget( InvalidFilesLabel );
     MainLayout->addLayout( ButtonsLayout );
+
 
     MainLayout->setMargin( 5 );
 
@@ -70,6 +75,7 @@ void FilesDialog::apply_settings()  {
     TitleLabel->setText( tr("Selected files:") );
     CancelButton->setText( tr("Cancel") );
     ConfirmButton->setText( tr("Load") );
+
 
     this->resize( 1100, 400 );
     //loading table
@@ -90,6 +96,11 @@ void FilesDialog::apply_settings()  {
     FilesTable->setColumnWidth(0,650);
     FilesTable->setColumnWidth(1,80);
 
+    //files counters
+    unsigned int valid_files_count = 0;
+    unsigned int invalid_files_count = 0;
+
+
     //addint items to table
     foreach( QString filename, input_filenames ) {
         FilesTable->insertRow( FilesTable->rowCount() );
@@ -102,9 +113,10 @@ void FilesDialog::apply_settings()  {
             //correct file type
             FilesTable->setItem( FilesTable->rowCount() - 1,
                                  1,
-                                 new QTableWidgetItem(tr("Valid")) );
+                                 new QTableWidgetItem( FilesUtilities::getProgLangName( extension ) ) );
             output_filenames.push_back( filename );
 
+            ++valid_files_count;
         } else {
             //unknown file type
 
@@ -118,9 +130,13 @@ void FilesDialog::apply_settings()  {
 
             WidgetsUtilities::colorTableWidgetRow( FilesTable, FilesTable->rowCount()-1, QColor( 255, 100, 100 ) );
 
-
+            ++invalid_files_count;
         }
     }
+
+
+    ValidFilesLabel->setText( tr("Valid files:") + " " + QString::number( valid_files_count ) );
+    InvalidFilesLabel->setText( tr("Invalid files:") + " " + QString::number( invalid_files_count ) );
 
 
 }

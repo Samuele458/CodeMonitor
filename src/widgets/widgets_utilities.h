@@ -37,4 +37,5 @@ class WidgetsUtilities {
         static void colorTableWidgetRow( QTableWidget* table, int row, QColor color );
 };
 
+
 #endif
