@@ -60,7 +60,12 @@ void CodeMonitorWindow::setup_ui() {
     RightSplitterLayout = new QVBoxLayout;
     RightSplitter = new QSplitter;
     MonitorTable = new QTableWidget;
-    DataGroup = new QGroupBox;
+
+    ViewWidget = new QWidget;
+    ViewLayout = new QVBoxLayout;
+    InformationLabel = new QLabel;
+    ViewTable = new QTableWidget;
+
     ButtonsLayout = new QHBoxLayout;
     AddFileButton = new QPushButton;
     AddFolderButton = new QPushButton;
@@ -72,8 +77,14 @@ void CodeMonitorWindow::setup_ui() {
     LeftLayout->addWidget( MonitorTree );
 
     //---- right side ----
+
+    ViewLayout->addWidget( InformationLabel );
+    ViewLayout->addWidget( ViewTable );
+    ViewWidget->setLayout( ViewLayout );
+
+
     RightSplitter->addWidget( MonitorTable );
-    RightSplitter->addWidget( DataGroup );
+    RightSplitter->addWidget( ViewWidget );
     RightSplitter->setOrientation( Qt::Vertical );
 
     RightSplitterLayout->addWidget(RightSplitter);
@@ -96,6 +107,7 @@ void CodeMonitorWindow::setup_ui() {
     MainLayout->setMargin(0);
     RightLayout->setMargin(3);
     LeftLayout->setMargin(3);
+    ViewLayout->setMargin(0);
 
 
     //menus
@@ -110,7 +122,6 @@ void CodeMonitorWindow::apply_settings() {
     AddFileButton->setText( tr("Add file") );
     AddFolderButton->setText( tr("Add folder") );
     SettingsButton->setText( tr("Settigs") );
-    DataGroup->setTitle( tr("Informations" ) );
 
     MonitorTree->setHeaderLabels( QStringList() << tr("Files") );
 

@@ -105,7 +105,12 @@ class CodeMonitorWindow : public GeneralWindow {
         QVBoxLayout* RightSplitterLayout;
         QSplitter* RightSplitter;
         QTableWidget* MonitorTable;
-        QGroupBox* DataGroup;
+
+        QWidget* ViewWidget;
+        QVBoxLayout* ViewLayout;
+        QLabel* InformationLabel;
+        QTableWidget* ViewTable;
+
         QHBoxLayout* ButtonsLayout;
         QPushButton* AddFileButton;
         QPushButton* AddFolderButton;
