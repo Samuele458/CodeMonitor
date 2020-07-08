@@ -23,6 +23,7 @@ SOURCES += \
     dialogs/cm_welcomedialog.cpp \
     dialogs/dialogs.cpp \
     dialogs/filesdialog.cpp \
+    dialogs/general_settings.cpp \
     dialogs/inputbox.cpp \
     main.cpp \
     monitor.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     dialogs/cm_welcomedialog.h \
     dialogs/dialogs.h \
     dialogs/filesdialog.h \
+    dialogs/general_settings.h \
     dialogs/inputbox.h \
     monitor.h \
     widgets/widgets_utilities.h

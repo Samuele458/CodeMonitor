@@ -170,6 +170,10 @@ void CM_WelcomeDialog::refresh_monitor_widget() {
 //settings button clicked
 void CM_WelcomeDialog::SettingsButtonClicked() {
 
+    GeneralSettingsDialog* settings_dialog = new GeneralSettingsDialog( this );
+    settings_dialog->exec();
+
+    delete settings_dialog;
 }
 
 //exit button clicked

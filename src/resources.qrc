@@ -3,5 +3,8 @@
         <file>themes/default_style.qss</file>
         <file>fonts/monofonto.ttf</file>
         <file>common/default_prog_lang.dat</file>
+        <file>img/icons/criss-cross.png</file>
+        <file>img/icons/more.png</file>
+        <file>img/icons/pencil.png</file>
     </qresource>
 </RCC>

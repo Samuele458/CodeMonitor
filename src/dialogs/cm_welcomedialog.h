@@ -36,10 +36,13 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QMessageBox>
+#include <QFont>
+#include <QApplication>
 
 #include "dialogs/dialogs.h"
 #include "dialogs/inputbox.h"
 #include "dialogs/cm_mainwindow.h"
+#include "dialogs/general_settings.h"
 
 
 class CM_WelcomeDialog : public GeneralWindow {
