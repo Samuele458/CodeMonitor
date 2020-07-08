@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
-    CM_WelcomeDialog w ;
+    CM_WelcomeDialog w;
 
     //setting up stylesheets
     QFile File(":/themes/default_style.qss");

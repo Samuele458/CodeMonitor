@@ -51,6 +51,10 @@ class GeneralSettingsDialog : public GeneralDialog {
     protected slots:
         void confirm_button_clicked();
         void cancel_button_clicked();
+        void add_lang_button_clicked();
+        void remove_lang_button_clicked();
+        void edit_lang_button_clicked();
+        void size_slider_changed( int value );
 
 
     protected:

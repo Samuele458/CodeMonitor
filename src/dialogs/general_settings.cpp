@@ -138,6 +138,15 @@ void GeneralSettingsDialog::apply_settings() {
     ProgLangBox->setTitle( tr( "Programming Languages" ) );
     LangLabel->setText( tr("Programming languages loaded:" ) );
 
+    dateFormatCombo->clear();
+    dateFormatCombo->addItem( "DD/MM/YYYY" );
+    dateFormatCombo->addItem( "MM/DD/YYYY" );
+    dateFormatCombo->addItem( "YYYY/MM/DD" );
+
+    sizeSlider->setRange( 5, 25 );
+
+    load();
+
 
 }
 
@@ -146,12 +155,19 @@ void GeneralSettingsDialog::apply_slots() {
 
     connect( ConfirmButton, SIGNAL(clicked()), this, SLOT(confirm_button_clicked()));
     connect( CancelButton, SIGNAL(clicked()), this, SLOT(cancel_button_clicked()));
+    connect( AddLangButton, SIGNAL(clicked()), this, SLOT(add_lang_button_clicked()));
+    connect( RemoveLangButton, SIGNAL(clicked()), this, SLOT(remove_lang_button_clicked()));
+    connect( EditLangButton, SIGNAL(clicked()), this, SLOT(edit_lang_button_clicked()));
+    connect( sizeSlider, SIGNAL(valueChanged(int)), this, SLOT(size_slider_changed(int)));
 
 }
 
 //load settings
 void GeneralSettingsDialog::load() {
-
+    fontCombo->setCurrentText( settings.getValue( "font_family" ) );
+    sizeSlider->setValue(  settings.getValue( "font_size" ).toInt() );
+    sizeLine->setText( settings.getValue( "font_size" ) );
+    dateFormatCombo->setCurrentText( settings.getValue( "date_format" ) );
 }
 
 //save settings
@@ -174,5 +190,21 @@ void GeneralSettingsDialog::confirm_button_clicked() {
 
 void GeneralSettingsDialog::cancel_button_clicked() {
     this->close();
+}
+
+void GeneralSettingsDialog::add_lang_button_clicked() {
+
+}
+
+void GeneralSettingsDialog::remove_lang_button_clicked() {
+
+}
+
+void GeneralSettingsDialog::edit_lang_button_clicked() {
+
+}
+
+void GeneralSettingsDialog::size_slider_changed( int value ) {
+    sizeLine->setText( QString::number( value ) );
 }
 

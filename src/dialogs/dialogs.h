@@ -38,7 +38,7 @@ class WindowManager {
         ~WindowManager() { };
 
     protected:
-        //apply current settings (like language, teme, and other general settings
+        //apply current settings (like language, theme, and other general settings
         virtual void apply_settings() { }
 
         //connect all principal widgets signals to the corresponding slots
