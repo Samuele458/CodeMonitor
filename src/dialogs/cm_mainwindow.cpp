@@ -34,7 +34,7 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
     setup_ui();
     apply_settings();
     apply_slots();
-
+    MonitorTree->topLevelItem(0)->setCheckState( 0, Qt::Checked );
     refresh_monitor_table();
 
     saved = true;
@@ -126,15 +126,20 @@ void CodeMonitorWindow::apply_settings() {
     MonitorTree->setHeaderLabels( QStringList() << tr("Files") );
 
     refreshTree();
+
+    setup_monitor_table();
+    setup_view_table();
 }
 
 //connect all principal widgets signals to the corresponding slots
 void CodeMonitorWindow::apply_slots() {
 
-    connect( MonitorTree, SIGNAL(itemClicked(QTreeWidgetItem*, int )), this, SLOT(monitor_tree_item_clicked( QTreeWidgetItem*, int  )) );
+    connect( MonitorTree, SIGNAL(itemChanged(QTreeWidgetItem*, int )), this, SLOT(monitor_tree_item_clicked( QTreeWidgetItem*, int  )) );
     connect( AddFileButton, SIGNAL(clicked()), this, SLOT(add_file_button_clicked() ) );
     connect( AddFolderButton, SIGNAL(clicked()), this, SLOT(add_folder_button_clicked() ) );
     connect( MonitorNowButton, SIGNAL(clicked()), this, SLOT(monitor_now_button_clicked() ) );
+    connect( MonitorTable, SIGNAL( cellClicked( int, int ) ), this, SLOT( monitor_table_cell_clicked( int, int ) ) );
+
 }
 
 
@@ -184,6 +189,8 @@ void CodeMonitorWindow::refreshTree() {
         childItem->setText(0, splitFileName.last());
         childItem->setToolTip(0, fileName );
     }
+    MonitorTree->expandAll();
+
 }
 
 
@@ -264,6 +271,10 @@ void CodeMonitorWindow::add_folder_button_clicked() {
 
 }
 
+void CodeMonitorWindow::monitor_table_cell_clicked( int row, int column ) {
+    refresh_view_table( monitor.viewAt( row ) );
+}
+
 //set files to be showed in the ui
 void CodeMonitorWindow::setFilesToShow() {
 
@@ -305,51 +316,35 @@ void CodeMonitorWindow::monitor_now_button_clicked() {
 
 void CodeMonitorWindow::refresh_monitor_table() {
 
-    MonitorTable->setRowCount(0);
-    MonitorTable->setColumnCount(4);
-    MonitorTable->setHorizontalHeaderLabels( QStringList() << tr("Total lines") <<
-                                                              tr("Code lines") <<
-                                                              tr("Comment lines") <<
-                                                              tr("Void lines") );
-    MonitorTable->setColumnWidth(0,250);
-    MonitorTable->setColumnWidth(1,250);
-    MonitorTable->setColumnWidth(2,250);
-    MonitorTable->setColumnWidth(3,250);
-
-    MonitorTable->horizontalHeader()->setStretchLastSection( true );
-
-    MonitorTable->verticalHeader()->setVisible(false);
-    MonitorTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    MonitorTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    MonitorTable->setSelectionMode(QAbstractItemView::SingleSelection);
-    MonitorTable->setShowGrid(false);
+    //clearing all data
+    MonitorTable->setRowCount( 0 );
 
     foreach( View current_view, monitor.getAllViews() ) {
-        unsigned int code_lines = 0;        //numeber of code lines
-        unsigned int comment_lines = 0;     //number of comment lines
+
         unsigned int total_lines = 0;       //number of total lines
-        unsigned int void_lines = 0;
+        unsigned int size = 0;
+
 
         foreach( QString file, filesToShow ) {
             FileData current_file = current_view.getFileData( file );
-            code_lines += current_file.getCodeLines();
-            comment_lines += current_file.getCommentLines();
             total_lines += current_file.getTotalLines();
-            void_lines += current_file.getVoidLines();
+            size += current_file.getSize();
         }
+
         MonitorTable->insertRow( MonitorTable->rowCount() );
+
         MonitorTable->setItem( MonitorTable->rowCount() - 1,
                                0,
-                               new QTableWidgetItem( QString::number( total_lines ) ) );
+                               new QTableWidgetItem( current_view.getDateTime().toString( "dd/MM/yyyy - hh:mm:ss.zzz" ) ) );
+
         MonitorTable->setItem( MonitorTable->rowCount() - 1,
                                1,
-                               new QTableWidgetItem( QString::number( code_lines ) ) );
+                               new QTableWidgetItem( QString::number( total_lines ) ) );
+
         MonitorTable->setItem( MonitorTable->rowCount() - 1,
                                2,
-                               new QTableWidgetItem( QString::number( comment_lines ) ) );
-        MonitorTable->setItem( MonitorTable->rowCount() - 1,
-                               3,
-                               new QTableWidgetItem( QString::number( void_lines ) ) );
+                               new QTableWidgetItem( QString::number( size ) ) );
+
     }
 
 }
@@ -454,6 +449,75 @@ void CodeMonitorWindow::createMenus() {
     SettingsMenu->addAction( monitorSettingsAct );
 
 
+}
+
+
+void CodeMonitorWindow::refresh_view_table( View view ) {
+
+    //clearing old dataa from table
+    ViewTable->setRowCount( 0 );
+
+    QList<FileData> data = view.getData();
+    FileData current_file;
+    for( int i = 0; i < data.size(); ++i ) {
+        current_file = data.at(i);
+
+        ViewTable->insertRow( ViewTable->rowCount() );
+
+        ViewTable->setItem( i, 0, new QTableWidgetItem( current_file.getFilename().split("/").last() ) );
+        ViewTable->item( i, 0 )->setToolTip( current_file.getFilename() );
+        ViewTable->setItem( i, 1, new QTableWidgetItem( QString::number(current_file.getTotalLines() ) ) );
+        ViewTable->setItem( i, 2, new QTableWidgetItem( QString::number(current_file.getCodeLines() ) ) );
+        ViewTable->setItem( i, 3, new QTableWidgetItem( QString::number(current_file.getCommentLines() ) ) );
+        ViewTable->setItem( i, 4, new QTableWidgetItem( QString::number(current_file.getVoidLines() ) ) );
+        ViewTable->setItem( i, 5, new QTableWidgetItem( QString::number(current_file.getChars() ) ) );
+        qDebug() << current_file.getTotalLines();
+    }
+}
+
+void CodeMonitorWindow::setup_monitor_table() {
+
+    MonitorTable->setRowCount(0);
+    MonitorTable->setColumnCount(3);
+    MonitorTable->setHorizontalHeaderLabels( QStringList() << tr("Date") <<
+                                                              tr("Total lines") <<
+                                                              tr("Total Size(KB)") );
+
+    MonitorTable->setColumnWidth(0,250);
+    MonitorTable->setColumnWidth(1,250);
+    MonitorTable->setColumnWidth(2,250);
+
+    MonitorTable->horizontalHeader()->setStretchLastSection( true );
+
+    MonitorTable->verticalHeader()->setVisible(true);
+    MonitorTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    MonitorTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    MonitorTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    MonitorTable->setShowGrid(true);
+
+}
+
+void CodeMonitorWindow::setup_view_table() {
+
+    //setting up table
+    ViewTable->setRowCount( 0 );
+    ViewTable->setColumnCount(5);
+    ViewTable->setHorizontalHeaderLabels( QStringList() << tr("File") <<
+                                                           tr("Total lines") <<
+                                                           tr("Code lines") <<
+                                                           tr("Comment lines") <<
+                                                           tr("Void lines") <<
+                                                           tr("Chars") <<
+                                                           tr("Size(KB)") <<
+                                                           tr("Language") );
+
+
+    ViewTable->horizontalHeader()->setStretchLastSection( true );
+    ViewTable->verticalHeader()->setVisible(true);
+    ViewTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ViewTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ViewTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ViewTable->setShowGrid(true);
 }
 
 //---- menu slots -----

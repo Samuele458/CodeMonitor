@@ -1,7 +1,7 @@
 
 QPushButton {
     background-color: rgb(103,103,103);
-    font: 20px;
+    font: 16px;
     min-width: 6em;
     padding: 6px;
     color: white;

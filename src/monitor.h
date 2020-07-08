@@ -226,6 +226,7 @@ class Monitor : public QObject {
         void setMonitorName( const QString name_str );
 
         QList<View> getAllViews() const;
+        View viewAt( int pos );
 
         QStringList getCurrentFilespath() const;
         void addFilespath( const QStringList files );

@@ -63,6 +63,7 @@ class CodeMonitorWindow : public GeneralWindow {
         void settings_button_clicked();
         void add_folder_button_clicked();
         void monitor_now_button_clicked();
+        void monitor_table_cell_clicked( int row, int column );
 
         //menu slots
         void exit_slot();
@@ -144,6 +145,9 @@ class CodeMonitorWindow : public GeneralWindow {
         void save();
         void createActions();
         void createMenus();
+        void refresh_view_table( View view );
+        void setup_monitor_table();
+        void setup_view_table();
 
         //keep trace of save state.
         bool saved;

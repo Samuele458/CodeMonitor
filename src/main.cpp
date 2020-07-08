@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
     //configuring main font (monofonto.ttf located in resurce file)
     int id = QFontDatabase::addApplicationFont(":/fonts/monofonto.ttf");
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont monospace(family);
+    QFont monospace( family );
+    monospace.setPointSize(9);
     QApplication::setFont( monospace );
 
     if( !QFile::exists( QDir::currentPath() + "/programming_languages.ini" ) ) {
@@ -57,7 +58,6 @@ int main(int argc, char *argv[])
 
 
 
-    //FileData f("C:\\Users\\Yankoo\\Desktop\\test.py");
     w.show();
     return a.exec();
 
