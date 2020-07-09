@@ -25,6 +25,7 @@ SOURCES += \
     dialogs/filesdialog.cpp \
     dialogs/general_settings.cpp \
     dialogs/inputbox.cpp \
+    dialogs/languagedialog.cpp \
     main.cpp \
     monitor.cpp \
     widgets/widgets_utilities.cpp
@@ -39,6 +40,7 @@ HEADERS += \
     dialogs/filesdialog.h \
     dialogs/general_settings.h \
     dialogs/inputbox.h \
+    dialogs/languagedialog.h \
     monitor.h \
     widgets/widgets_utilities.h
 

@@ -255,7 +255,8 @@ void GeneralSettingsDialog::cancel_button_clicked() {
 }
 
 void GeneralSettingsDialog::add_lang_button_clicked() {
-
+    LanguageDialog* language_dialog = new LanguageDialog( "" );
+    language_dialog->exec();
 }
 
 void GeneralSettingsDialog::remove_lang_button_clicked() {

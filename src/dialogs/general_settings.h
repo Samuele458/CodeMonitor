@@ -40,6 +40,7 @@
 #include <QHeaderView>
 
 #include "dialogs/dialogs.h"
+#include "dialogs/languagedialog.h"
 
 class GeneralSettingsDialog : public GeneralDialog {
     Q_OBJECT
