@@ -38,6 +38,7 @@
 #include <QIcon>
 #include <QSettings>
 #include <QHeaderView>
+#include <QMessageBox>
 
 #include "dialogs/dialogs.h"
 #include "dialogs/languagedialog.h"

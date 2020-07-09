@@ -32,6 +32,8 @@ LanguageDialog::LanguageDialog( QString intro_label_text, QWidget* parent, QStri
     apply_settings();
     apply_slots();
 
+    form_confirmed = false;
+
 
 }
 
@@ -48,6 +50,11 @@ LanguageDialog::~LanguageDialog() {
 
 ProgrammingLanguage LanguageDialog::getLanguage() const {
     return new_programming_langauge;
+}
+
+
+bool LanguageDialog::wasFormConfirmed() const {
+    return form_confirmed;
 }
 
 
@@ -81,17 +88,19 @@ void LanguageDialog::setup_ui() {
 
     MainLayout->addWidget( IntroLabel );
     MainLayout->addStretch();
-    MainLayout->addLayout( LangLayout );
+    MainLayout->addWidget( LangBox );
     MainLayout->addLayout( ButtonsLayout );
 
+    LangBox->setLayout( LangLayout );
+
     LangLayout->addWidget(LangNameLabel, 0, 0, 1, 3 );
-    LangLayout->addWidget(LangNameEdit, 0, 3, 1, 3 );
+    LangLayout->addWidget(LangNameEdit, 0, 4, 1, 2 );
     LangLayout->addWidget(LangSlcLabel, 1, 0, 1, 3 );
-    LangLayout->addWidget(LangSlcLine, 1, 3, 1, 3 );
+    LangLayout->addWidget(LangSlcLine, 1, 4, 1, 2 );
     LangLayout->addWidget(LangMlcStartLabel, 2, 0, 1, 3);
-    LangLayout->addWidget(LangMlcStartLine, 2, 3, 1, 3);
+    LangLayout->addWidget(LangMlcStartLine, 2, 4, 1, 2);
     LangLayout->addWidget(LangMlcEndLabel, 3, 0, 1, 3);
-    LangLayout->addWidget(LangMlcEndLine, 3, 3, 1, 3);
+    LangLayout->addWidget(LangMlcEndLine, 3, 4, 1, 2);
     LangLayout->addWidget(ExtensionsLabel, 4, 0, 1, 6 );
     LangLayout->addWidget(AddExtButton, 5, 0 );
     LangLayout->addWidget(RemoveExtButton, 6, 0 );
@@ -110,15 +119,23 @@ void LanguageDialog::setup_ui() {
     LangMlcStartLine->setAlignment( Qt::AlignCenter );
     LangNameEdit->setAlignment( Qt::AlignCenter );
 
+    LangSlcLine->setMaximumWidth( 70 );
+    LangMlcEndLine->setMaximumWidth( 70 );
+    LangMlcStartLine->setMaximumWidth( 70 );
+    LangNameEdit->setMaximumWidth( 120 );
+
+    ExtensionsLabel->setAlignment( Qt::AlignCenter );
+
     this->setLayout( MainLayout );
 
 
 }
 
+
 //apply current settings (like language, teme, and other general settings
 void LanguageDialog::apply_settings() {
 
-    this->setWindowTitle( tr("Programming Languages Editor") );
+    this->setWindowTitle( tr("Programming Languages") );
 
     IntroLabel->setText( intro_label_txt );
     LangNameLabel->setText( tr("Language name:") );
@@ -133,11 +150,59 @@ void LanguageDialog::apply_settings() {
 
 }
 
+// ----- slots -----
+
 //connect all principal widgets signals to the corresponding slots
 void LanguageDialog::apply_slots() {
 
+    connect( ConfirmButton, SIGNAL( clicked() ), this, SLOT( confirm_button_clicked() ) );
+    connect( CancelButton, SIGNAL( clicked() ), this, SLOT( cancel_button_clicked() ) );
+    connect( AddExtButton, SIGNAL( clicked() ), this, SLOT( add_lang_button_clicked() ) );
+    connect( RemoveExtButton, SIGNAL( clicked() ), this, SLOT( remove_lang_button_clicked() ) );
+
 }
 
+void LanguageDialog::confirm_button_clicked() {
+
+    //Note: input check must be implemented
+
+    new_programming_langauge.setName( LangNameEdit->text() );
+    new_programming_langauge.setSingleLine( LangSlcLine->text() );
+    new_programming_langauge.setMultiLineStart( LangMlcStartLine->text() );
+    new_programming_langauge.setMultiLineEnd( LangMlcEndLine->text() );
+
+    QStringList extensions;
+
+    for( int i = 0; i < ExtensionsList->count(); ++i ) {
+        extensions.push_back( ExtensionsList->item( i )->text() );
+    }
+
+    new_programming_langauge.setExtensions( extensions );
+
+    form_confirmed = true;
+    this->close();
+}
+
+void LanguageDialog::cancel_button_clicked() {
+    this->close();
+}
+
+void LanguageDialog::add_lang_button_clicked() {
+    InputBox box( tr("Extension"),
+                  tr("Extension:") );
+    box.exec();
+    if( box.wasFormConfirmed() ) {
+        ExtensionsList->insertItem( ExtensionsList->count(), new QListWidgetItem( box.getInputStr() ) );
+    }
+}
+
+void LanguageDialog::remove_lang_button_clicked() {
+    if( ExtensionsList->selectedItems().size() == 0 ) {
+        QMessageBox::critical( this, tr("Error"), tr("Select an item!") );
+    } else {
+         delete ExtensionsList->selectedItems().at(0);
+    }
+}
 
 
 

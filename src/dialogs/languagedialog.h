@@ -33,8 +33,10 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QIcon>
+#include <QMessageBox>
 
 #include "dialogs/dialogs.h"
+#include "dialogs/inputbox.h"
 #include "monitor.h"
 
 
@@ -47,6 +49,14 @@ class LanguageDialog : public GeneralDialog {
         ~LanguageDialog();
 
         ProgrammingLanguage getLanguage() const;
+
+        bool wasFormConfirmed() const;
+
+    protected slots:
+        void confirm_button_clicked();
+        void cancel_button_clicked();
+        void add_lang_button_clicked();
+        void remove_lang_button_clicked();
 
     protected:
 

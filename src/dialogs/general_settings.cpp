@@ -257,6 +257,49 @@ void GeneralSettingsDialog::cancel_button_clicked() {
 void GeneralSettingsDialog::add_lang_button_clicked() {
     LanguageDialog* language_dialog = new LanguageDialog( "" );
     language_dialog->exec();
+
+    //check if form was confirmer or not
+    if(language_dialog->wasFormConfirmed() ) {
+        //form confirmed, so new prog lang must be added
+
+        ProgrammingLanguage lang = language_dialog->getLanguage();
+
+
+        //check if a language with the same name is present
+        bool langIsPresent = false;
+        for( int i = 0; i < LangTable->rowCount(); ++i ) {
+            if( LangTable->item(i,0)->text() == lang.getName() ) {
+                langIsPresent = true;
+            }
+        }
+        if( langIsPresent) {
+            //a language with the same name is already present
+            QMessageBox::critical( this,
+                                   tr("Error"),
+                                   tr("Language %1 is already present!").arg( "\"" + lang.getName() + "\"") );
+
+
+        } else {
+            //new language is unique, so it can be added
+
+            LangTable->insertRow( LangTable->rowCount() );
+            LangTable->item( LangTable->rowCount() - 1, 0 )->setText( lang.getName() );
+            LangTable->item( LangTable->rowCount() - 1, 1 )->setText( lang.getSingleLine() );
+            LangTable->item( LangTable->rowCount() - 1, 2 )->setText( lang.getMultiLineStart() +
+                                                                      " " +
+                                                                      lang.getMultiLineEnd() );
+
+            QString extensions_list_str = "";
+
+            foreach( QString ext, lang.getExtensions() ) {
+                extensions_list_str += ext + " ";
+            }
+
+            LangTable->item( LangTable->rowCount() - 1, 3 )->setText( extensions_list_str );
+
+        }
+
+    }
 }
 
 void GeneralSettingsDialog::remove_lang_button_clicked() {
