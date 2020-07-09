@@ -44,6 +44,8 @@
 #include "dialogs/cm_mainwindow.h"
 #include "dialogs/general_settings.h"
 
+#include "common/filesutility.h"
+
 
 class CM_WelcomeDialog : public GeneralWindow {
     Q_OBJECT

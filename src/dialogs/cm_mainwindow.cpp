@@ -27,6 +27,7 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
     monitor_name( monitor_name_str ),
     monitor( monitor_name_str )
 {
+
     this->resize( 500, 400 );
     this->showMaximized();
     qDebug() << monitor.getCurrentFilespath();
@@ -34,8 +35,15 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
     setup_ui();
     apply_settings();
     apply_slots();
-    MonitorTree->topLevelItem(0)->setCheckState( 0, Qt::Checked );
+
+
+    //if tree is not empty, set all items checked
+    if( MonitorTree->topLevelItem(0) != nullptr ) {
+        MonitorTree->topLevelItem(0)->setCheckState( 0, Qt::Checked );
+    }
+
     refresh_monitor_table();
+
 
     saved = true;
 

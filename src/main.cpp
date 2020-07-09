@@ -23,9 +23,13 @@
 #include <QDir>
 #include <QFont>
 #include <QFontDatabase>
+
 #include "dialogs/cm_welcomedialog.h"
 #include "monitor.h"
 #include "common/textsanitizer.h"
+#include "common/filesutility.h"
+
+
 // main function
 int main(int argc, char *argv[])
 {
@@ -45,7 +49,7 @@ int main(int argc, char *argv[])
     QFont monospace( family );
     monospace.setPointSize(9);
     QApplication::setFont( monospace );
-
+    /*
     if( !QFile::exists( QDir::currentPath() + "/programming_languages.ini" ) ) {
         QFile default_file( ":/common/default_prog_lang.dat" );
         if( default_file.open( QIODevice::ReadOnly ) ) {
@@ -55,8 +59,9 @@ int main(int argc, char *argv[])
             }
         }
     }
-
-
+    */
+    FilesUtilities::fileCheckFromFile(QDir::currentPath() + "/programming_languages.ini",
+                                      ":/common/default_prog_lang.dat" );
 
     w.show();
     return a.exec();

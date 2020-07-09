@@ -24,15 +24,13 @@ CM_WelcomeDialog::CM_WelcomeDialog( QWidget* parent, QString settings_filename_s
     GeneralWindow( parent, settings_filename_str )
 {
     this->resize( 800, 400 );
-    if( !QDir( QDir::currentPath() + "/data" ).exists() ) {
-        QDir local( QDir::currentPath() );
-        local.mkdir("data" );
-    }
 
-    if( !QDir( QDir::currentPath() + "/data/monitors" ).exists() ) {
-        QDir local( QDir::currentPath() + "/data" );
-        local.mkdir("monitors" );
-    }
+
+
+
+    FilesUtilities::dirCheck( QDir::currentPath() + "/data" );
+    FilesUtilities::dirCheck( QDir::currentPath() + "/data/monitors" );
+
 
     //setting up database
     db = new QSqlDatabase;

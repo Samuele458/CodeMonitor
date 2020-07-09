@@ -47,3 +47,37 @@ QString FilesUtilities::getProgLangName( QString extension ) {
     return "";
 }
 
+//check if a dir exists or not. If not create it
+void FilesUtilities::dirCheck( QString dir ) {
+
+    QDir dir_obj( dir );
+
+    if( !dir_obj.exists() ) {
+        dir_obj.mkdir( "." );
+    }
+}
+
+//check if file exists or not. if not, create it and fill with default data
+void FilesUtilities::fileCheck( QString file, QByteArray default_data ) {
+    if( !QFile::exists( file ) ) {
+        QFile out_file( file );
+        if( out_file.open( QIODevice::WriteOnly | QIODevice::Truncate ) ) {
+            out_file.write( default_data );
+        }
+    }
+}
+
+void FilesUtilities::fileCheckFromFile( QString file, QString default_data_filename ) {
+    if( !QFile::exists( file ) ) {
+        QFile out_file( file );
+        if( out_file.open( QIODevice::WriteOnly | QIODevice::Truncate ) ) {
+            QFile in_file( default_data_filename );
+            if( in_file.open( QIODevice::ReadOnly ) ) {
+
+                out_file.write( in_file.readAll() );
+
+            }
+        }
+    }
+}
+

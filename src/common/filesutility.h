@@ -37,6 +37,13 @@ public:
     //get programming language name from file extension
     static QString getProgLangName( QString extension );
 
+    //check if a dir exists or not. If not create it
+    static void dirCheck( QString dir );
+
+    //check if file exists or not. if not, create it and fill with default data
+    static void fileCheck( QString file, QByteArray default_data );
+    static void fileCheckFromFile( QString file, QString default_data_filename );
+
 };
 
 #endif
