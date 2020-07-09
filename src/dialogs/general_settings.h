@@ -36,6 +36,8 @@
 #include <QLineEdit>
 #include <QSizePolicy>
 #include <QIcon>
+#include <QSettings>
+#include <QHeaderView>
 
 #include "dialogs/dialogs.h"
 

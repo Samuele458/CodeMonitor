@@ -42,19 +42,22 @@ int main(int argc, char *argv[])
     QString StyleSheet = QLatin1String(File.readAll());
     qApp->setStyleSheet( StyleSheet );
 
-    //configuring main font (monofonto.ttf located in resurce file)
-    int id = QFontDatabase::addApplicationFont(":/fonts/monofonto.ttf");
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont monospace( family );
-    monospace.setPointSize(9);
-    QApplication::setFont( monospace );
+
+    ManagerFromFile settings( "config.ini" );
 
 
     //check if programming languages file exists or not
     FilesUtilities::fileCheckFromFile(QDir::currentPath() + "/programming_languages.ini",
                                       ":/common/default_prog_lang.dat" );
 
+    //check if default file exists or not
+    FilesUtilities::fileCheckFromFile(QDir::currentPath() + "/config.ini",
+                                      ":/common/default_config.dat" );
 
+
+    QFont font( settings.getValue( "font_family" ) );
+    font.setPointSize( settings.getValue( "font_size" ).toInt() );
+    QApplication::setFont( font );
 
 
     w.show();

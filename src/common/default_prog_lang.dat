@@ -2,11 +2,11 @@
 single_line_comment=//
 multi_line_comment_start=/*
 multi_line_comment_end=*/
-files_extensions=c i ii m mi mm mii h cc cp cxx cpp c%2B%2B hh hp hxx hpp h%2Bh%2B tcc
+files_extensions="c i ii m mi mm mii h cc cp cxx cpp c++ hh hp hxx hpp h++ tcc"
 
 [PYTHON]
 single_line_comment=#
-multi_line_comment_start="""
-multi_line_comment_end="""
-files_extensions=py
+multi_line_comment_start=\"\"\"
+multi_line_comment_end=\"\"\"
+files_extensions="py"
 

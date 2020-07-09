@@ -168,16 +168,78 @@ void GeneralSettingsDialog::load() {
     sizeSlider->setValue(  settings.getValue( "font_size" ).toInt() );
     sizeLine->setText( settings.getValue( "font_size" ) );
     dateFormatCombo->setCurrentText( settings.getValue( "date_format" ) );
+
+    //load all languages into lang table
+    setup_lang_table();
 }
 
 //save settings
 void GeneralSettingsDialog::save() {
+    settings.setValue( "font_family", fontCombo->currentText() );
+    settings.setValue( "font_size", QString::number(sizeSlider->value()) );
+    settings.setValue( "date_format", dateFormatCombo->currentText() );
+    settings.save();
+
+    //clear rpogramming languages file
+    QFile langs_file( QDir::currentPath() + "/programming_languages.ini" );
+    langs_file.resize(0);
+
+
+    //rewrite all data to programming langauges file
+    QSettings prog_langs( QDir::currentPath() + "/programming_languagess.ini", QSettings::IniFormat );
+
+    for( int i = 0; i < LangTable->rowCount(); ++i ) {
+        prog_langs.beginGroup( LangTable->item(i,0)->text() );
+
+        prog_langs.setValue( "single_line_comment", LangTable->item(i,1)->text() );
+        prog_langs.setValue( "multi_line_comment_start", LangTable->item(i,2)->text().split(" ").at(0) );
+        prog_langs.setValue( "multi_line_comment_end", LangTable->item(i,2)->text().split(" ").at(1) );
+        prog_langs.setValue( "files_extensions", LangTable->item(i,3)->text() );
+
+        prog_langs.endGroup();
+    }
+
+
 
 }
 
 //setup programming language table;
 void GeneralSettingsDialog::setup_lang_table() {
 
+    LangTable->setRowCount( 0 );
+    LangTable->setColumnCount( 4 );
+
+    //loading header table
+    QStringList header;
+    header << tr("Langauge") <<
+              tr("Single line comment") <<
+              tr("Multi line comment") <<
+              tr("Extenstions");
+
+    LangTable->setHorizontalHeaderLabels( header );
+    LangTable->horizontalHeader()->setStretchLastSection(true);
+    LangTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    LangTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    LangTable->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    //languages are stored in programming_languages.ini
+    QSettings prog_langs( QDir::currentPath() + "/programming_languages.ini", QSettings::IniFormat );
+    QStringList languages = prog_langs.childGroups();
+    for( int i = 0; i < languages.size(); ++i ) {
+        prog_langs.beginGroup( languages.at(i) );
+
+        LangTable->insertRow( LangTable->rowCount() );
+
+        LangTable->setItem( LangTable->rowCount() - 1, 0, new QTableWidgetItem( languages.at(i) ) );
+        LangTable->setItem( LangTable->rowCount() - 1, 1, new QTableWidgetItem( prog_langs.value( "single_line_comment" ).toString() ) );
+        LangTable->setItem( LangTable->rowCount() - 1, 2, new QTableWidgetItem( prog_langs.value( "multi_line_comment_start" ).toString() +
+                                                                                " " +
+                                                                                prog_langs.value( "multi_line_comment_end" ).toString()) );
+        LangTable->setItem( LangTable->rowCount() - 1, 3, new QTableWidgetItem( prog_langs.value( "files_extensions" ).toString() ) );
+
+
+        prog_langs.endGroup();
+    }
 }
 
 // ---- slots funxtions ----
