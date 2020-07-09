@@ -33,7 +33,6 @@
 // main function
 int main(int argc, char *argv[])
 {
-
     QApplication a(argc, argv);
     CM_WelcomeDialog w;
 
@@ -49,19 +48,14 @@ int main(int argc, char *argv[])
     QFont monospace( family );
     monospace.setPointSize(9);
     QApplication::setFont( monospace );
-    /*
-    if( !QFile::exists( QDir::currentPath() + "/programming_languages.ini" ) ) {
-        QFile default_file( ":/common/default_prog_lang.dat" );
-        if( default_file.open( QIODevice::ReadOnly ) ) {
-            QFile prog_langs_file( QDir::currentPath() + "/programming_languages.ini" );
-            if( prog_langs_file.open( QIODevice::WriteOnly | QIODevice::Truncate ) ) {
-                prog_langs_file.write( default_file.readAll() );
-            }
-        }
-    }
-    */
+
+
+    //check if programming languages file exists or not
     FilesUtilities::fileCheckFromFile(QDir::currentPath() + "/programming_languages.ini",
                                       ":/common/default_prog_lang.dat" );
+
+
+
 
     w.show();
     return a.exec();

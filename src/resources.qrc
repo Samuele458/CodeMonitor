@@ -6,5 +6,6 @@
         <file>img/icons/criss-cross.png</file>
         <file>img/icons/more.png</file>
         <file>img/icons/pencil.png</file>
+        <file>common/default_config.dat</file>
     </qresource>
 </RCC>
