@@ -186,7 +186,7 @@ void GeneralSettingsDialog::save() {
 
 
     //rewrite all data to programming langauges file
-    QSettings prog_langs( QDir::currentPath() + "/programming_languagess.ini", QSettings::IniFormat );
+    QSettings prog_langs( QDir::currentPath() + "/programming_languages.ini", QSettings::IniFormat );
 
     for( int i = 0; i < LangTable->rowCount(); ++i ) {
         prog_langs.beginGroup( LangTable->item(i,0)->text() );
@@ -264,7 +264,6 @@ void GeneralSettingsDialog::add_lang_button_clicked() {
 
         ProgrammingLanguage lang = language_dialog->getLanguage();
 
-
         //check if a language with the same name is present
         bool langIsPresent = false;
         for( int i = 0; i < LangTable->rowCount(); ++i ) {
@@ -281,21 +280,20 @@ void GeneralSettingsDialog::add_lang_button_clicked() {
 
         } else {
             //new language is unique, so it can be added
-
             LangTable->insertRow( LangTable->rowCount() );
-            LangTable->item( LangTable->rowCount() - 1, 0 )->setText( lang.getName() );
-            LangTable->item( LangTable->rowCount() - 1, 1 )->setText( lang.getSingleLine() );
-            LangTable->item( LangTable->rowCount() - 1, 2 )->setText( lang.getMultiLineStart() +
-                                                                      " " +
-                                                                      lang.getMultiLineEnd() );
+            LangTable->setItem( LangTable->rowCount() - 1, 0, new QTableWidgetItem(lang.getName()) );
+            LangTable->setItem( LangTable->rowCount() - 1, 1, new QTableWidgetItem(lang.getSingleLine() ) );
+            LangTable->setItem( LangTable->rowCount() - 1, 2, new QTableWidgetItem( lang.getMultiLineStart() +
+                                                                                    " " +
+                                                                                    lang.getMultiLineEnd() ) );
+
 
             QString extensions_list_str = "";
 
             foreach( QString ext, lang.getExtensions() ) {
                 extensions_list_str += ext + " ";
             }
-
-            LangTable->item( LangTable->rowCount() - 1, 3 )->setText( extensions_list_str );
+            LangTable->setItem( LangTable->rowCount() - 1, 3, new QTableWidgetItem( extensions_list_str ) );
 
         }
 

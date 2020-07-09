@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     qApp->setStyleSheet( StyleSheet );
 
 
-    ManagerFromFile settings( "config.ini" );
+
 
 
     //check if programming languages file exists or not
@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
     FilesUtilities::fileCheckFromFile(QDir::currentPath() + "/config.ini",
                                       ":/common/default_config.dat" );
 
+
+    ManagerFromFile settings( "config.ini" );
 
     QFont font( settings.getValue( "font_family" ) );
     font.setPointSize( settings.getValue( "font_size" ).toInt() );
