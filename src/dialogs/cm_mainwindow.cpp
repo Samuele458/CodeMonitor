@@ -99,6 +99,7 @@ void CodeMonitorWindow::setup_ui() {
     RightLayout->addLayout( RightSplitterLayout );
     ButtonsLayout->addWidget( AddFileButton );
     ButtonsLayout->addWidget( AddFolderButton );
+    ButtonsLayout->addStretch();
     ButtonsLayout->addWidget( MonitorNowButton );
     ButtonsLayout->addWidget( SettingsButton );
     RightLayout->addLayout( ButtonsLayout );
@@ -117,6 +118,8 @@ void CodeMonitorWindow::setup_ui() {
     LeftLayout->setMargin(3);
     ViewLayout->setMargin(0);
 
+    MonitorTree->header()->setStretchLastSection( false );
+    MonitorTree->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     //menus
     createActions();
@@ -129,7 +132,9 @@ void CodeMonitorWindow::apply_settings() {
     MonitorNameLabel->setText( tr("Monitor: ") + monitor_name );
     AddFileButton->setText( tr("Add file") );
     AddFolderButton->setText( tr("Add folder") );
-    SettingsButton->setText( tr("Settigs") );
+    MonitorNowButton->setText( tr("Monitor Now") );
+    SettingsButton->setText( tr("Settings") );
+    InformationLabel->setText( tr("Monitor:") + "   -     " );
 
     MonitorTree->setHeaderLabels( QStringList() << tr("Files") );
 
@@ -203,10 +208,8 @@ void CodeMonitorWindow::refreshTree() {
 
 
 void CodeMonitorWindow::monitor_tree_item_clicked( QTreeWidgetItem* item, int column ) {
-    qDebug() << "REFRESH DEI DATI";
     setFilesToShow();
     refresh_monitor_table();
-    qDebug() << filesToShow.size();
 }
 
 void CodeMonitorWindow::add_file_button_clicked() {
@@ -320,6 +323,9 @@ void CodeMonitorWindow::monitor_now_button_clicked() {
     monitor.MonitorNow();
     refresh_monitor_table();
     saved = false;
+
+    MonitorTable->selectRow( MonitorTable->rowCount() - 1 );
+    refresh_view_table( monitor.viewAt( MonitorTable->rowCount() - 1) );
 }
 
 void CodeMonitorWindow::refresh_monitor_table() {
@@ -465,6 +471,9 @@ void CodeMonitorWindow::refresh_view_table( View view ) {
     //clearing old dataa from table
     ViewTable->setRowCount( 0 );
 
+    InformationLabel->setText( tr("Monitor:") + "   " + view.getDateTime().toString("dd/MM/yyyy - hh:mm:ss.zzz") );
+
+
     QList<FileData> data = view.getData();
     FileData current_file;
     for( int i = 0; i < data.size(); ++i ) {
@@ -538,11 +547,11 @@ void CodeMonitorWindow::save_slot() {
     this->save();
 }
 void CodeMonitorWindow::add_file_slot() {
-
+    add_file_button_clicked();
 }
 
 void CodeMonitorWindow::add_folder_slot() {
-
+    add_folder_button_clicked();
 }
 
 void CodeMonitorWindow::remove_file_slot() {
@@ -550,7 +559,10 @@ void CodeMonitorWindow::remove_file_slot() {
 }
 
 void CodeMonitorWindow::general_settings_slot() {
+    GeneralSettingsDialog* settings_dialog = new GeneralSettingsDialog( this );
+    settings_dialog->exec();
 
+    delete settings_dialog;
 }
 
 void CodeMonitorWindow::monitor_settings_slot() {

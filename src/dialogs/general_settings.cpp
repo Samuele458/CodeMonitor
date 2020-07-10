@@ -24,6 +24,8 @@ GeneralSettingsDialog::GeneralSettingsDialog( QWidget* parent , QString settings
     GeneralDialog( parent, settings_filename_str )
 {
 
+    this->resize( 750, 580 );
+
     //setup ui
     setup_ui();
     apply_settings();
@@ -119,6 +121,8 @@ void GeneralSettingsDialog::setup_ui() {
     LangLabel->setAlignment( Qt::AlignCenter );
 
 
+
+
 }
 
 //apply current settings (like language, teme, and other general settings
@@ -159,6 +163,7 @@ void GeneralSettingsDialog::apply_slots() {
     connect( RemoveLangButton, SIGNAL(clicked()), this, SLOT(remove_lang_button_clicked()));
     connect( EditLangButton, SIGNAL(clicked()), this, SLOT(edit_lang_button_clicked()));
     connect( sizeSlider, SIGNAL(valueChanged(int)), this, SLOT(size_slider_changed(int)));
+    connect( LangTable, SIGNAL(cellDoubleClicked(int,int) ), this, SLOT(lang_table_cell_double_clicked(int,int)));
 
 }
 
@@ -221,6 +226,11 @@ void GeneralSettingsDialog::setup_lang_table() {
     LangTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     LangTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     LangTable->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    LangTable->setColumnWidth( 0 , 110 );
+    LangTable->setColumnWidth( 1 , 200 );
+    LangTable->setColumnWidth( 2 , 200 );
+
 
     //languages are stored in programming_languages.ini
     QSettings prog_langs( QDir::currentPath() + "/programming_languages.ini", QSettings::IniFormat );
@@ -392,5 +402,9 @@ void GeneralSettingsDialog::edit_lang_button_clicked() {
 
 void GeneralSettingsDialog::size_slider_changed( int value ) {
     sizeLine->setText( QString::number( value ) );
+}
+
+void GeneralSettingsDialog::lang_table_cell_double_clicked( int row, int column ) {
+    edit_lang_button_clicked();
 }
 

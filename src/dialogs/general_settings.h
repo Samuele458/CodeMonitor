@@ -59,6 +59,7 @@ class GeneralSettingsDialog : public GeneralDialog {
         void remove_lang_button_clicked();
         void edit_lang_button_clicked();
         void size_slider_changed( int value );
+        void lang_table_cell_double_clicked( int row, int column );
 
 
     protected:

@@ -49,6 +49,7 @@
 #include "common/textsanitizer.h"
 #include "monitor.h"
 #include "dialogs/filesdialog.h"
+#include "dialogs/general_settings.h"
 
 class CodeMonitorWindow : public GeneralWindow {
     Q_OBJECT
