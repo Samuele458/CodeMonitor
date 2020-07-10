@@ -121,6 +121,9 @@ void GeneralSettingsDialog::setup_ui() {
     LangLabel->setAlignment( Qt::AlignCenter );
 
 
+    CancelButton->setObjectName( "cancel" );
+    ConfirmButton->setObjectName( "confirm" );
+
 
 
 }

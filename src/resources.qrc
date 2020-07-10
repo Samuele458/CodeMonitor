@@ -8,5 +8,7 @@
         <file>common/default_config.dat</file>
         <file>img/icons/folder.png</file>
         <file>img/icons/hdd.png</file>
+        <file>img/icons/play.png</file>
+        <file>img/icons/settings.png</file>
     </qresource>
 </RCC>

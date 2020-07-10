@@ -7,7 +7,12 @@ QPushButton {
     color: black;
 }
 
-QPushButton#confirm {
+QPushButton:hover {
+    font-weight: bold;
+}
+
+
+QPushButton#green-button {
     background-color: rgb(0,230,0);
     min-width: 6em;
     border: 2px solid rgb(0,230,0);
@@ -16,22 +21,30 @@ QPushButton#confirm {
     font-weight: bold;
 }
 
+QPushButton#green-button:hover {
+    background-color: white;
+    color: rgb(0,230,0);
+    border: 2px solid rgb(0,230,0);
+}
+
 QPushButton#confirm:hover {
     background-color: white;
     color: rgb(0,230,0);
     border: 2px solid rgb(0,230,0);
 }
 
+QPushButton#cancel:hover {
+    background-color: white;
+    color: red;
+    border: 2px solid red;
+}
+
+
 QToolButton {
     background-color: white;
     border: 1px solid gray;
     padding: 2px;
     color: black;
-}
-
-
-QPushButton:hover {
-    background-color: rgb(255, 162, 0);
 }
 
 QGroupBox {

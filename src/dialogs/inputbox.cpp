@@ -87,6 +87,9 @@ void InputBox::setup_ui() {
     CancelButton->setText( tr("Cancel") );
     EnterMessageLabel->setText( message );
     this->setWindowTitle( title );
+
+    CancelButton->setObjectName( "cancel" );
+    ConfirmButton->setObjectName( "confirm" );
 }
 
 // ----- slots -----

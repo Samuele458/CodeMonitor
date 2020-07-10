@@ -68,6 +68,9 @@ void FilesDialog::setup_ui() {
 
     this->setLayout( MainLayout );
 
+    CancelButton->setObjectName( "cancel" );
+    ConfirmButton->setObjectName( "confirm" );
+
 }
 
 //apply current settings (like language, teme, and other general settings

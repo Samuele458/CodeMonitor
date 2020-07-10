@@ -100,7 +100,7 @@ void CodeMonitorWindow::setup_ui() {
     ButtonsLayout->addWidget( AddFileButton );
     ButtonsLayout->addWidget( AddFolderButton );
     ButtonsLayout->addWidget( MonitorNowButton );
-    MonitorNowButton->setObjectName( "confirm" );
+    MonitorNowButton->setObjectName( "green-button" );
 
     ButtonsLayout->addStretch();
 
@@ -126,6 +126,8 @@ void CodeMonitorWindow::setup_ui() {
 
     AddFileButton->setIcon( QIcon( ":/img/icons/more.png" ) );
     AddFolderButton->setIcon( QIcon( ":/img/icons/more.png" ) );
+    SettingsButton->setIcon( QIcon( ":/img/icons/settings.png" ) );
+
 
     MonitorTable->setContextMenuPolicy( Qt::ContextMenuPolicy::CustomContextMenu );
 

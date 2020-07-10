@@ -136,6 +136,9 @@ void LanguageDialog::setup_ui() {
 
     this->setLayout( MainLayout );
 
+    CancelButton->setObjectName( "cancel" );
+    ConfirmButton->setObjectName( "confirm" );
+
 
 }
 

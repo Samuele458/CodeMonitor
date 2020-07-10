@@ -149,6 +149,13 @@ void CM_WelcomeDialog::setup_ui() {
     DeleteMonitorButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
     SettingsButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
     ExitButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+
+
+    SettingsButton->setIcon( QIcon( ":/img/icons/settings.png" ) );
+    NewMonitorButton->setIcon( QIcon( ":/img/icons/more.png" ) );
+    EditMonitorButton->setIcon( QIcon( ":/img/icons/pencil.png" ) );
+    DeleteMonitorButton->setIcon( QIcon( ":/img/icons/criss-cross.png" ) );
+    OpenMonitorButton->setIcon( QIcon( ":/img/icons/play.png" ) );
 }
 
 
