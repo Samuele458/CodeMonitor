@@ -265,7 +265,7 @@ void GeneralSettingsDialog::cancel_button_clicked() {
 }
 
 void GeneralSettingsDialog::add_lang_button_clicked() {
-    LanguageDialog* language_dialog = new LanguageDialog( "" );
+    LanguageDialog* language_dialog = new LanguageDialog( tr("New language:") );
     language_dialog->exec();
 
     //check if form was confirmer or not

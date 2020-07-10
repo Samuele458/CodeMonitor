@@ -248,6 +248,7 @@ void CM_WelcomeDialog::OpenMonitorButtonClicked() {
     if( MonitorWidget->selectedItems().size() != 0 ) {
         CodeMonitorWindow* cm_window = new CodeMonitorWindow( MonitorWidget->selectedItems().at(0)->text() );
         cm_window->show();
+        this->close();
     } else {
         QMessageBox::warning( this, tr("Error"), tr("No monitor selected!") );
     }

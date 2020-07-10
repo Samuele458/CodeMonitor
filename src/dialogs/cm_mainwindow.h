@@ -44,6 +44,9 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
+#include <QPoint>
+#include <QContextMenuEvent>
+#include <QModelIndex>
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
@@ -65,6 +68,8 @@ class CodeMonitorWindow : public GeneralWindow {
         void add_folder_button_clicked();
         void monitor_now_button_clicked();
         void monitor_table_cell_clicked( int row, int column );
+        void monitor_table_context_menu( const QPoint& pos );
+
 
         //menu slots
         void exit_slot();
@@ -75,6 +80,8 @@ class CodeMonitorWindow : public GeneralWindow {
         void general_settings_slot();
         void monitor_settings_slot();
         void about_slot();
+
+        void delete_view_slot();
 
 
     protected:
@@ -135,6 +142,9 @@ class CodeMonitorWindow : public GeneralWindow {
         QAction* monitorSettingsAct;
         QAction* aboutAct;
 
+        //table monitor context menu actions
+        QAction* deleteViewAct;
+
 
         //other ---
         QStringList filesToShow;
@@ -149,6 +159,7 @@ class CodeMonitorWindow : public GeneralWindow {
         void refresh_view_table( View view );
         void setup_monitor_table();
         void setup_view_table();
+        void clear_view_table();
 
         //keep trace of save state.
         bool saved;

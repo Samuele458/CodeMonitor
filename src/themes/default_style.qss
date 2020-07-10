@@ -7,6 +7,21 @@ QPushButton {
     color: black;
 }
 
+QPushButton#confirm {
+    background-color: rgb(0,230,0);
+    min-width: 6em;
+    border: 2px solid rgb(0,230,0);
+    padding: 6px;
+    color: white;
+    font-weight: bold;
+}
+
+QPushButton#confirm:hover {
+    background-color: white;
+    color: rgb(0,230,0);
+    border: 2px solid rgb(0,230,0);
+}
+
 QToolButton {
     background-color: white;
     border: 1px solid gray;

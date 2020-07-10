@@ -234,6 +234,10 @@ class Monitor : public QObject {
         //monitor all files
         void MonitorNow();
 
+        int size();
+
+        bool removeView( int pos );
+
         //--- other ---
         bool load();
 

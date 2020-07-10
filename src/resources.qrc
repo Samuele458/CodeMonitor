@@ -6,5 +6,7 @@
         <file>img/icons/more.png</file>
         <file>img/icons/pencil.png</file>
         <file>common/default_config.dat</file>
+        <file>img/icons/folder.png</file>
+        <file>img/icons/hdd.png</file>
     </qresource>
 </RCC>

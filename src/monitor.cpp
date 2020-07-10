@@ -613,6 +613,27 @@ void Monitor::MonitorNow() {
     qDebug() << newView.getDataStrings() << current_files;
 }
 
+int Monitor::size() {
+    return views.size();
+}
+
+//remove a view from views array
+bool Monitor::removeView( int pos ) {
+
+    //check if pos is in range
+    if( pos >= 0 && pos < views.size() ) {
+
+        views.removeAt( pos );
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+}
+
 //save data to database file
 bool Monitor::saveData() {
 

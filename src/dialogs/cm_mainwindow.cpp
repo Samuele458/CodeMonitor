@@ -99,8 +99,11 @@ void CodeMonitorWindow::setup_ui() {
     RightLayout->addLayout( RightSplitterLayout );
     ButtonsLayout->addWidget( AddFileButton );
     ButtonsLayout->addWidget( AddFolderButton );
-    ButtonsLayout->addStretch();
     ButtonsLayout->addWidget( MonitorNowButton );
+    MonitorNowButton->setObjectName( "confirm" );
+
+    ButtonsLayout->addStretch();
+
     ButtonsLayout->addWidget( SettingsButton );
     RightLayout->addLayout( ButtonsLayout );
 
@@ -120,6 +123,11 @@ void CodeMonitorWindow::setup_ui() {
 
     MonitorTree->header()->setStretchLastSection( false );
     MonitorTree->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    AddFileButton->setIcon( QIcon( ":/img/icons/more.png" ) );
+    AddFolderButton->setIcon( QIcon( ":/img/icons/more.png" ) );
+
+    MonitorTable->setContextMenuPolicy( Qt::ContextMenuPolicy::CustomContextMenu );
 
     //menus
     createActions();
@@ -152,6 +160,7 @@ void CodeMonitorWindow::apply_slots() {
     connect( AddFolderButton, SIGNAL(clicked()), this, SLOT(add_folder_button_clicked() ) );
     connect( MonitorNowButton, SIGNAL(clicked()), this, SLOT(monitor_now_button_clicked() ) );
     connect( MonitorTable, SIGNAL( cellClicked( int, int ) ), this, SLOT( monitor_table_cell_clicked( int, int ) ) );
+    connect( MonitorTable, SIGNAL(customContextMenuRequested(const QPoint& )), this, SLOT(monitor_table_context_menu( const QPoint& )));
 
 }
 
@@ -169,6 +178,7 @@ void CodeMonitorWindow::refreshTree() {
             topLevelItem->setCheckState( 0, Qt::Unchecked );
             topLevelItem->setFlags( topLevelItem->flags() | Qt::ItemIsTristate | Qt::ItemIsUserCheckable );
             topLevelItem->setText(0, splitFileName[0]);
+            topLevelItem->setIcon( 0, QIcon( ":/img/icons/hdd.png" ) );
             MonitorTree->addTopLevelItem(topLevelItem);
         }
 
@@ -193,6 +203,8 @@ void CodeMonitorWindow::refreshTree() {
                 parentItem->setCheckState( 0, Qt::Unchecked );
                 parentItem->setFlags( parentItem->flags() | Qt::ItemIsTristate | Qt::ItemIsUserCheckable );
                 parentItem->setText(0, splitFileName[i]);
+                parentItem->setIcon( 0, QIcon( ":/img/icons/folder.png" ) );
+
             }
         }
 
@@ -242,7 +254,10 @@ void CodeMonitorWindow::add_file_button_clicked() {
 }
 
 void CodeMonitorWindow::settings_button_clicked() {
+    GeneralSettingsDialog* settings_dialog = new GeneralSettingsDialog( this );
+    settings_dialog->exec();
 
+    delete settings_dialog;
 }
 
 void CodeMonitorWindow::add_folder_button_clicked() {
@@ -284,6 +299,19 @@ void CodeMonitorWindow::add_folder_button_clicked() {
 
 void CodeMonitorWindow::monitor_table_cell_clicked( int row, int column ) {
     refresh_view_table( monitor.viewAt( row ) );
+}
+
+void CodeMonitorWindow::monitor_table_context_menu( const QPoint& pos ) {
+    QModelIndex index = MonitorTable->indexAt( pos );
+
+    if( index.row() != -1 ) {
+
+        QMenu* menu = new QMenu( this );
+        menu->addAction( deleteViewAct );
+
+        menu->popup( MonitorTable->viewport()->mapToGlobal( pos ) );
+
+    }
 }
 
 //set files to be showed in the ui
@@ -444,6 +472,12 @@ void CodeMonitorWindow::createActions() {
     aboutAct->setStatusTip( tr( "About Code Monitor" ) );
     connect( aboutAct, &QAction::triggered, this, &CodeMonitorWindow::about_slot );
 
+    //--- table monitor context menu actions ---
+
+    //delete view action
+    deleteViewAct = new QAction( QIcon( ":img/icons/criss-cross.png"),
+                                 tr( "Delete" ) );
+    connect( deleteViewAct, &QAction::triggered, this, &CodeMonitorWindow::delete_view_slot );
 
 }
 
@@ -537,6 +571,11 @@ void CodeMonitorWindow::setup_view_table() {
     ViewTable->setShowGrid(true);
 }
 
+void CodeMonitorWindow::clear_view_table() {
+    ViewTable->setRowCount( 0 );
+    InformationLabel->setText( tr("Monitor:") + "   -     " );
+}
+
 //---- menu slots -----
 
 void CodeMonitorWindow::exit_slot() {
@@ -571,6 +610,27 @@ void CodeMonitorWindow::monitor_settings_slot() {
 
 void CodeMonitorWindow::about_slot() {
 
+}
+
+void CodeMonitorWindow::delete_view_slot() {
+    if( MonitorTable->selectedItems().size() > 0 ) {
+
+        int index = -1;
+
+        for( int i = 0; i <  MonitorTable->rowCount(); ++i ) {
+            if( MonitorTable->selectedItems().at(0) == MonitorTable->item(i,0) ) {
+                index = i;
+            }
+        }
+
+        if( index != -1 ) {
+            monitor.removeView( index );
+            refresh_monitor_table();
+            saved = false;
+            clear_view_table();
+        }
+
+    }
 }
 
 
