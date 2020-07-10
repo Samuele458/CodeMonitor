@@ -38,10 +38,18 @@ LanguageDialog::LanguageDialog( QString intro_label_text, QWidget* parent, QStri
 }
 
 LanguageDialog::LanguageDialog( QString intro_label_text, ProgrammingLanguage prog_lang, QWidget* parent, QString settings_filename_str ) :
-    GeneralDialog( parent, settings_filename_str ),
-    intro_label_txt( intro_label_text )
+    LanguageDialog( intro_label_text, parent, settings_filename_str )
 {
-    //sistemare prog langs in ui
+
+    LangNameEdit->setText( prog_lang.getName() );
+    LangSlcLine->setText( prog_lang.getSingleLine() );
+    LangMlcStartLine->setText( prog_lang.getMultiLineStart() );
+    LangMlcEndLine->setText( prog_lang.getMultiLineEnd() );
+
+    foreach( QString ext, prog_lang.getExtensions() ) {
+        ExtensionsList->insertItem( ExtensionsList->count(), ext );
+    }
+
 }
 
 LanguageDialog::~LanguageDialog() {
