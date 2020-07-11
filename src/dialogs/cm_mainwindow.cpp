@@ -160,6 +160,7 @@ void CodeMonitorWindow::apply_slots() {
     connect( MonitorTree, SIGNAL(itemChanged(QTreeWidgetItem*, int )), this, SLOT(monitor_tree_item_clicked( QTreeWidgetItem*, int  )) );
     connect( AddFileButton, SIGNAL(clicked()), this, SLOT(add_file_button_clicked() ) );
     connect( AddFolderButton, SIGNAL(clicked()), this, SLOT(add_folder_button_clicked() ) );
+    connect( SettingsButton, SIGNAL(clicked()), this, SLOT(settings_button_clicked() ) );
     connect( MonitorNowButton, SIGNAL(clicked()), this, SLOT(monitor_now_button_clicked() ) );
     connect( MonitorTable, SIGNAL( cellClicked( int, int ) ), this, SLOT( monitor_table_cell_clicked( int, int ) ) );
     connect( MonitorTable, SIGNAL(customContextMenuRequested(const QPoint& )), this, SLOT(monitor_table_context_menu( const QPoint& )));
