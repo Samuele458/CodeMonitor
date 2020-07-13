@@ -130,6 +130,7 @@ void CodeMonitorWindow::setup_ui() {
 
 
     MonitorTable->setContextMenuPolicy( Qt::ContextMenuPolicy::CustomContextMenu );
+    MonitorTree->setContextMenuPolicy( Qt::ContextMenuPolicy::CustomContextMenu );
 
     //menus
     createActions();
@@ -164,6 +165,7 @@ void CodeMonitorWindow::apply_slots() {
     connect( MonitorNowButton, SIGNAL(clicked()), this, SLOT(monitor_now_button_clicked() ) );
     connect( MonitorTable, SIGNAL( cellClicked( int, int ) ), this, SLOT( monitor_table_cell_clicked( int, int ) ) );
     connect( MonitorTable, SIGNAL(customContextMenuRequested(const QPoint& )), this, SLOT(monitor_table_context_menu( const QPoint& )));
+    connect( MonitorTree, SIGNAL(customContextMenuRequested(const QPoint& )), this, SLOT(monitor_tree_context_menu( const QPoint& )));
 
 }
 
@@ -315,6 +317,22 @@ void CodeMonitorWindow::monitor_table_context_menu( const QPoint& pos ) {
         menu->popup( MonitorTable->viewport()->mapToGlobal( pos ) );
 
     }
+}
+
+void CodeMonitorWindow::monitor_tree_context_menu( const QPoint& pos ) {
+    QTreeWidgetItem* item = MonitorTree->itemAt( pos );
+
+    if( item != nullptr ) {
+
+        if( item->toolTip( 0 ) != "" ) {
+            QMenu* menu = new QMenu( this );
+            menu->addAction( deleteFileAct );
+
+            menu->popup( MonitorTree->viewport()->mapToGlobal( pos ) );
+        }
+
+    }
+
 }
 
 //set files to be showed in the ui
@@ -482,6 +500,14 @@ void CodeMonitorWindow::createActions() {
                                  tr( "Delete" ) );
     connect( deleteViewAct, &QAction::triggered, this, &CodeMonitorWindow::delete_view_slot );
 
+
+    //--- table monitor context menu actions ---
+
+    //delete file action
+    deleteFileAct = new QAction( QIcon( ":img/icons/criss-cross.png"),
+                                 tr( "Remove file" ) );
+    connect( deleteFileAct, &QAction::triggered, this, &CodeMonitorWindow::delete_file_slot );
+
 }
 
 //create menus
@@ -634,6 +660,22 @@ void CodeMonitorWindow::delete_view_slot() {
         }
 
     }
+}
+
+void CodeMonitorWindow::delete_file_slot() {
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, tr("Selete file"), tr("Are you sure you want to remove %1 from current monitor?").arg( "\"" + MonitorTree->selectedItems().at(0)->text(0) + "\""),
+                                  QMessageBox::Yes|QMessageBox::No);
+
+    //check if file must be removed from monitor
+    if( reply == QMessageBox::Yes ) {
+        monitor.removeFilespath( QStringList() << MonitorTree->selectedItems().at(0)->toolTip(0) );
+        refreshTree();
+        refresh_monitor_table();
+
+    }
+
 }
 
 

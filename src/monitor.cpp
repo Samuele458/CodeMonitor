@@ -497,6 +497,15 @@ void View::addFile( const QString filename, QString data_string ) {
     data.push_back( FileData(filename, data_string) );
 }
 
+//remove file
+void View::removeFile( const QString filename ) {
+    for( int i = 0; i < data.size(); ++i ) {
+        if( data.at(i).getFilename() == filename ) {
+            data.removeAt( i );
+        }
+    }
+}
+
 
 
 /*  Class:          Monitor
@@ -565,6 +574,19 @@ void Monitor::addFilespath( const QStringList files ) {
         }
     }
 }
+
+void Monitor::removeFilespath( const QStringList files ) {
+    foreach( QString file, files ) {
+        if( current_files.indexOf( file ) != -1 ) {
+            current_files.removeAt( current_files.indexOf( file ) );
+
+            for( int i = 0; i < views.size(); ++i ) {
+                views[i].removeFile( file );
+            }
+        }
+    }
+}
+
 
 //load data from db
 bool Monitor::load() {

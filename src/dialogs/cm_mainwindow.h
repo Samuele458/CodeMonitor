@@ -69,6 +69,7 @@ class CodeMonitorWindow : public GeneralWindow {
         void monitor_now_button_clicked();
         void monitor_table_cell_clicked( int row, int column );
         void monitor_table_context_menu( const QPoint& pos );
+        void monitor_tree_context_menu( const QPoint& pos );
 
 
         //menu slots
@@ -82,6 +83,8 @@ class CodeMonitorWindow : public GeneralWindow {
         void about_slot();
 
         void delete_view_slot();
+
+        void delete_file_slot();
 
 
     protected:
@@ -144,6 +147,9 @@ class CodeMonitorWindow : public GeneralWindow {
 
         //table monitor context menu actions
         QAction* deleteViewAct;
+
+        //tree monitor context menu actions
+        QAction* deleteFileAct;
 
 
         //other ---

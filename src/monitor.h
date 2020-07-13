@@ -197,6 +197,8 @@ class View {
         //add file from other
         void addFile( const QString filename, QString data_string );
 
+        //remove file
+        void removeFile( const QString filename );
 
     protected:
         QList<FileData> data;
@@ -231,6 +233,8 @@ class Monitor : public QObject {
 
         QStringList getCurrentFilespath() const;
         void addFilespath( const QStringList files );
+
+        void removeFilespath( const QStringList files );
 
         //monitor all files
         void MonitorNow();
