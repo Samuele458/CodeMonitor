@@ -197,6 +197,7 @@ class View {
         //add file from other
         void addFile( const QString filename, QString data_string );
 
+
     protected:
         QList<FileData> data;
         QDateTime date_time;

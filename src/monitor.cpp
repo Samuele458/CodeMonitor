@@ -475,7 +475,9 @@ FileData View::getFileData( QString filename, bool* ok  ) {
     if( index != -1 ) {
         return data.at( index );
     } else {
-        return FileData();
+        FileData file;
+        file.setFilename( filename );
+        return file;
     }
 }
 
@@ -554,6 +556,12 @@ void Monitor::addFilespath( const QStringList files ) {
     foreach( QString file, files ) {
         if( current_files.indexOf( file ) == -1 ) {
             current_files.push_back( file );
+
+            FileData file_data;
+            file_data.setFilename( file );
+            for( int i = 0; i < views.size(); ++i ) {
+                views[i].addFile( file_data );
+            }
         }
     }
 }

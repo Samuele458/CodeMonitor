@@ -510,11 +510,12 @@ void CodeMonitorWindow::refresh_view_table( View view ) {
 
     InformationLabel->setText( tr("Monitor:") + "   " + view.getDateTime().toString("dd/MM/yyyy - hh:mm:ss.zzz") );
 
-
+    QStringList filenames = view.getFilenames();
     QList<FileData> data = view.getData();
     FileData current_file;
-    for( int i = 0; i < data.size(); ++i ) {
-        current_file = data.at(i);
+
+    for( int i = 0; i < filesToShow.size(); ++i ) {
+        current_file = view.getFileData( filesToShow.at(i) );
 
         ViewTable->insertRow( ViewTable->rowCount() );
 
@@ -525,7 +526,6 @@ void CodeMonitorWindow::refresh_view_table( View view ) {
         ViewTable->setItem( i, 3, new QTableWidgetItem( QString::number(current_file.getCommentLines() ) ) );
         ViewTable->setItem( i, 4, new QTableWidgetItem( QString::number(current_file.getVoidLines() ) ) );
         ViewTable->setItem( i, 5, new QTableWidgetItem( QString::number(current_file.getChars() ) ) );
-        qDebug() << current_file.getTotalLines();
     }
 }
 
