@@ -103,6 +103,7 @@ class CodeMonitorWindow : public GeneralWindow {
         //data
         QString monitor_name;
         Monitor monitor;
+        View* view;
 
         //widgets
         QWidget* MainWidget;
@@ -162,7 +163,7 @@ class CodeMonitorWindow : public GeneralWindow {
         void save();
         void createActions();
         void createMenus();
-        void refresh_view_table( View view );
+        void refresh_view_table();
         void setup_monitor_table();
         void setup_view_table();
         void clear_view_table();

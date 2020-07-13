@@ -554,8 +554,8 @@ QList<View> Monitor::getAllViews() const {
     return views;
 }
 
-View Monitor::viewAt( int pos ) {
-    return views.at(pos);
+View* Monitor::viewAt( int pos ) {
+    return &views[pos];
 }
 QStringList Monitor::getCurrentFilespath() const {
     return current_files;

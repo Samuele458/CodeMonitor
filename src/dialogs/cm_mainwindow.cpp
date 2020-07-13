@@ -30,6 +30,10 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
 
     this->resize( 500, 400 );
     this->showMaximized();
+
+    //nullptr ---> there is not a curent view
+    view = nullptr;
+
     qDebug() << monitor.getCurrentFilespath();
     //setting up gui
     setup_ui();
@@ -227,6 +231,7 @@ void CodeMonitorWindow::refreshTree() {
 void CodeMonitorWindow::monitor_tree_item_clicked( QTreeWidgetItem* item, int column ) {
     setFilesToShow();
     refresh_monitor_table();
+    refresh_view_table();
 }
 
 void CodeMonitorWindow::add_file_button_clicked() {
@@ -303,7 +308,8 @@ void CodeMonitorWindow::add_folder_button_clicked() {
 }
 
 void CodeMonitorWindow::monitor_table_cell_clicked( int row, int column ) {
-    refresh_view_table( monitor.viewAt( row ) );
+    view = monitor.viewAt( row );
+    refresh_view_table();
 }
 
 void CodeMonitorWindow::monitor_table_context_menu( const QPoint& pos ) {
@@ -374,7 +380,9 @@ void CodeMonitorWindow::monitor_now_button_clicked() {
     saved = false;
 
     MonitorTable->selectRow( MonitorTable->rowCount() - 1 );
-    refresh_view_table( monitor.viewAt( MonitorTable->rowCount() - 1) );
+
+    view = monitor.viewAt( MonitorTable->rowCount() - 1);
+    refresh_view_table();
 }
 
 void CodeMonitorWindow::refresh_monitor_table() {
@@ -529,19 +537,21 @@ void CodeMonitorWindow::createMenus() {
 }
 
 
-void CodeMonitorWindow::refresh_view_table( View view ) {
+void CodeMonitorWindow::refresh_view_table() {
 
     //clearing old dataa from table
     ViewTable->setRowCount( 0 );
 
-    InformationLabel->setText( tr("Monitor:") + "   " + view.getDateTime().toString("dd/MM/yyyy - hh:mm:ss.zzz") );
+    if( view != nullptr ) {
 
-    QStringList filenames = view.getFilenames();
-    QList<FileData> data = view.getData();
+    InformationLabel->setText( tr("Monitor:") + "   " + view->getDateTime().toString("dd/MM/yyyy - hh:mm:ss.zzz") );
+
+    QStringList filenames = view->getFilenames();
+    QList<FileData> data = view->getData();
     FileData current_file;
 
     for( int i = 0; i < filesToShow.size(); ++i ) {
-        current_file = view.getFileData( filesToShow.at(i) );
+        current_file = view->getFileData( filesToShow.at(i) );
 
         ViewTable->insertRow( ViewTable->rowCount() );
 
@@ -552,6 +562,10 @@ void CodeMonitorWindow::refresh_view_table( View view ) {
         ViewTable->setItem( i, 3, new QTableWidgetItem( QString::number(current_file.getCommentLines() ) ) );
         ViewTable->setItem( i, 4, new QTableWidgetItem( QString::number(current_file.getVoidLines() ) ) );
         ViewTable->setItem( i, 5, new QTableWidgetItem( QString::number(current_file.getChars() ) ) );
+    }
+
+    } else {
+        InformationLabel->setText( tr("Monitor:") + "    ---" );
     }
 }
 
