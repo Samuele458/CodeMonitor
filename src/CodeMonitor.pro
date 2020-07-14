@@ -27,7 +27,7 @@ SOURCES += \
     dialogs/general_settings.cpp \
     dialogs/inputbox.cpp \
     dialogs/languagedialog.cpp \
-    dialogs/licencedialog.cpp \
+    dialogs/licensedialog.cpp \
     main.cpp \
     monitor.cpp \
     widgets/widgets_utilities.cpp
@@ -44,7 +44,7 @@ HEADERS += \
     dialogs/general_settings.h \
     dialogs/inputbox.h \
     dialogs/languagedialog.h \
-    dialogs/licencedialog.h \
+    dialogs/licensedialog.h \
     monitor.h \
     widgets/widgets_utilities.h
 

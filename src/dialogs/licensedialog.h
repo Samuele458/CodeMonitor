@@ -18,57 +18,38 @@
  *  Github:     https://github.com/Samuele458
  */
 
-#ifndef ABOUTDIALOG_H
-#define ABOUTDIALOG_H
+#ifndef LICENSEDIALOG_H
+#define LICENSEDIALOG_H
 
 #include <QPushButton>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QGridLayout>
-#include <QDesktopServices>
-#include <QUrl>
+#include <QTextEdit>
+#include <QFile>
+#include <QFont>
 
 #include "dialogs/dialogs.h"
-#include "dialogs/licensedialog.h"
 
-class AboutDialog : public GeneralDialog {
+class LicenseDialog : public GeneralDialog {
     Q_OBJECT
 
     public:
-        AboutDialog( QWidget* parent = nullptr,
-                     QString settings_filename_str = "config.ini"  );
+        LicenseDialog( QWidget* parent = nullptr,
+                       QString settings_filename_str = "config.ini"  );
 
-        ~AboutDialog();
+        ~LicenseDialog();
 
     protected slots:
         void ok_button_clicked();
-        void official_page_button_clicked();
-        void license_button_clicked();
 
     protected:
 
-
         //widgets
         QVBoxLayout* MainLayout;
-
-        QGridLayout* InfoLayout;
-        QLabel* VersionLeftLabel;
-        QLabel* VersionRightLabel;
-        QLabel* DateLeftLabel;
-        QLabel* DateRightLabel;
-        QLabel* LicenseLeftLabel;
-        QLabel* LicenseRightLabel;
-        QLabel* AuthorLeftLabel;
-        QLabel* AuthorRightLabel;
-        QLabel* EmailLeftLabel;
-        QLabel* EmailRightLabel;
-        QLabel* GithubLeftLabel;
-        QLabel* GithubRightLabel;
-
+        QLabel* TitleLabel;
+        QTextEdit* LicenseEdit;
         QHBoxLayout* ButtonsLayout;
-        QPushButton* OfficialPageButton;
-        QPushButton* LicenseButton;
         QPushButton* OkButton;
 
 
@@ -84,8 +65,8 @@ class AboutDialog : public GeneralDialog {
         //configure the User Interface: allocating Widgets, layout, etc.
         void setup_ui() override;
 
+
+
 };
 
 #endif
-
-

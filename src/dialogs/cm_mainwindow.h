@@ -54,6 +54,7 @@
 #include "dialogs/filesdialog.h"
 #include "dialogs/general_settings.h"
 #include "dialogs/aboutdialog.h"
+#include "dialogs/licensedialog.h"
 
 class CodeMonitorWindow : public GeneralWindow {
     Q_OBJECT

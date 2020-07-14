@@ -666,7 +666,11 @@ void CodeMonitorWindow::about_slot() {
 }
 
 void CodeMonitorWindow::license_slot() {
+    LicenseDialog* license_dialog = new LicenseDialog( this );
 
+    license_dialog->exec();
+
+    delete license_dialog;
 }
 
 void CodeMonitorWindow::delete_view_slot() {

@@ -10,5 +10,6 @@
         <file>img/icons/hdd.png</file>
         <file>img/icons/play.png</file>
         <file>img/icons/settings.png</file>
+        <file>other/license.dat</file>
     </qresource>
 </RCC>

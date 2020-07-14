@@ -152,7 +152,11 @@ void AboutDialog::official_page_button_clicked() {
 }
 
 void AboutDialog::license_button_clicked() {
+    LicenseDialog* license_dialog = new LicenseDialog( this );
 
+    license_dialog->exec();
+
+    delete license_dialog;
 }
 
 
