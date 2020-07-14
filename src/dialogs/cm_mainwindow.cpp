@@ -486,20 +486,20 @@ void CodeMonitorWindow::createActions() {
     generalSettingsAct->setStatusTip( tr( "Open general settings dialog" ) );
     connect( generalSettingsAct, &QAction::triggered, this, &CodeMonitorWindow::general_settings_slot );
 
-    //add folder action
+    //monitor settings action
     monitorSettingsAct = new QAction( tr( "&Monitor settings"), this );
     monitorSettingsAct->setStatusTip( tr( "Open monitor settings dialog" ) );
     connect( monitorSettingsAct, &QAction::triggered, this, &CodeMonitorWindow::monitor_settings_slot );
 
-    //add folder action
-    monitorSettingsAct = new QAction( tr( "&Monitor settings"), this );
-    monitorSettingsAct->setStatusTip( tr( "Open monitor settings dialog" ) );
-    connect( monitorSettingsAct, &QAction::triggered, this, &CodeMonitorWindow::monitor_settings_slot );
-
-    //add folder action
+    //about action
     aboutAct = new QAction( tr( "&About"), this );
     aboutAct->setStatusTip( tr( "About Code Monitor" ) );
     connect( aboutAct, &QAction::triggered, this, &CodeMonitorWindow::about_slot );
+
+    //license action
+    licenseAct = new QAction( tr( "&License"), this );
+    licenseAct->setStatusTip( tr( "See program License" ) );
+    connect( licenseAct, &QAction::triggered, this, &CodeMonitorWindow::license_slot );
 
     //--- table monitor context menu actions ---
 
@@ -522,16 +522,22 @@ void CodeMonitorWindow::createActions() {
 void CodeMonitorWindow::createMenus() {
     FileMenu = menuBar()->addMenu( tr( "&File" ) );
     FileMenu->addAction( saveAct );
+    FileMenu->addSeparator();
     FileMenu->addAction( exitAct );
 
     MonitorMenu = menuBar()->addMenu( tr( "&Monitor" ) );
     MonitorMenu->addAction( addFileAct );
     MonitorMenu->addAction( addFolderAct );
+    MonitorMenu->addSeparator();
     MonitorMenu->addAction( removeFileAct );
 
     SettingsMenu = menuBar()->addMenu( tr( "&Settings" ) );
     SettingsMenu->addAction( generalSettingsAct );
     SettingsMenu->addAction( monitorSettingsAct );
+
+    HelpMenu = menuBar()->addMenu( tr( "&Help" ) );
+    HelpMenu->addAction( aboutAct );
+    HelpMenu->addAction( licenseAct );
 
 
 }
@@ -652,6 +658,14 @@ void CodeMonitorWindow::monitor_settings_slot() {
 }
 
 void CodeMonitorWindow::about_slot() {
+    AboutDialog* about_dialog = new AboutDialog( this );
+
+    about_dialog->exec();
+
+    delete about_dialog;
+}
+
+void CodeMonitorWindow::license_slot() {
 
 }
 

@@ -19,6 +19,7 @@ SOURCES += \
     common/filesutility.cpp \
     common/managers.cpp \
     common/textsanitizer.cpp \
+    dialogs/aboutdialog.cpp \
     dialogs/cm_mainwindow.cpp \
     dialogs/cm_welcomedialog.cpp \
     dialogs/dialogs.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     dialogs/general_settings.cpp \
     dialogs/inputbox.cpp \
     dialogs/languagedialog.cpp \
+    dialogs/licencedialog.cpp \
     main.cpp \
     monitor.cpp \
     widgets/widgets_utilities.cpp
@@ -34,6 +36,7 @@ HEADERS += \
     common/filesutility.h \
     common/managers.h \
     common/textsanitizer.h \
+    dialogs/aboutdialog.h \
     dialogs/cm_mainwindow.h \
     dialogs/cm_welcomedialog.h \
     dialogs/dialogs.h \
@@ -41,6 +44,7 @@ HEADERS += \
     dialogs/general_settings.h \
     dialogs/inputbox.h \
     dialogs/languagedialog.h \
+    dialogs/licencedialog.h \
     monitor.h \
     widgets/widgets_utilities.h
 

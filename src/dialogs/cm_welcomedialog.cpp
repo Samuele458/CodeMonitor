@@ -224,6 +224,12 @@ void CM_WelcomeDialog::NewMonitorButtonClicked() {
                             "file_path TEXT NOT NULL UNIQUE"
                             ")" );
 
+                query.exec( "CREATE TABLE settings ("
+                            "ID_param INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
+                            "param_name TEXT NOT NULL UNIQUE,"
+                            "param_value TEXT"
+                            ")" );
+
 
                 local_db.close();
                 local_db.setDatabaseName( QDir::currentPath() + "/data/monitors.db" );

@@ -53,6 +53,7 @@
 #include "monitor.h"
 #include "dialogs/filesdialog.h"
 #include "dialogs/general_settings.h"
+#include "dialogs/aboutdialog.h"
 
 class CodeMonitorWindow : public GeneralWindow {
     Q_OBJECT
@@ -81,6 +82,7 @@ class CodeMonitorWindow : public GeneralWindow {
         void general_settings_slot();
         void monitor_settings_slot();
         void about_slot();
+        void license_slot();
 
         void delete_view_slot();
 
@@ -134,7 +136,7 @@ class CodeMonitorWindow : public GeneralWindow {
         QMenu* FileMenu;
         QMenu* MonitorMenu;
         QMenu* SettingsMenu;
-        QMenu* InfoMenu;
+        QMenu* HelpMenu;
 
         //Actions
         QAction* exitAct;
@@ -145,6 +147,7 @@ class CodeMonitorWindow : public GeneralWindow {
         QAction* generalSettingsAct;
         QAction* monitorSettingsAct;
         QAction* aboutAct;
+        QAction* licenseAct;
 
         //table monitor context menu actions
         QAction* deleteViewAct;
