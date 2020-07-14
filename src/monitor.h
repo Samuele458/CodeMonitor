@@ -38,6 +38,7 @@
 
 #include "common/filesutility.h"
 #include "common/textsanitizer.h"
+#include "common/managers.h"
 
 
 /*  Class:          Comment
@@ -247,6 +248,8 @@ class Monitor : public QObject {
         bool load();
 
         bool saveData();
+
+        Manager<QString,QString> getSettings() const;
 
 
 

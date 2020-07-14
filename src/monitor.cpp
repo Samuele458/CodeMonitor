@@ -751,6 +751,33 @@ bool Monitor::saveData() {
     }
 }
 
+Manager<QString,QString> Monitor::getSettings() const {
+
+    //check if database is opened or not
+    if( db->isOpen() ) {
+        //database is open
+
+        Manager<QString,QString> settings;
+        QSqlQuery query( *db );
+
+        if ( query.exec( "SELECT param_name, param_value FROM settings" ) )
+        {
+
+            while( query.next() ) {
+
+                settings.push_back( query.record().value(0).toString(),
+                                    query.record().value(1).toString() );
+
+            }
+
+        }
+        return settings;
+    } else {
+        //database isn't open
+        return Manager<QString,QString>();
+    }
+}
+
 
 
 

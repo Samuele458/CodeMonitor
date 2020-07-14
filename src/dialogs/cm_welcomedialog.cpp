@@ -230,6 +230,19 @@ void CM_WelcomeDialog::NewMonitorButtonClicked() {
                             "param_value TEXT"
                             ")" );
 
+                query.exec( "INSERT INTO settings(param_name,param_value) "
+                            "VALUES (\"AUTOSAVE\",\"0\")" );
+
+                query.exec( "INSERT INTO settings(param_name,param_value) "
+                            "VALUES (\"AUTOSAVE_DELAY\",\"30\")" );
+
+                query.exec( "INSERT INTO settings(param_name,param_value) "
+                            "VALUES (\"CLOSE_EVENT\",\"0\")" );
+
+                query.exec( "INSERT INTO settings(param_name,param_value) "
+                            "VALUES (\"DONT_ADD_DUPLICATES\",\"0\")" );
+
+
 
                 local_db.close();
                 local_db.setDatabaseName( QDir::currentPath() + "/data/monitors.db" );

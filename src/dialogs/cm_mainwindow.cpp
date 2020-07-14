@@ -654,7 +654,7 @@ void CodeMonitorWindow::general_settings_slot() {
 }
 
 void CodeMonitorWindow::monitor_settings_slot() {
-
+    monitor.getSettings().debug_dump();
 }
 
 void CodeMonitorWindow::about_slot() {
