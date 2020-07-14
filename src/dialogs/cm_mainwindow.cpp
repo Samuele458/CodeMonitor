@@ -654,7 +654,12 @@ void CodeMonitorWindow::general_settings_slot() {
 }
 
 void CodeMonitorWindow::monitor_settings_slot() {
-    monitor.getSettings().debug_dump();
+
+    MonitorSettingsDialog* dialog = new MonitorSettingsDialog( monitor.getSettings() );
+
+    dialog->exec();
+
+    delete dialog;
 }
 
 void CodeMonitorWindow::about_slot() {

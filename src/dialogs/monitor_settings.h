@@ -46,6 +46,8 @@ class MonitorSettingsDialog : public GeneralDialog {
                                QString settings_filename_str = "config.ini" );
 
         ~MonitorSettingsDialog();
+
+
     protected slots:
         void confirm_button_clicked();
         void cancel_button_clicked();
@@ -54,15 +56,25 @@ class MonitorSettingsDialog : public GeneralDialog {
 
         //widgets
         QVBoxLayout* MainLayout;
+
         QGroupBox* SaveGroup;
-        QWidget* SaveWidget;
-        QGridLayout SaveLayout;
+        QGridLayout* SaveLayout;
         QCheckBox* AutosaveCheckbox;
+        QHBoxLayout* AutosaveLayout;
         QLabel* EveryLabel;
+        QLineEdit* TimeLine;
         QLabel* MinutesLabel;
+        QLabel* WhenClosingLabel;
+        QRadioButton* AskRadio;
+        QRadioButton* AutosaveRadio;
 
         QGroupBox* DataGroup;
-        QWidget* DataWidget;
+        QGridLayout* DataLayout;
+        QCheckBox* DontDuplicateCheckbox;
+
+        QHBoxLayout* ButtonsLayout;
+        QPushButton* ConfirmButton;
+        QPushButton* CancelButton;
 
 
 
