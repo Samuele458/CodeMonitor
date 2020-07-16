@@ -71,7 +71,7 @@ void MonitorSettingsDialog::apply_settings() {
 
 //connect all principal widgets signals to the corresponding slots
 void MonitorSettingsDialog::apply_slots() {
-    connect( ConfirmButton, SIGNAL(clicked()))
+    //connect( ConfirmButton, SIGNAL(clicked()));
 }
 
 //configure the User Interface: allocating Widgets, layout, etc.
