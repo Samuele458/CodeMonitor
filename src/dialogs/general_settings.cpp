@@ -20,6 +20,7 @@
 
 #include "dialogs/general_settings.h"
 
+
 GeneralSettingsDialog::GeneralSettingsDialog( QWidget* parent , QString settings_filename_str ) :
     GeneralDialog( parent, settings_filename_str )
 {
