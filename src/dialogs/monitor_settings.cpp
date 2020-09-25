@@ -74,6 +74,7 @@ void MonitorSettingsDialog::apply_slots() {
     //connect( ConfirmButton, SIGNAL(clicked()));
 }
 
+
 //configure the User Interface: allocating Widgets, layout, etc.
 void MonitorSettingsDialog::setup_ui() {
 

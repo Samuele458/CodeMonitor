@@ -508,6 +508,149 @@ void View::removeFile( const QString filename ) {
 
 
 
+
+/*  Class:          MonitorSettings
+ *  Description:    Managment and saving implementation of monitor settings.
+ *                  Data is saved in a specific table of database provided to MonitorSettings
+ */
+
+
+MonitorSettings::MonitorSettings() {
+    //db not set
+    db = nullptr;
+
+
+    //loading default settings
+    monitor_autosave = true;
+    monitor_autosave_every_mins = 5;
+    monitor_save_on_closing = false;
+    monitor_no_duplicate = false;
+}
+
+//constructor with db: it auto loads data from db
+MonitorSettings::MonitorSettings( QSqlDatabase* db_ptr ) {
+    //loading default settings
+    monitor_autosave = true;
+    monitor_autosave_every_mins = 5;
+    monitor_save_on_closing = false;
+    monitor_no_duplicate = false;
+
+    //load settings from db
+    load();
+}
+
+//constructor with data. it doesn't perform an autosave.
+//(you must set a valid db and then sall save() )
+MonitorSettings::MonitorSettings(    const bool autosave_val,
+                                     const int autosave_every_mins_val,
+                                     const bool monitor_save_on_closing_val,
+                                     const bool no_duplicate_val )
+{
+    //db not set
+    db = nullptr;
+
+    monitor_autosave = autosave_val;
+    monitor_autosave_every_mins = autosave_every_mins_val;
+    monitor_save_on_closing = monitor_save_on_closing_val;
+    monitor_no_duplicate = no_duplicate_val;
+}
+
+
+//copy constructor
+MonitorSettings::MonitorSettings( const MonitorSettings& other ) {
+    monitor_autosave = other.monitor_autosave;
+    monitor_autosave_every_mins = other.monitor_autosave_every_mins;
+    monitor_save_on_closing = other.monitor_save_on_closing;
+    monitor_no_duplicate = other.monitor_no_duplicate;
+
+    //copying db (by address)
+    db = other.db;
+}
+
+//assignment operator
+MonitorSettings& MonitorSettings::operator=( const MonitorSettings& other ) {
+    monitor_autosave = other.monitor_autosave;
+    monitor_autosave_every_mins = other.monitor_autosave_every_mins;
+    monitor_save_on_closing = other.monitor_save_on_closing;
+    monitor_no_duplicate = other.monitor_no_duplicate;
+
+    //copying db (by address)
+    db = other.db;
+
+    return *this;
+}
+
+
+
+//save-load functions
+bool MonitorSettings::load() {
+
+    //check db
+    if( db != nullptr ) {
+
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool MonitorSettings::save() {
+
+    //check db
+    if( db != nullptr ) {
+
+
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+// getter - setter methods
+bool MonitorSettings::getAutosave() const {
+    return monitor_autosave;
+}
+
+int MonitorSettings::getAutosaveEveryMins() const {
+    return monitor_autosave_every_mins;
+}
+
+bool MonitorSettings::getMonitorSaveOnClosing() const {
+    return monitor_save_on_closing;
+}
+
+bool MonitorSettings::getNoDuplicate() const {
+    return monitor_no_duplicate;
+}
+
+void MonitorSettings::setAutosave( const bool autosave_val ) {
+    monitor_autosave = autosave_val;
+}
+
+void MonitorSettings::setAutosaveEveryMins( const int autosave_every_mins_val ) {
+    monitor_autosave_every_mins = autosave_every_mins_val;
+}
+
+void MonitorSettings::setMonitorSaveOnClosing( const bool monitor_save_on_closing_val ) {
+    monitor_save_on_closing = monitor_save_on_closing_val;
+}
+
+void MonitorSettings::setNoDuplicate( const bool no_duplicate_val ) {
+    monitor_no_duplicate = no_duplicate_val;
+}
+
+QSqlDatabase* MonitorSettings::getDatabase() const {
+    return db;
+}
+
+void MonitorSettings::setDatabase( QSqlDatabase* db_var ){
+    db = db_var;
+}
+
+
+
+
 /*  Class:          Monitor
  *  Description:    Describes a coment type
  */

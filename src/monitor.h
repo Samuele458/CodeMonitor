@@ -208,6 +208,72 @@ class View {
 
 };
 
+
+/*  Class:          MonitorSettings
+ *  Description:    Managment and saving implementation of monitor settings.
+ *                  Data is saved in a specific table of database provided to MonitorSettings
+ */
+class MonitorSettings {
+
+    public:
+
+        //default constructor
+        MonitorSettings();
+
+        //constructor with db: it auto loads data from db
+        MonitorSettings( QSqlDatabase* db_ptr );
+
+        //constructor with data. it doesn't perform an autosave.
+        //(you must set a valid db and then sall save() )
+        MonitorSettings( const bool autosave_val,
+                         const int autosave_every_mins_val,
+                         const bool monitor_save_on_closing_val,
+                         const bool no_duplicate_val );
+
+
+        //copy constructor
+        MonitorSettings( const MonitorSettings& other );
+
+        //assignment operator
+        MonitorSettings& operator=( const MonitorSettings& other );
+
+
+        //destructor
+        ~MonitorSettings() { }
+
+        //save-load functions
+        bool load();
+        bool save();
+
+
+        // getter - setter methods
+        bool getAutosave() const;
+        int getAutosaveEveryMins() const;
+        bool getMonitorSaveOnClosing() const;
+        bool getNoDuplicate() const;
+
+        void setAutosave( const bool autosave_val );
+        void setAutosaveEveryMins( const int autosave_every_mins_val );
+        void setMonitorSaveOnClosing( const bool monitor_save_on_closing_val );
+        void setNoDuplicate( const bool no_duplicate_val );
+
+        QSqlDatabase* getDatabase() const;
+        void setDatabase( QSqlDatabase* db_var );
+
+    private:
+
+        //database connection to implement save/load functions
+        QSqlDatabase* db;
+
+        //settings parameters
+        bool monitor_autosave;
+        int monitor_autosave_every_mins;
+        bool monitor_save_on_closing;
+        bool monitor_no_duplicate;
+
+};
+
+
 /*  Class:          Monitor
  *  Description:    Describes a coment type
  *                  It inherits from QObject to allow the use of QTranslator
