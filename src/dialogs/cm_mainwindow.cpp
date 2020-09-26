@@ -421,15 +421,18 @@ void CodeMonitorWindow::refresh_monitor_table() {
 }
 
 void CodeMonitorWindow::closeEvent( QCloseEvent* event )  {
-    if( saved == true )
+    if( saved == true ) {
         //db saved
         event->accept();
-    else {
-        //db not saved yet
 
+    } else if( monitor.getSettings().getMonitorSaveOnClosing() ) { //db not saved yet
+        save();
+
+    } else {
         QMessageBox::StandardButton reply;
         reply = QMessageBox::question(this, tr("Save"), tr("Save %1 monitor before closing?").arg( "\"" + monitor.getMonitorName() + "\""),
                                       QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+
         if( reply == QMessageBox::Yes ) {
             //YES button clicked
             save();
