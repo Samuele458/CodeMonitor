@@ -535,6 +535,8 @@ MonitorSettings::MonitorSettings( QSqlDatabase* db_ptr ) {
     monitor_save_on_closing = false;
     monitor_no_duplicate = false;
 
+    db = db_ptr;
+
     //load settings from db
     load();
 }
@@ -588,6 +590,27 @@ bool MonitorSettings::load() {
     //check db
     if( db != nullptr ) {
 
+        QSqlQuery query( *db );
+
+        query.exec("SELECT key, value FROM monitor_settings");
+
+        while ( query.next() ) {
+            QString current_key;
+            QString current_value;
+
+            current_key = query.record().value(0).toString();
+            current_value = query.record().value(1).toString();
+
+            if( current_key == "monitor_autosave" )
+                monitor_autosave = current_value.toInt();
+            else if( current_key == "monitor_autosave_every_mins" )
+                monitor_autosave_every_mins = current_value.toInt();
+            else if( current_key == "monitor_save_on_closing" )
+                monitor_save_on_closing = current_value.toInt();
+            else if( current_key == "monitor_no_duplicate" )
+                monitor_no_duplicate = current_value.toInt();
+        }
+
         return true;
     } else {
         return false;
@@ -595,9 +618,15 @@ bool MonitorSettings::load() {
 }
 
 bool MonitorSettings::save() {
-
     //check db
     if( db != nullptr ) {
+        qDebug() << "Salvatagiio";
+        QSqlQuery query( *db );
+
+        qDebug() <<query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_autosave)+"\" WHERE key = \"monitor_autosave\"");
+        qDebug() <<query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_autosave_every_mins)+"\" WHERE key = \"monitor_autosave_every_mins\"");
+        qDebug() <<query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_save_on_closing)+"\" WHERE key = \"monitor_save_on_closing\"");
+        qDebug() <<query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_no_duplicate)+"\" WHERE key = \"monitor_no_duplicate\"");
 
 
         return true;
@@ -894,30 +923,17 @@ bool Monitor::saveData() {
     }
 }
 
-Manager<QString,QString> Monitor::getSettings() const {
+MonitorSettings Monitor::getSettings() const {
 
     //check if database is opened or not
     if( db->isOpen() ) {
         //database is open
 
-        Manager<QString,QString> settings;
-        QSqlQuery query( *db );
 
-        if ( query.exec( "SELECT param_name, param_value FROM settings" ) )
-        {
-
-            while( query.next() ) {
-
-                settings.push_back( query.record().value(0).toString(),
-                                    query.record().value(1).toString() );
-
-            }
-
-        }
-        return settings;
+        return MonitorSettings(db);
     } else {
         //database isn't open
-        return Manager<QString,QString>();
+        return MonitorSettings();
     }
 }
 

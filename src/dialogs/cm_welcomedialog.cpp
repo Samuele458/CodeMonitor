@@ -224,23 +224,23 @@ void CM_WelcomeDialog::NewMonitorButtonClicked() {
                             "file_path TEXT NOT NULL UNIQUE"
                             ")" );
 
-                query.exec( "CREATE TABLE settings ("
+                query.exec( "CREATE TABLE monitor_settings ("
                             "ID_param INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
-                            "param_name TEXT NOT NULL UNIQUE,"
-                            "param_value TEXT"
+                            "key TEXT NOT NULL UNIQUE,"
+                            "value TEXT"
                             ")" );
 
-                query.exec( "INSERT INTO settings(param_name,param_value) "
-                            "VALUES (\"AUTOSAVE\",\"0\")" );
+                query.exec( "INSERT INTO monitor_settings(key,value) "
+                            "VALUES (\"monitor_autosave\",\"1\")" );
 
-                query.exec( "INSERT INTO settings(param_name,param_value) "
-                            "VALUES (\"AUTOSAVE_DELAY\",\"30\")" );
+                query.exec( "INSERT INTO monitor_settings(key,value) "
+                            "VALUES (\"monitor_autosave_every_mins\",\"10\")" );
 
-                query.exec( "INSERT INTO settings(param_name,param_value) "
-                            "VALUES (\"CLOSE_EVENT\",\"0\")" );
+                query.exec( "INSERT INTO monitor_settings(key,value) "
+                            "VALUES (\"monitor_save_on_closing\",\"0\")" );
 
-                query.exec( "INSERT INTO settings(param_name,param_value) "
-                            "VALUES (\"DONT_ADD_DUPLICATES\",\"0\")" );
+                query.exec( "INSERT INTO monitor_settings(key,value) "
+                            "VALUES (\"monitor_no_duplicate\",\"0\")" );
 
 
 

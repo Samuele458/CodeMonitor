@@ -20,16 +20,23 @@
 
 #include "dialogs/monitor_settings.h"
 
-MonitorSettingsDialog::MonitorSettingsDialog( Manager<QString,QString> settings_manager_in,
+MonitorSettingsDialog::MonitorSettingsDialog( MonitorSettings settings_manager_in,
                                               QWidget* parent,
                                               QString settings_filename_str ) :
     GeneralDialog( parent, settings_filename_str )
 {
 
+    monitor_settings = settings_manager_in;
+
     //setup ui
     setup_ui();
     apply_settings();
     apply_slots();
+
+
+    load();
+
+    saved = false;
 
 }
 
@@ -38,11 +45,13 @@ MonitorSettingsDialog::~MonitorSettingsDialog() {
 }
 
 void MonitorSettingsDialog::confirm_button_clicked() {
-
+    this->close();
+    save();
+    saved = true;
 }
 
 void MonitorSettingsDialog::cancel_button_clicked() {
-
+    this->close();
 }
 
 
@@ -71,7 +80,8 @@ void MonitorSettingsDialog::apply_settings() {
 
 //connect all principal widgets signals to the corresponding slots
 void MonitorSettingsDialog::apply_slots() {
-    //connect( ConfirmButton, SIGNAL(clicked()));
+    connect( ConfirmButton, SIGNAL(clicked()), this, SLOT(confirm_button_clicked()));
+    connect( CancelButton, SIGNAL(clicked()), this, SLOT(cancel_button_clicked()) );
 }
 
 
@@ -133,11 +143,39 @@ void MonitorSettingsDialog::setup_ui() {
 
 }
 
+//load settings from monitor_settings
 void MonitorSettingsDialog::load() {
+
+    //reload monitor_settings from db
+    monitor_settings.load();
+
+    if( monitor_settings.getAutosave() ) {
+        AutosaveCheckbox->setCheckState( Qt::CheckState::Checked );
+    } else {
+        AutosaveCheckbox->setCheckState( Qt::CheckState::Unchecked );
+    }
+
+    TimeLine->setText( QString::number( monitor_settings.getAutosaveEveryMins() ) );
+
+    AutosaveRadio->setChecked( monitor_settings.getMonitorSaveOnClosing() );
+    AskRadio->setChecked( !monitor_settings.getMonitorSaveOnClosing() );
+
+    if( monitor_settings.getNoDuplicate() ) {
+        DontDuplicateCheckbox->setCheckState( Qt::CheckState::Checked );
+    } else {
+        DontDuplicateCheckbox->setCheckState( Qt::CheckState::Unchecked );
+    }
 
 }
 
 
 void MonitorSettingsDialog::save() {
 
+    monitor_settings.setAutosave( AutosaveCheckbox->isChecked() );
+    monitor_settings.setNoDuplicate( DontDuplicateCheckbox->isChecked() );
+    monitor_settings.setAutosaveEveryMins( TimeLine->text().toInt() );
+    monitor_settings.setMonitorSaveOnClosing( AutosaveRadio->isChecked() );
+
+    monitor_settings.save();
+    qDebug() << 2;
 }

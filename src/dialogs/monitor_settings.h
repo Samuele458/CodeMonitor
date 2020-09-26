@@ -34,6 +34,7 @@
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
 #include "common/managers.h"
+#include "monitor.h"
 
 
 
@@ -41,7 +42,7 @@ class MonitorSettingsDialog : public GeneralDialog {
     Q_OBJECT
 
     public:
-        MonitorSettingsDialog( Manager<QString,QString> settings_manager_in,
+        MonitorSettingsDialog( MonitorSettings settings_manager_in,
                                QWidget* parent = nullptr,
                                QString settings_filename_str = "config.ini" );
 
@@ -78,7 +79,6 @@ class MonitorSettingsDialog : public GeneralDialog {
 
 
 
-
         //apply current settings (like language, teme, and other general settings
         void apply_settings() override;
 
@@ -92,6 +92,8 @@ class MonitorSettingsDialog : public GeneralDialog {
         void save();
 
         bool saved;
+
+        MonitorSettings monitor_settings;
 
 };
 

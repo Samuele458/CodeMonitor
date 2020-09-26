@@ -315,7 +315,7 @@ class Monitor : public QObject {
 
         bool saveData();
 
-        Manager<QString,QString> getSettings() const;
+        MonitorSettings getSettings() const;
 
 
 
