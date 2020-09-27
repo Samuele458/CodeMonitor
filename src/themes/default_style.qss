@@ -88,4 +88,7 @@ QMainWindow {
     background-color: white;
 }
 
+QLabel:disabled
+{ color: #7F7F7F; }
+
 

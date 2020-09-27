@@ -71,6 +71,7 @@ void CodeMonitorWindow::setup_ui() {
     LeftWidget = new QWidget;
     RightWidget = new QWidget;
     LeftLayout = new QVBoxLayout;
+    MainToolbar = new QToolBar;
     MonitorNameLabel = new QLabel;
     MonitorTree = new QTreeWidget;
     RightLayout = new QVBoxLayout;
@@ -90,6 +91,7 @@ void CodeMonitorWindow::setup_ui() {
     MonitorNowButton = new QPushButton;
 
     //---- left side ----
+    LeftLayout->addWidget( MainToolbar );
     LeftLayout->addWidget( MonitorNameLabel );
     LeftLayout->addWidget( MonitorTree );
 
@@ -141,9 +143,12 @@ void CodeMonitorWindow::setup_ui() {
     MonitorTable->setContextMenuPolicy( Qt::ContextMenuPolicy::CustomContextMenu );
     MonitorTree->setContextMenuPolicy( Qt::ContextMenuPolicy::CustomContextMenu );
 
+
     //menus
     createActions();
     createMenus();
+
+    MainToolbar->addAction(addFileAct);
 
 }
 

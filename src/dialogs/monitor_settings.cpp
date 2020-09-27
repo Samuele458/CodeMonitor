@@ -82,6 +82,7 @@ void MonitorSettingsDialog::apply_settings() {
 void MonitorSettingsDialog::apply_slots() {
     connect( ConfirmButton, SIGNAL(clicked()), this, SLOT(confirm_button_clicked()));
     connect( CancelButton, SIGNAL(clicked()), this, SLOT(cancel_button_clicked()) );
+    connect( AutosaveCheckbox, SIGNAL(stateChanged(int)), this, SLOT(time_line_checked(int)) );
 }
 
 
@@ -166,6 +167,7 @@ void MonitorSettingsDialog::load() {
         DontDuplicateCheckbox->setCheckState( Qt::CheckState::Unchecked );
     }
 
+
 }
 
 
@@ -179,3 +181,18 @@ void MonitorSettingsDialog::save() {
     monitor_settings.save();
     qDebug() << 2;
 }
+
+
+void MonitorSettingsDialog::time_line_checked( int state ) {
+    if( !AutosaveCheckbox->isChecked() ) {
+        EveryLabel->setEnabled( false );
+        MinutesLabel->setEnabled( false );
+        TimeLine->setEnabled( false );
+    } else {
+        EveryLabel->setEnabled( true );
+        MinutesLabel->setEnabled( true );
+        TimeLine->setEnabled( true );
+    }
+}
+
+

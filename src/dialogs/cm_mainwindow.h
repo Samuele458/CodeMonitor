@@ -48,6 +48,7 @@
 #include <QContextMenuEvent>
 #include <QModelIndex>
 #include <QTimer>
+#include <QToolBar>
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
@@ -125,6 +126,7 @@ class CodeMonitorWindow : public GeneralWindow {
         QVBoxLayout* RightSplitterLayout;
         QSplitter* RightSplitter;
         QTableWidget* MonitorTable;
+        QToolBar* MainToolbar;
 
         QWidget* ViewWidget;
         QVBoxLayout* ViewLayout;

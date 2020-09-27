@@ -52,6 +52,7 @@ class MonitorSettingsDialog : public GeneralDialog {
     protected slots:
         void confirm_button_clicked();
         void cancel_button_clicked();
+        void time_line_checked( int state );
 
     protected:
 
