@@ -11,5 +11,9 @@
         <file>img/icons/play.png</file>
         <file>img/icons/settings.png</file>
         <file>other/license.dat</file>
+        <file>img/icons/add_file.png</file>
+        <file>img/icons/add_folder.png</file>
+        <file>img/icons/monitor_now.png</file>
+        <file>img/icons/monitor_settings.png</file>
     </qresource>
 </RCC>

@@ -50,8 +50,8 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
 
     saved = true;
 
+    autosave_timer = new QTimer(this);
     if( monitor.getSettings().getAutosave() ) {
-        autosave_timer = new QTimer(this);
         connect(autosave_timer,SIGNAL(timeout()), this, SLOT(autosave_slot()));
         autosave_timer->start(monitor.getSettings().getAutosaveEveryMins()*60*1000);
     }
@@ -77,6 +77,10 @@ void CodeMonitorWindow::setup_ui() {
     RightLayout = new QVBoxLayout;
     RightSplitterLayout = new QVBoxLayout;
     RightSplitter = new QSplitter;
+
+    MonitorWidget = new QWidget;
+    MonitorLayout = new QVBoxLayout;
+    MonitorToolbar = new QToolBar;
     MonitorTable = new QTableWidget;
 
     ViewWidget = new QWidget;
@@ -101,8 +105,11 @@ void CodeMonitorWindow::setup_ui() {
     ViewLayout->addWidget( ViewTable );
     ViewWidget->setLayout( ViewLayout );
 
+    MonitorLayout->addWidget( MonitorToolbar );
+    MonitorLayout->addWidget( MonitorTable);
+    MonitorWidget->setLayout(MonitorLayout);
 
-    RightSplitter->addWidget( MonitorTable );
+    RightSplitter->addWidget( MonitorWidget );
     RightSplitter->addWidget( ViewWidget );
     RightSplitter->setOrientation( Qt::Vertical );
 
@@ -148,7 +155,19 @@ void CodeMonitorWindow::setup_ui() {
     createActions();
     createMenus();
 
+    MainToolbar->setIconSize(QSize(30,30));
+    MainToolbar->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonIconOnly);
+
     MainToolbar->addAction(addFileAct);
+    MainToolbar->addAction(addFolderAct);
+    MainToolbar->addAction(removeFileAct);
+    MainToolbar->addAction(generalSettingsAct);
+
+    MonitorToolbar->setIconSize(QSize(30,30));
+    MonitorToolbar->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonIconOnly);
+
+    MonitorToolbar->addAction(monitorNowAct);
+    MonitorToolbar->addAction(monitorSettingsAct);
 
 }
 
@@ -481,27 +500,33 @@ void CodeMonitorWindow::createActions() {
     //add file action
     addFileAct = new QAction( tr( "&Add file"), this );
     addFileAct->setStatusTip( tr( "Add one or more files to monitor" ) );
+    addFileAct->setIcon(QIcon(":/img/icons/add_file.png"));
     connect( addFileAct, &QAction::triggered, this, &CodeMonitorWindow::add_file_slot );
 
     //add folder action
     addFolderAct = new QAction( tr( "&Add folder"), this );
     addFolderAct->setStatusTip( tr( "Add all files contained in a folder" ) );
+    addFolderAct->setIcon(QIcon(":/img/icons/add_folder.png"));
     connect( addFolderAct, &QAction::triggered, this, &CodeMonitorWindow::add_folder_slot );
 
     //remove file action
     removeFileAct = new QAction( tr( "&Remove file"), this );
     removeFileAct->setShortcut( QKeySequence::Delete );
     removeFileAct->setStatusTip( tr( "Remove selected file" ) );
+    removeFileAct->setIcon(QIcon(":/img/icons/criss-cross.png"));
     connect( removeFileAct, &QAction::triggered, this, &CodeMonitorWindow::remove_file_slot );
 
     //general settings action
     generalSettingsAct = new QAction( tr( "&General settings"), this );
     generalSettingsAct->setStatusTip( tr( "Open general settings dialog" ) );
+    generalSettingsAct->setIcon(QIcon(":/img/icons/settings.png"));
+
     connect( generalSettingsAct, &QAction::triggered, this, &CodeMonitorWindow::general_settings_slot );
 
     //monitor settings action
     monitorSettingsAct = new QAction( tr( "&Monitor settings"), this );
     monitorSettingsAct->setStatusTip( tr( "Open monitor settings dialog" ) );
+    monitorSettingsAct->setIcon(QIcon(":/img/icons/monitor_settings.png"));
     connect( monitorSettingsAct, &QAction::triggered, this, &CodeMonitorWindow::monitor_settings_slot );
 
     //about action
@@ -519,6 +544,7 @@ void CodeMonitorWindow::createActions() {
     //delete view action
     deleteViewAct = new QAction( QIcon( ":img/icons/criss-cross.png"),
                                  tr( "Delete" ) );
+    deleteViewAct->setIcon(QIcon(":/img/icons/criss-cross.png"));
     connect( deleteViewAct, &QAction::triggered, this, &CodeMonitorWindow::delete_view_slot );
 
 
@@ -527,8 +553,14 @@ void CodeMonitorWindow::createActions() {
     //delete file action
     deleteFileAct = new QAction( QIcon( ":img/icons/criss-cross.png"),
                                  tr( "Remove file" ) );
+    deleteFileAct->setIcon(QIcon(":/img/icons/criss-cross.png"));
     connect( deleteFileAct, &QAction::triggered, this, &CodeMonitorWindow::delete_file_slot );
 
+
+    //monitor now action
+    monitorNowAct = new QAction( tr("$Monitor Now"), this );
+    monitorNowAct->setIcon( QIcon(":/img/icons/monitor_now.png"));
+    connect( monitorNowAct, &QAction::triggered, this, &CodeMonitorWindow::monitor_now_button_clicked );
 }
 
 //create menus

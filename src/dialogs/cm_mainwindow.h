@@ -125,7 +125,11 @@ class CodeMonitorWindow : public GeneralWindow {
         QVBoxLayout* RightLayout;
         QVBoxLayout* RightSplitterLayout;
         QSplitter* RightSplitter;
+
+        QWidget* MonitorWidget;
+        QVBoxLayout* MonitorLayout;
         QTableWidget* MonitorTable;
+        QToolBar* MonitorToolbar;
         QToolBar* MainToolbar;
 
         QWidget* ViewWidget;
@@ -155,6 +159,7 @@ class CodeMonitorWindow : public GeneralWindow {
         QAction* monitorSettingsAct;
         QAction* aboutAct;
         QAction* licenseAct;
+        QAction* monitorNowAct;
 
         //table monitor context menu actions
         QAction* deleteViewAct;
