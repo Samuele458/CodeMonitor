@@ -48,8 +48,13 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
 
     refresh_monitor_table();
 
-
     saved = true;
+
+    if( monitor.getSettings().getAutosave() ) {
+        autosave_timer = new QTimer(this);
+        connect(autosave_timer,SIGNAL(timeout()), this, SLOT(autosave_slot()));
+        autosave_timer->start(monitor.getSettings().getAutosaveEveryMins()*60*1000);
+    }
 
 }
 
@@ -658,11 +663,19 @@ void CodeMonitorWindow::general_settings_slot() {
 
 void CodeMonitorWindow::monitor_settings_slot() {
 
+    //stop timer while settings dialog is open
+    autosave_timer->stop();
+
     MonitorSettingsDialog* dialog = new MonitorSettingsDialog( monitor.getSettings() );
 
     dialog->exec();
 
     delete dialog;
+
+    //set new autosave delay
+    if( monitor.getSettings().getAutosave() ) {
+        autosave_timer->start(monitor.getSettings().getAutosaveEveryMins()*1000*60);
+    }
 }
 
 void CodeMonitorWindow::about_slot() {
@@ -718,4 +731,7 @@ void CodeMonitorWindow::delete_file_slot() {
 
 }
 
-
+void CodeMonitorWindow::autosave_slot() {
+    qDebug() << "saved";
+    this->save();
+}

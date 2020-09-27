@@ -47,6 +47,7 @@
 #include <QPoint>
 #include <QContextMenuEvent>
 #include <QModelIndex>
+#include <QTimer>
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
@@ -89,6 +90,8 @@ class CodeMonitorWindow : public GeneralWindow {
         void delete_view_slot();
 
         void delete_file_slot();
+
+        void autosave_slot();
 
 
     protected:
@@ -175,6 +178,10 @@ class CodeMonitorWindow : public GeneralWindow {
 
         //keep trace of save state.
         bool saved;
+
+
+        //timer used to keep track of autosave
+        QTimer* autosave_timer;
 
 
 };
