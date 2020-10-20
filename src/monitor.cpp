@@ -208,6 +208,18 @@ FileData& FileData::operator=( const FileData& other ) {
     return *this;
 }
 
+bool FileData::operator==( const FileData& other ) {
+    return ( filename == other.filename &&
+             code_lines == other.code_lines &&
+             comment_lines == other.comment_lines &&
+             total_lines == other.total_lines &&
+             void_lines == other.void_lines &&
+             size == other.size &&
+             chars == other.chars &&
+             language_name == other.language_name
+            );
+}
+
 
 //examines file
 bool FileData::Examines() {
@@ -425,6 +437,10 @@ View& View::operator=( const View& other ) {
     data = other.data;
     date_time = other.date_time;
     return *this;
+}
+
+bool View::operator==( const View& other ) {
+    return data == other.data;
 }
 
 void View::examinesAll() {
@@ -811,7 +827,21 @@ bool Monitor::load() {
 //monitor all files
 void Monitor::MonitorNow() {
     View newView( current_files );
-    views.push_back( newView );
+    MonitorSettings settings = getSettings();
+
+    //check if option: getNoDuplicate is enabled
+    if( settings.getNoDuplicate() ) {
+
+        //check if current data is duplicated
+        if( !(newView == views.at( views.size() - 1 )) ) {
+            views.push_back( newView );
+        }
+    } else {
+        views.push_back( newView );
+    }
+
+
+
     qDebug() << newView.getDataStrings() << current_files;
 }
 

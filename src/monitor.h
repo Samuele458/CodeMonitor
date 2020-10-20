@@ -121,6 +121,7 @@ class FileData {
 
         //assignment operator
         FileData& operator=( const FileData& other );
+        bool operator==( const FileData& other );
 
         bool Examines();          //examin file
         bool wasFileExamined();
@@ -178,6 +179,7 @@ class View {
 
         View( const View& other );
         View& operator=( const View& other );
+        bool operator==( const View& other );
 
         //examines all files
         void examinesAll();
@@ -281,6 +283,11 @@ class MonitorSettings {
 class Monitor : public QObject {
     Q_OBJECT
     public:
+        enum MONITOR_NOW_RETURN_CODES {
+            MONITOR_DONE,
+            DATA_DUPLICATED
+        };
+
         Monitor( QString monitor_name_str );
         ~Monitor();
 
