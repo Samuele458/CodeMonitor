@@ -49,6 +49,7 @@
 #include <QModelIndex>
 #include <QTimer>
 #include <QToolBar>
+#include <QApplication>
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"

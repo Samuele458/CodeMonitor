@@ -419,6 +419,9 @@ void CodeMonitorWindow::refresh_monitor_table() {
     //clearing all data
     MonitorTable->setRowCount( 0 );
 
+    QFont default_font = QApplication::font();
+    default_font.setBold( true );
+
     foreach( View current_view, monitor.getAllViews() ) {
 
         unsigned int total_lines = 0;       //number of total lines
@@ -444,6 +447,9 @@ void CodeMonitorWindow::refresh_monitor_table() {
         MonitorTable->setItem( MonitorTable->rowCount() - 1,
                                2,
                                new QTableWidgetItem( QString::number( size ) ) );
+
+        MonitorTable->item( MonitorTable->rowCount() - 1, 0 )->setTextAlignment(Qt::AlignCenter);
+        MonitorTable->item( MonitorTable->rowCount() - 1, 0 )->setFont( default_font );
 
     }
 
@@ -593,27 +599,39 @@ void CodeMonitorWindow::refresh_view_table() {
     //clearing old dataa from table
     ViewTable->setRowCount( 0 );
 
+    QFont default_font = QApplication::font();
+    default_font.setBold( true );
+
     if( view != nullptr ) {
 
-    InformationLabel->setText( tr("Monitor:") + "   " + view->getDateTime().toString("dd/MM/yyyy - hh:mm:ss.zzz") );
+        InformationLabel->setText( tr("Monitor:") + "   " + view->getDateTime().toString("dd/MM/yyyy - hh:mm:ss.zzz") );
 
-    QStringList filenames = view->getFilenames();
-    QList<FileData> data = view->getData();
-    FileData current_file;
+        QStringList filenames = view->getFilenames();
+        QList<FileData> data = view->getData();
+        FileData current_file;
 
-    for( int i = 0; i < filesToShow.size(); ++i ) {
-        current_file = view->getFileData( filesToShow.at(i) );
+        for( int i = 0; i < filesToShow.size(); ++i ) {
+            current_file = view->getFileData( filesToShow.at(i) );
 
-        ViewTable->insertRow( ViewTable->rowCount() );
+            ViewTable->insertRow( ViewTable->rowCount() );
 
-        ViewTable->setItem( i, 0, new QTableWidgetItem( current_file.getFilename().split("/").last() ) );
-        ViewTable->item( i, 0 )->setToolTip( current_file.getFilename() );
-        ViewTable->setItem( i, 1, new QTableWidgetItem( QString::number(current_file.getTotalLines() ) ) );
-        ViewTable->setItem( i, 2, new QTableWidgetItem( QString::number(current_file.getCodeLines() ) ) );
-        ViewTable->setItem( i, 3, new QTableWidgetItem( QString::number(current_file.getCommentLines() ) ) );
-        ViewTable->setItem( i, 4, new QTableWidgetItem( QString::number(current_file.getVoidLines() ) ) );
-        ViewTable->setItem( i, 5, new QTableWidgetItem( QString::number(current_file.getChars() ) ) );
-    }
+            ViewTable->setItem( i, 0, new QTableWidgetItem( current_file.getFilename().split("/").last() ) );
+            ViewTable->item( i, 0 )->setToolTip( current_file.getFilename() );
+            ViewTable->setItem( i, 1, new QTableWidgetItem( QString::number(current_file.getTotalLines() ) ) );
+            ViewTable->setItem( i, 2, new QTableWidgetItem( QString::number(current_file.getCodeLines() ) ) );
+            ViewTable->setItem( i, 3, new QTableWidgetItem( QString::number(current_file.getCommentLines() ) ) );
+            ViewTable->setItem( i, 4, new QTableWidgetItem( QString::number(current_file.getVoidLines() ) ) );
+            ViewTable->setItem( i, 5, new QTableWidgetItem( QString::number(current_file.getChars() ) ) );
+
+            //columns styles
+            ViewTable->item( i, 1 )->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
+            ViewTable->item( i, 2 )->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
+            ViewTable->item( i, 3 )->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
+            ViewTable->item( i, 4 )->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
+
+
+            ViewTable->item( i, 0 )->setFont( default_font );
+        }
 
     } else {
         InformationLabel->setText( tr("Monitor:") + "    ---" );
@@ -628,8 +646,8 @@ void CodeMonitorWindow::setup_monitor_table() {
                                                               tr("Total lines") <<
                                                               tr("Total Size(KB)") );
 
-    MonitorTable->setColumnWidth(0,250);
-    MonitorTable->setColumnWidth(1,250);
+    MonitorTable->setColumnWidth(0,600);
+    MonitorTable->setColumnWidth(1,300);
     MonitorTable->setColumnWidth(2,250);
 
     MonitorTable->horizontalHeader()->setStretchLastSection( true );
@@ -656,6 +674,10 @@ void CodeMonitorWindow::setup_view_table() {
                                                            tr("Size(KB)") <<
                                                            tr("Language") );
 
+    ViewTable->setColumnWidth( 0, 300 );
+    ViewTable->setColumnWidth( 1, 120 );
+    ViewTable->setColumnWidth( 2, 120 );
+    ViewTable->setColumnWidth( 3, 120 );
 
     ViewTable->horizontalHeader()->setStretchLastSection( true );
     ViewTable->verticalHeader()->setVisible(true);
@@ -663,6 +685,9 @@ void CodeMonitorWindow::setup_view_table() {
     ViewTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     ViewTable->setSelectionMode(QAbstractItemView::SingleSelection);
     ViewTable->setShowGrid(true);
+
+
+
 }
 
 void CodeMonitorWindow::clear_view_table() {
@@ -688,7 +713,7 @@ void CodeMonitorWindow::add_folder_slot() {
 }
 
 void CodeMonitorWindow::remove_file_slot() {
-
+    delete_file_slot();
 }
 
 void CodeMonitorWindow::general_settings_slot() {
@@ -754,16 +779,23 @@ void CodeMonitorWindow::delete_view_slot() {
 
 void CodeMonitorWindow::delete_file_slot() {
 
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, tr("Selete file"), tr("Are you sure you want to remove %1 from current monitor?").arg( "\"" + MonitorTree->selectedItems().at(0)->text(0) + "\""),
-                                  QMessageBox::Yes|QMessageBox::No);
+    if( MonitorTree->selectedItems().size() > 0 ) {
+        if( MonitorTree->selectedItems().at(0)->toolTip(0) != "" ) {
 
-    //check if file must be removed from monitor
-    if( reply == QMessageBox::Yes ) {
-        monitor.removeFilespath( QStringList() << MonitorTree->selectedItems().at(0)->toolTip(0) );
-        refreshTree();
-        refresh_monitor_table();
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, tr("Selete file"), tr("Are you sure you want to remove %1 from current monitor?").arg( "\"" + MonitorTree->selectedItems().at(0)->text(0) + "\""),
+                                          QMessageBox::Yes|QMessageBox::No);
 
+            //check if file must be removed from monitor
+            if( reply == QMessageBox::Yes ) {
+                monitor.removeFilespath( QStringList() << MonitorTree->selectedItems().at(0)->toolTip(0) );
+                refreshTree();
+                refresh_monitor_table();
+
+            }
+        } else {
+            QMessageBox::warning( this, "Select a file!", "No file selected: Select a file to delete!");
+        }
     }
 
 }
