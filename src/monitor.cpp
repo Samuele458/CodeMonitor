@@ -233,8 +233,11 @@ bool FileData::Examines() {
     chars = 0;
     language_name = "";
 
+    //check if file exists or not
     if( QFile::exists( filename ) ) {
         QFile file( filename );
+
+        //opening file
         if( file.open( QIODevice::ReadOnly ) ) {
             ProgrammingLanguage prog_lang( FilesUtilities::getProgLangName( FilesUtilities::getFileExtension( filename ) ) );
             prog_lang.load();
@@ -274,7 +277,10 @@ bool FileData::Examines() {
                         } else if( ml_index > 0 ) {
 
                         }
+                    } else if(TextSanitizer::check_string(current_line,TextSanitizer::Void_Alphabet) ) {
+                        ++void_lines;
                     } else {
+                        qDebug() << "La stringa è" << current_line;
                         ++code_lines;
                     }
                 }

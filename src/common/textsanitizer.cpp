@@ -32,7 +32,7 @@ const QString TextSanitizer::Digit_Alphabet = "0123456789";
 const QString TextSanitizer::Letter_Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const QString TextSanitizer::Extra_Symbol_Alphabet = "#-@+*/€.,";
 const QString TextSanitizer::Extra_Letter_Alphabet = "èùàòì";
-const QString TextSanitizer::Void_Alphabet = " \t";
+const QString TextSanitizer::Void_Alphabet = " \t\r\n";
 const QStringList TextSanitizer::all_alphabets = ( QStringList() << TextSanitizer::Digit_Alphabet <<
                                                                     TextSanitizer::Letter_Alphabet <<
                                                                     TextSanitizer::Extra_Symbol_Alphabet <<
