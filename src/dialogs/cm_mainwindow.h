@@ -50,6 +50,7 @@
 #include <QTimer>
 #include <QToolBar>
 #include <QApplication>
+#include <QProgressBar>
 
 #include "dialogs/dialogs.h"
 #include "common/textsanitizer.h"
@@ -143,6 +144,7 @@ class CodeMonitorWindow : public GeneralWindow {
         QPushButton* AddFolderButton;
         QPushButton* SettingsButton;
         QPushButton* MonitorNowButton;
+        QProgressBar* MonitorProgressBar;
 
         //menus
         QMenu* FileMenu;

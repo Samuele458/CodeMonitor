@@ -93,6 +93,7 @@ void CodeMonitorWindow::setup_ui() {
     AddFolderButton = new QPushButton;
     SettingsButton = new QPushButton;
     MonitorNowButton = new QPushButton;
+    MonitorProgressBar = new QProgressBar;
 
     //---- left side ----
     LeftLayout->addWidget( MainToolbar );
@@ -119,6 +120,7 @@ void CodeMonitorWindow::setup_ui() {
     ButtonsLayout->addWidget( AddFolderButton );
     ButtonsLayout->addWidget( MonitorNowButton );
     MonitorNowButton->setObjectName( "green-button" );
+    ButtonsLayout->addWidget( MonitorProgressBar );
 
     ButtonsLayout->addStretch();
 
@@ -403,8 +405,15 @@ void CodeMonitorWindow::checkTreeItemsState( QTreeWidgetItem* item ) {
     }
 }
 
-void CodeMonitorWindow::monitor_now_button_clicked() {
-    monitor.MonitorNow();
+void CodeMonitorWindow::monitor_now_button_clicked( ) {
+
+    //reset progress bar
+    MonitorProgressBar->setValue( 0 );
+    MonitorProgressBar->setRange(0,monitor.getCurrentFilespath().size() - 1);
+
+    //analyze files
+    monitor.MonitorNow( MonitorProgressBar );
+
     refresh_monitor_table();
     saved = false;
 

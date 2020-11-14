@@ -35,6 +35,7 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QProgressBar>
 
 #include "common/filesutility.h"
 #include "common/textsanitizer.h"
@@ -171,10 +172,12 @@ class FileData {
 class View {
     public:
         View();
-        View( QStringList filenames_list );
+        View( QStringList filenames_list,
+              QProgressBar* progress = nullptr );
         View( QStringList filenames_list,
               QStringList data_strings,
-              QDateTime date );
+              QDateTime date,
+              QProgressBar* progress = nullptr);
         ~View();
 
         View( const View& other );
@@ -182,7 +185,7 @@ class View {
         bool operator==( const View& other );
 
         //examines all files
-        void examinesAll();
+        void examinesAll( QProgressBar* progress = nullptr );
 
         //getter - setter methods
         QStringList getFilenames() const;
@@ -206,6 +209,8 @@ class View {
     protected:
         QList<FileData> data;
         QDateTime date_time;
+
+
 
 
 };
@@ -311,7 +316,7 @@ class Monitor : public QObject {
         void removeFilespath( const QStringList files );
 
         //monitor all files
-        void MonitorNow();
+        void MonitorNow( QProgressBar* progress = nullptr );
 
         int size();
 

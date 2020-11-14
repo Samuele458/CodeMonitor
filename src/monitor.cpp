@@ -404,17 +404,20 @@ View::View() {
 
 }
 
-View::View( QStringList filenames_list ) {
+View::View( QStringList filenames_list,
+            QProgressBar* progress )
+{
     foreach( QString file, filenames_list ) {
         data.push_back( FileData() );
         data.last().setFilename( file );
     }
-    examinesAll();
+    examinesAll( progress );
 }
 
 View::View( QStringList filenames_list,
             QStringList data_strings,
-            QDateTime date )
+            QDateTime date,
+            QProgressBar* progress )
 {
 
     //filenames and data array, must have the same length
@@ -449,10 +452,12 @@ bool View::operator==( const View& other ) {
     return data == other.data;
 }
 
-void View::examinesAll() {
+void View::examinesAll( QProgressBar* progress ) {
     date_time = QDateTime::currentDateTime();
     for( int i = 0; i < data.size(); ++i ) {
        data[i].Examines();
+       if( progress != nullptr )
+       progress->setValue( progress->value() + 1 );
     }
 }
 
@@ -831,8 +836,8 @@ bool Monitor::load() {
 }
 
 //monitor all files
-void Monitor::MonitorNow() {
-    View newView( current_files );
+void Monitor::MonitorNow( QProgressBar* progress ) {
+    View newView( current_files, progress );
     MonitorSettings settings = getSettings();
 
     //check if option: getNoDuplicate is enabled
