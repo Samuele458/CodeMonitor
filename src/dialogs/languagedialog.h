@@ -34,6 +34,7 @@
 #include <QListWidget>
 #include <QIcon>
 #include <QMessageBox>
+#include <QUrl>
 
 #include "dialogs/dialogs.h"
 #include "dialogs/inputbox.h"

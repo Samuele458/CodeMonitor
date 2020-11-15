@@ -31,6 +31,7 @@
 
 #include "dialogs/dialogs.h"
 #include "dialogs/licensedialog.h"
+#include "common/version.h"
 
 class AboutDialog : public GeneralDialog {
     Q_OBJECT

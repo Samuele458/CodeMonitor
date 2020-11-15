@@ -109,8 +109,8 @@ void AboutDialog::apply_settings() {
     EmailLeftLabel->setText( tr( "Email:" ) );
     GithubLeftLabel->setText( tr( "Github:" ) );
 
-    VersionRightLabel->setText( "VERSION" );
-    DateRightLabel->setText( "DATE" );
+    VersionRightLabel->setText( CODE_MONITOR_VERSION );
+    DateRightLabel->setText( CODE_MONITOR_RELEASE_DATE );
 
     LicenseRightLabel->setText( "GNU General Public License v3.0");
     AuthorRightLabel->setText( "Samuele Girgenti" );

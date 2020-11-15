@@ -176,7 +176,6 @@ void LanguageDialog::apply_slots() {
 void LanguageDialog::confirm_button_clicked() {
 
     //Note: input check must be implemented
-
     new_programming_langauge.setName( LangNameEdit->text() );
     new_programming_langauge.setSingleLine( LangSlcLine->text() );
     new_programming_langauge.setMultiLineStart( LangMlcStartLine->text() );

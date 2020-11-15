@@ -37,6 +37,7 @@ HEADERS += \
     common/filesutility.h \
     common/managers.h \
     common/textsanitizer.h \
+    common/version.h \
     dialogs/aboutdialog.h \
     dialogs/cm_mainwindow.h \
     dialogs/cm_welcomedialog.h \
