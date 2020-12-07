@@ -280,7 +280,6 @@ bool FileData::Examines() {
                     } else if(TextSanitizer::check_string(current_line,TextSanitizer::Void_Alphabet) ) {
                         ++void_lines;
                     } else {
-                        qDebug() << "La stringa è" << current_line;
                         ++code_lines;
                     }
                 }
@@ -647,13 +646,12 @@ bool MonitorSettings::load() {
 bool MonitorSettings::save() {
     //check db
     if( db != nullptr ) {
-        qDebug() << "Salvatagiio";
         QSqlQuery query( *db );
 
-        qDebug() <<query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_autosave)+"\" WHERE key = \"monitor_autosave\"");
-        qDebug() <<query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_autosave_every_mins)+"\" WHERE key = \"monitor_autosave_every_mins\"");
-        qDebug() <<query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_save_on_closing)+"\" WHERE key = \"monitor_save_on_closing\"");
-        qDebug() <<query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_no_duplicate)+"\" WHERE key = \"monitor_no_duplicate\"");
+        query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_autosave)+"\" WHERE key = \"monitor_autosave\"");
+        query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_autosave_every_mins)+"\" WHERE key = \"monitor_autosave_every_mins\"");
+        query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_save_on_closing)+"\" WHERE key = \"monitor_save_on_closing\"");
+        query.exec( "UPDATE monitor_settings SET value = \""+QString::number(monitor_no_duplicate)+"\" WHERE key = \"monitor_no_duplicate\"");
 
 
         return true;
@@ -808,7 +806,6 @@ bool Monitor::load() {
             query_text += columns.last()+",";
         }
         query_text += "date FROM monitor_data";
-        qDebug() << query_text;
         query.exec( query_text );
         while( query.next() ) {
             QStringList files_data_strings;
@@ -821,8 +818,6 @@ bool Monitor::load() {
                                    files_data_strings,
                                    QDateTime::fromString( query.record().value(i).toString(),
                                                           "yyyy-MM-dd-hh-mm-ss-zzz" ) ) );
-            qDebug() << views.last().getDataStrings();
-
         }
         //SELECT  FROM monitor_data
 
@@ -851,9 +846,6 @@ void Monitor::MonitorNow( QProgressBar* progress ) {
         views.push_back( newView );
     }
 
-
-
-    qDebug() << newView.getDataStrings() << current_files;
 }
 
 int Monitor::size() {

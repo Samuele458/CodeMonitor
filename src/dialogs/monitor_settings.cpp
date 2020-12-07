@@ -179,7 +179,6 @@ void MonitorSettingsDialog::save() {
     monitor_settings.setMonitorSaveOnClosing( AutosaveRadio->isChecked() );
 
     monitor_settings.save();
-    qDebug() << 2;
 }
 
 

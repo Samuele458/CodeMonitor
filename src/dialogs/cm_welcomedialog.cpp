@@ -42,9 +42,9 @@ CM_WelcomeDialog::CM_WelcomeDialog( QWidget* parent, QString settings_filename_s
 
     if( !QFile::exists( QDir::currentPath() + "/data/monitors.db" ) ) {
         //creating new database
-        qDebug() << monitors_db->open();
+        monitors_db->open();
         QSqlQuery query( *monitors_db );
-        qDebug() << query.exec( "CREATE TABLE monitors ("
+        query.exec( "CREATE TABLE monitors ("
                     "ID_monitor INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
                     "monitor_name TEXT NOT NULL UNIQUE "
                     ")" );
@@ -72,7 +72,7 @@ QStringList CM_WelcomeDialog::monitorsList() const {
     QStringList list;
 
     QSqlQuery query( *monitors_db );
-    qDebug() << query.exec( "SELECT monitor_name FROM monitors" );
+    query.exec( "SELECT monitor_name FROM monitors" );
     while( query.next() ) {
         list.push_back( query.record().value(0).toString() );
     }
@@ -292,7 +292,6 @@ void CM_WelcomeDialog::EditMonitorButtonClicked() {
         //checking if form is accepted
         if( box->wasFormConfirmed() ) {
 
-            qDebug() << monitorsList() << box->getInputStr();
             if( monitorsList().indexOf( box->getInputStr() ) == -1 ) {
                 QString new_monitor_name = box->getInputStr();
 
@@ -304,7 +303,7 @@ void CM_WelcomeDialog::EditMonitorButtonClicked() {
                 //changing main database
                 QSqlQuery query( *monitors_db );
 
-                qDebug() <<query.exec( "UPDATE monitors "
+                query.exec( "UPDATE monitors "
                             "SET monitor_name=\""+new_monitor_name+"\" "
                             "WHERE monitor_name=\""+old_monitor_name+"\" " );
 

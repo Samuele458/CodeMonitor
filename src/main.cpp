@@ -39,10 +39,10 @@ int main(int argc, char *argv[])
     CM_WelcomeDialog w;
 
     //setting up stylesheets
-    QFile File(":/themes/default_style.qss");
-    File.open(QFile::ReadOnly);
-    QString StyleSheet = QLatin1String(File.readAll());
-    qApp->setStyleSheet( StyleSheet );
+    //QFile File(":/themes/default_style.qss");
+    //File.open(QFile::ReadOnly);
+    //QString StyleSheet = QLatin1String(File.readAll());
+    //qApp->setStyleSheet( StyleSheet );
 
 
 

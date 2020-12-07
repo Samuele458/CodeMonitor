@@ -89,12 +89,10 @@ bool ManagerFromFile::save() {
     if( filename != "" ) {
         QSettings settings( filename, QSettings::IniFormat );
         settings.beginGroup( "set_1" );
-        qDebug() << "Keys size: " << keys.size();
 
         //saving values
         for( int i = 0; i < keys.size(); ++i ) {
             settings.setValue( keys.at(i), values.at(i) );
-            qDebug() << "Setting value: " << keys.at(i) << " -> " << values.at(i);
         }
 
         settings.endGroup();

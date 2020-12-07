@@ -34,7 +34,6 @@ CodeMonitorWindow::CodeMonitorWindow( QString monitor_name_str,
     //nullptr ---> there is not a curent view
     view = nullptr;
 
-    qDebug() << monitor.getCurrentFilespath();
     //setting up gui
     setup_ui();
     apply_settings();
@@ -90,7 +89,7 @@ void CodeMonitorWindow::setup_ui() {
 
     ButtonsLayout = new QHBoxLayout;
     AddFileButton = new QPushButton;
-    AddFolderButton = new QPushButton;
+    AddFolderButton = new QPushButton(this);
     SettingsButton = new QPushButton;
     MonitorNowButton = new QPushButton;
     MonitorProgressBar = new QProgressBar;
@@ -295,6 +294,8 @@ void CodeMonitorWindow::add_file_button_clicked() {
 }
 
 void CodeMonitorWindow::settings_button_clicked() {
+    qDebug() << "Button settings";
+
     GeneralSettingsDialog* settings_dialog = new GeneralSettingsDialog( this );
     settings_dialog->exec();
 
@@ -302,6 +303,7 @@ void CodeMonitorWindow::settings_button_clicked() {
 }
 
 void CodeMonitorWindow::add_folder_button_clicked() {
+    qDebug() << "add folder button clicked";
 
     //file dialog to choose one or more files
     QFileDialog dialog( this );
@@ -734,6 +736,7 @@ void CodeMonitorWindow::general_settings_slot() {
 
 void CodeMonitorWindow::monitor_settings_slot() {
 
+    qDebug() << "Settings clicked";
     //stop timer while settings dialog is open
     autosave_timer->stop();
 
@@ -810,6 +813,5 @@ void CodeMonitorWindow::delete_file_slot() {
 }
 
 void CodeMonitorWindow::autosave_slot() {
-    qDebug() << "saved";
     this->save();
 }
