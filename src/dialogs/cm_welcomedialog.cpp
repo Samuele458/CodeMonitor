@@ -58,6 +58,9 @@ CM_WelcomeDialog::CM_WelcomeDialog( QWidget* parent, QString settings_filename_s
     this->apply_settings();
     this->apply_slots();
 
+    MonitorWidget->setCurrentItem(MonitorWidget->item(0));
+
+
 
 
 

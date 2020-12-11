@@ -302,6 +302,8 @@ class Monitor : public QObject {
         //assignment operator
         Monitor& operator=( const Monitor& other );
 
+        //checks if every file format is supported or not.
+        void checkFilesFormat();
 
         //getter  setter methods
         QString getMonitorName() const;

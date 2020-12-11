@@ -241,7 +241,7 @@ bool FileData::Examines() {
         if( file.open( QIODevice::ReadOnly ) ) {
             ProgrammingLanguage prog_lang( FilesUtilities::getProgLangName( FilesUtilities::getFileExtension( filename ) ) );
             prog_lang.load();
-
+            qDebug() << FilesUtilities::getProgLangName( FilesUtilities::getFileExtension( filename ) );
             while( !file.atEnd() ) {
                 QString current_line = file.readLine();
                 int sl_index = current_line.indexOf( prog_lang.getSingleLine() );
@@ -738,6 +738,40 @@ Monitor& Monitor::operator=( const Monitor& other ) {
     return *this;
 }
 
+void Monitor::checkFilesFormat() {
+
+    QStringList extensions;
+    QStringList unknown_extensions;
+
+    for( int i = 0; i < current_files.size(); ++i ) {
+        QString current_extension;
+
+        current_extension = FilesUtilities::getFileExtension( current_files.at(i) );
+
+        if( extensions.indexOf( current_extension ) == -1 ) {
+            extensions.append( current_extension );
+        }
+    }
+
+    for( int i = 0; i < extensions.size(); ++i ) {
+        if( FilesUtilities::getProgLangName( extensions.at(i) ) == "" ) {
+            unknown_extensions.append( extensions.at(i) );
+        }
+    }
+
+    if( unknown_extensions.size() > 0 ) {
+        QString error_msg;
+
+        error_msg = "Unknown file formats: \n";
+        for( int i = 0; i < unknown_extensions.size(); ++i ) {
+            error_msg += unknown_extensions.at(i) + ", ";
+        }
+        error_msg = error_msg.mid( 0, error_msg.size() - 2 );
+        error_msg += ". Edit Settings to allow Code Monitor to handle these files.";
+        qDebug() << error_msg;
+    }
+}
+
 //getter  setter methods
 QString Monitor::getMonitorName() const {
     return name;
@@ -821,6 +855,7 @@ bool Monitor::load() {
         }
         //SELECT  FROM monitor_data
 
+        checkFilesFormat();
 
         return true;
     } else {
