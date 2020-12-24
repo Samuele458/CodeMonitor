@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    common/error.cpp \
     common/filesutility.cpp \
     common/managers.cpp \
     common/textsanitizer.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
     widgets/widgets_utilities.cpp
 
 HEADERS += \
+    common/error.h \
     common/filesutility.h \
     common/managers.h \
     common/textsanitizer.h \

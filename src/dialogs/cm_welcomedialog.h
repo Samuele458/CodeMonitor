@@ -45,6 +45,7 @@
 #include "dialogs/general_settings.h"
 
 #include "common/filesutility.h"
+#include "common/error.h"
 
 
 class CM_WelcomeDialog : public GeneralWindow {

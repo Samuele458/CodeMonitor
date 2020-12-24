@@ -40,6 +40,7 @@
 #include "common/filesutility.h"
 #include "common/textsanitizer.h"
 #include "common/managers.h"
+#include "common/error.h"
 
 
 /*  Class:          Comment

@@ -743,6 +743,7 @@ void Monitor::checkFilesFormat() {
     QStringList extensions;
     QStringList unknown_extensions;
 
+    //reading current file extensions
     for( int i = 0; i < current_files.size(); ++i ) {
         QString current_extension;
 
@@ -753,6 +754,7 @@ void Monitor::checkFilesFormat() {
         }
     }
 
+    //check if exists some programming language with current extensions or not
     for( int i = 0; i < extensions.size(); ++i ) {
         if( FilesUtilities::getProgLangName( extensions.at(i) ) == "" ) {
             unknown_extensions.append( extensions.at(i) );
@@ -768,7 +770,9 @@ void Monitor::checkFilesFormat() {
         }
         error_msg = error_msg.mid( 0, error_msg.size() - 2 );
         error_msg += ". Edit Settings to allow Code Monitor to handle these files.";
-        qDebug() << error_msg;
+
+        //Error: unknown formats
+        throw Error( Error::ERROR_CODE::UNKNOWN_ESTENSIONS, error_msg );
     }
 }
 
