@@ -764,12 +764,12 @@ void Monitor::checkFilesFormat() {
     if( unknown_extensions.size() > 0 ) {
         QString error_msg;
 
-        error_msg = "Unknown file formats: \n";
+        error_msg = "Unknown file formats: <ul><b>";
         for( int i = 0; i < unknown_extensions.size(); ++i ) {
-            error_msg += unknown_extensions.at(i) + ", ";
+            error_msg += "<li>."+unknown_extensions.at(i) + "</li>";
         }
         error_msg = error_msg.mid( 0, error_msg.size() - 2 );
-        error_msg += ". Edit Settings to allow Code Monitor to handle these files.";
+        error_msg += "</b></ul><br>\nEdit <b>Settings</b> to allow Code Monitor to handle these files.";
 
         //Error: unknown formats
         throw Error( Error::ERROR_CODE::UNKNOWN_ESTENSIONS, error_msg );

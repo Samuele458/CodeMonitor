@@ -279,8 +279,9 @@ void CM_WelcomeDialog::OpenMonitorButtonClicked() {
             CodeMonitorWindow* cm_window = new CodeMonitorWindow( MonitorWidget->selectedItems().at(0)->text() );
             cm_window->show();
             this->close();
-        }  catch ( Error ) {
-            qDebug() << "Errorrr";
+        }  catch ( Error error ) {
+            QMessageBox::critical( this, (tr("Error code: ") + error.getCode() ), error.getMessage() );
+
         }
 
     } else {
