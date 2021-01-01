@@ -39,6 +39,7 @@
 #include <QSettings>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QStringList>
 
 
 #include "dialogs/dialogs.h"
@@ -49,6 +50,7 @@ class GeneralSettingsDialog : public GeneralDialog {
 
     public:
         GeneralSettingsDialog( QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
+        GeneralSettingsDialog( QStringList openedFiles, QWidget* parent = nullptr, QString settings_filename_str = "config.ini" );
         ~GeneralSettingsDialog();
 
 
@@ -81,6 +83,8 @@ class GeneralSettingsDialog : public GeneralDialog {
         void setup_lang_table();
 
         bool saved;
+
+        QStringList& openedFiles;
 
         //widgets
         QVBoxLayout* MainLayout;

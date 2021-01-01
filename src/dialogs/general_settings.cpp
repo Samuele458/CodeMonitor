@@ -22,6 +22,10 @@
 
 
 GeneralSettingsDialog::GeneralSettingsDialog( QWidget* parent , QString settings_filename_str ) :
+    GeneralSettingsDialog( QStringList(), parent, settings_filename_str )
+{ }
+
+GeneralSettingsDialog::GeneralSettingsDialog( QStringList openedFiles, QWidget* parent , QString settings_filename_str ) :
     GeneralDialog( parent, settings_filename_str )
 {
 
