@@ -9,6 +9,7 @@
 ![enter image description here](https://raw.githubusercontent.com/Samuele458/CodeMonitor/master/img/screen_001.png)
 
 
+
 ## Download
 
 Click [here](https://github.com/Samuele458/CodeMonitor/releases) to get the latest release (Code Monitor v1.0)
