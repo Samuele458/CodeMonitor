@@ -296,7 +296,7 @@ void CodeMonitorWindow::add_file_button_clicked() {
 void CodeMonitorWindow::settings_button_clicked() {
     qDebug() << "Button settings";
 
-    GeneralSettingsDialog* settings_dialog = new GeneralSettingsDialog( this );
+    GeneralSettingsDialog* settings_dialog = new GeneralSettingsDialog( monitor.getCurrentFilespath() ,this );
     settings_dialog->exec();
 
     delete settings_dialog;
@@ -728,7 +728,7 @@ void CodeMonitorWindow::remove_file_slot() {
 }
 
 void CodeMonitorWindow::general_settings_slot() {
-    GeneralSettingsDialog* settings_dialog = new GeneralSettingsDialog( this );
+    GeneralSettingsDialog* settings_dialog = new GeneralSettingsDialog( monitor.getCurrentFilespath(), this );
     settings_dialog->exec();
 
     delete settings_dialog;
@@ -736,7 +736,6 @@ void CodeMonitorWindow::general_settings_slot() {
 
 void CodeMonitorWindow::monitor_settings_slot() {
 
-    qDebug() << "Settings clicked";
     //stop timer while settings dialog is open
     autosave_timer->stop();
 

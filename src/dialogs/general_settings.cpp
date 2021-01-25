@@ -25,8 +25,8 @@ GeneralSettingsDialog::GeneralSettingsDialog( QWidget* parent , QString settings
     GeneralSettingsDialog( QStringList(), parent, settings_filename_str )
 { }
 
-GeneralSettingsDialog::GeneralSettingsDialog( QStringList openedFiles, QWidget* parent , QString settings_filename_str ) :
-    GeneralDialog( parent, settings_filename_str )
+GeneralSettingsDialog::GeneralSettingsDialog( QStringList openedFiless, QWidget* parent , QString settings_filename_str ) :
+    GeneralDialog( parent, settings_filename_str ), openedFiles( openedFiless )
 {
 
     this->resize( 750, 580 );
@@ -36,9 +36,15 @@ GeneralSettingsDialog::GeneralSettingsDialog( QStringList openedFiles, QWidget* 
     apply_settings();
     apply_slots();
 
+
     load();
 
     saved = false;
+
+    qDebug() << openedFiles;
+    for( int i = 0; i < openedFiles.size(); ++i ) {
+        qDebug() << openedFiles[i];
+    }
 
 }
 

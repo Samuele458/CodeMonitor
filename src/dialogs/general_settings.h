@@ -84,7 +84,7 @@ class GeneralSettingsDialog : public GeneralDialog {
 
         bool saved;
 
-        QStringList& openedFiles;
+        QStringList openedFiles;
 
         //widgets
         QVBoxLayout* MainLayout;
