@@ -329,6 +329,28 @@ void GeneralSettingsDialog::remove_lang_button_clicked() {
     if( LangTable->selectedItems().size() == 0 ) {
         QMessageBox::critical( this, tr("Error"), tr("Select a language!") );
     } else {
+        //get all extensions of selected langauge
+        QStringList selectedExtensions = LangTable->selectedItems().at(3)->text().split(" ");
+
+        QString ext;
+        QStringList openedFilesExtensions;
+
+        //get all extensions of opened files
+        for( int i = 0; i < openedFiles.size(); ++i ) {
+            QString current_extension;
+
+            current_extension = FilesUtilities::getFileExtension( openedFiles.at(i) );
+
+            if( openedFilesExtensions.indexOf( current_extension ) == -1 ) {
+                openedFilesExtensions.append( current_extension );
+            }
+        }
+
+        //check all selected extensions
+        foreach( ext, selectedExtensions ) {
+
+        }
+
         QString languageName = LangTable->selectedItems().at(0)->text();
         int index = -1;
 
