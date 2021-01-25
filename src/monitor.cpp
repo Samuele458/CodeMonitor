@@ -761,6 +761,7 @@ void Monitor::checkFilesFormat() {
         }
     }
 
+    //if there are unknown extensions
     if( unknown_extensions.size() > 0 ) {
         QString error_msg;
 

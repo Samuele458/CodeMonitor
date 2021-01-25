@@ -346,22 +346,30 @@ void GeneralSettingsDialog::remove_lang_button_clicked() {
             }
         }
 
-        //check all selected extensions
+        //check that extensions to remove are not opened (
+        bool extOpened = false;
         foreach( ext, selectedExtensions ) {
-
-        }
-
-        QString languageName = LangTable->selectedItems().at(0)->text();
-        int index = -1;
-
-        for ( int i = 0; i < LangTable->rowCount(); ++i ) {
-            if( LangTable->item( i, 0 )->text() == languageName ) {
-                index = i;
+            if( openedFilesExtensions.indexOf( ext ) != -1 ) {
+                extOpened = true;
             }
         }
 
-        if( index != -1 ) {
-            LangTable->removeRow( index );
+        if( extOpened ) {
+            QMessageBox::critical( this, tr("Error"), "Couldn't delete <b>" + LangTable->selectedItems().at(0)->text() + "</b>. Close the monitor before deleting it." );
+        } else {
+
+            QString languageName = LangTable->selectedItems().at(0)->text();
+            int index = -1;
+
+            for ( int i = 0; i < LangTable->rowCount(); ++i ) {
+                if( LangTable->item( i, 0 )->text() == languageName ) {
+                    index = i;
+                }
+            }
+
+            if( index != -1 ) {
+                LangTable->removeRow( index );
+            }
         }
     }
 }
@@ -370,66 +378,96 @@ void GeneralSettingsDialog::edit_lang_button_clicked() {
     if( LangTable->selectedItems().size() == 0 ) {
         QMessageBox::critical( this, tr("Error"), tr("Select a language!") );
     } else {
-        QString languageName = LangTable->selectedItems().at(0)->text();
-        int index = -1;
+        //get all extensions of selected langauge
+        QStringList selectedExtensions = LangTable->selectedItems().at(3)->text().split(" ");
 
-        for ( int i = 0; i < LangTable->rowCount(); ++i ) {
-            if( LangTable->item( i, 0 )->text() == languageName ) {
-                index = i;
+        QString ext;
+        QStringList openedFilesExtensions;
+
+        //get all extensions of opened files
+        for( int i = 0; i < openedFiles.size(); ++i ) {
+            QString current_extension;
+
+            current_extension = FilesUtilities::getFileExtension( openedFiles.at(i) );
+
+            if( openedFilesExtensions.indexOf( current_extension ) == -1 ) {
+                openedFilesExtensions.append( current_extension );
             }
         }
 
-        if( index != -1 ) {
+        //check that extensions to remove are not opened (
+        bool extOpened = false;
+        foreach( ext, selectedExtensions ) {
+            if( openedFilesExtensions.indexOf( ext ) != -1 ) {
+                extOpened = true;
+            }
+        }
 
-            ProgrammingLanguage lang;
+        if( extOpened ) {
+            QMessageBox::critical( this, tr("Error"), "Couldn't edit <b>" + LangTable->selectedItems().at(0)->text() + "</b>. Close the monitor before editing it." );
+        } else {
 
-            lang.setName( LangTable->item( index, 0 )->text() );
-            lang.setSingleLine( LangTable->item( index, 1 )->text() );
-            lang.setMultiLineEnd( LangTable->item( index, 2 )->text().split( " " ).at(1) );
-            lang.setMultiLineStart( LangTable->item( index, 2 )->text().split( " " ).at(0) );
-            lang.setExtensions( LangTable->item( index, 3 )->text().split( " " ) );
+            QString languageName = LangTable->selectedItems().at(0)->text();
+            int index = -1;
 
-            LanguageDialog* language_dialog = new LanguageDialog( tr("Edit language"), lang );
-
-            language_dialog->exec();
-
-            //check if form was confirmed or not
-            if( language_dialog->wasFormConfirmed() ) {
-                //form confirmed, so new prog lang must be added
-
-                lang = language_dialog->getLanguage();
-
-                //check if a language with the same name is present
-                bool langIsPresent = false;
-                for( int i = 0; i < LangTable->rowCount(); ++i ) {
-                    if( LangTable->item(i,0)->text() == lang.getName() && i != index ) {
-                        langIsPresent = true;
-                    }
+            for ( int i = 0; i < LangTable->rowCount(); ++i ) {
+                if( LangTable->item( i, 0 )->text() == languageName ) {
+                    index = i;
                 }
+            }
 
-                if( langIsPresent) {
-                    //a language with the same name is already present
-                    QMessageBox::critical( this,
-                                           tr("Error"),
-                                           tr("Language %1 is already present!").arg( "\"" + lang.getName() + "\"") );
+            if( index != -1 ) {
 
+                ProgrammingLanguage lang;
 
-                } else {
-                    //new language is unique, so it can be modified
-                    LangTable->setItem( index, 0, new QTableWidgetItem(lang.getName()) );
-                    LangTable->setItem( index, 1, new QTableWidgetItem(lang.getSingleLine() ) );
-                    LangTable->setItem( index, 2, new QTableWidgetItem( lang.getMultiLineStart() +
-                                                                        " " +
-                                                                        lang.getMultiLineEnd() ) );
+                lang.setName( LangTable->item( index, 0 )->text() );
+                lang.setSingleLine( LangTable->item( index, 1 )->text() );
+                lang.setMultiLineEnd( LangTable->item( index, 2 )->text().split( " " ).at(1) );
+                lang.setMultiLineStart( LangTable->item( index, 2 )->text().split( " " ).at(0) );
+                lang.setExtensions( LangTable->item( index, 3 )->text().split( " " ) );
 
+                LanguageDialog* language_dialog = new LanguageDialog( tr("Edit language"), lang );
 
-                    QString extensions_list_str = "";
+                language_dialog->exec();
 
-                    foreach( QString ext, lang.getExtensions() ) {
-                        extensions_list_str += ext + " ";
+                //check if form was confirmed or not
+                if( language_dialog->wasFormConfirmed() ) {
+                    //form confirmed, so new prog lang must be added
+
+                    lang = language_dialog->getLanguage();
+
+                    //check if a language with the same name is present
+                    bool langIsPresent = false;
+                    for( int i = 0; i < LangTable->rowCount(); ++i ) {
+                        if( LangTable->item(i,0)->text() == lang.getName() && i != index ) {
+                            langIsPresent = true;
+                        }
                     }
-                    LangTable->setItem( index, 3, new QTableWidgetItem( extensions_list_str ) );
 
+                    if( langIsPresent) {
+                        //a language with the same name is already present
+                        QMessageBox::critical( this,
+                                               tr("Error"),
+                                               tr("Language %1 is already present!").arg( "\"" + lang.getName() + "\"") );
+
+
+                    } else {
+                        //new language is unique, so it can be modified
+                        LangTable->setItem( index, 0, new QTableWidgetItem(lang.getName()) );
+                        LangTable->setItem( index, 1, new QTableWidgetItem(lang.getSingleLine() ) );
+                        LangTable->setItem( index, 2, new QTableWidgetItem( lang.getMultiLineStart() +
+                                                                            " " +
+                                                                            lang.getMultiLineEnd() ) );
+
+
+                        QString extensions_list_str = "";
+
+                        foreach( QString ext, lang.getExtensions() ) {
+                            extensions_list_str += ext + " ";
+                        }
+                        LangTable->setItem( index, 3, new QTableWidgetItem( extensions_list_str ) );
+
+                    }
                 }
             }
         }
