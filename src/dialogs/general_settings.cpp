@@ -203,7 +203,6 @@ void GeneralSettingsDialog::save() {
     QFile langs_file( QDir::currentPath() + "/programming_languages.ini" );
     langs_file.resize(0);
 
-
     //rewrite all data to programming langauges file
     QSettings prog_langs( QDir::currentPath() + "/programming_languages.ini", QSettings::IniFormat );
 
@@ -214,11 +213,10 @@ void GeneralSettingsDialog::save() {
         prog_langs.setValue( "multi_line_comment_start", LangTable->item(i,2)->text().split(" ").at(0) );
         prog_langs.setValue( "multi_line_comment_end", LangTable->item(i,2)->text().split(" ").at(1) );
         prog_langs.setValue( "files_extensions", LangTable->item(i,3)->text() );
+        qDebug() << LangTable->item(i,3)->text();
 
         prog_langs.endGroup();
     }
-
-
 
 }
 
@@ -465,6 +463,14 @@ void GeneralSettingsDialog::edit_lang_button_clicked() {
                         foreach( QString ext, lang.getExtensions() ) {
                             extensions_list_str += ext + " ";
                         }
+
+                        //removing last white space
+                        if( extensions_list_str != "" &&
+                            extensions_list_str.at(extensions_list_str.size()-1 ) == " " )
+                        {
+                            extensions_list_str = extensions_list_str.mid(0,extensions_list_str.size()-1);
+                        }
+
                         LangTable->setItem( index, 3, new QTableWidgetItem( extensions_list_str ) );
 
                     }

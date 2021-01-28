@@ -134,6 +134,7 @@ bool ProgrammingLanguage::load() {
         multi_line_start = prog_langs.value( "multi_line_comment_start" ).toString();
         multi_line_end = prog_langs.value( "multi_line_comment_end" ).toString();
         extentions = prog_langs.value( "files_extensions" ).toString().split( " " );
+        qDebug() << extentions;
         prog_langs.endGroup();
         return true;
     } else {
