@@ -47,7 +47,6 @@ LanguageDialog::LanguageDialog( QString intro_label_text, ProgrammingLanguage pr
     LangMlcEndLine->setText( prog_lang.getMultiLineEnd() );
 
     foreach( QString ext, prog_lang.getExtensions() ) {
-        qDebug() << "ext: " << prog_lang.getExtensions();
         ExtensionsList->insertItem( ExtensionsList->count(), ext );
     }
 
@@ -188,7 +187,6 @@ void LanguageDialog::confirm_button_clicked() {
         extensions.push_back( ExtensionsList->item( i )->text() );
     }
 
-    qDebug() << "language_dialog saved:" << extensions;
     new_programming_langauge.setExtensions( extensions );
 
     form_confirmed = true;

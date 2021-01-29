@@ -41,11 +41,6 @@ GeneralSettingsDialog::GeneralSettingsDialog( QStringList openedFiless, QWidget*
 
     saved = false;
 
-    qDebug() << openedFiles;
-    for( int i = 0; i < openedFiles.size(); ++i ) {
-        qDebug() << openedFiles[i];
-    }
-
 }
 
 GeneralSettingsDialog::~GeneralSettingsDialog() {
@@ -213,7 +208,6 @@ void GeneralSettingsDialog::save() {
         prog_langs.setValue( "multi_line_comment_start", LangTable->item(i,2)->text().split(" ").at(0) );
         prog_langs.setValue( "multi_line_comment_end", LangTable->item(i,2)->text().split(" ").at(1) );
         prog_langs.setValue( "files_extensions", LangTable->item(i,3)->text() );
-        qDebug() << LangTable->item(i,3)->text();
 
         prog_langs.endGroup();
     }

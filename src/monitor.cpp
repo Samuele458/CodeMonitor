@@ -134,7 +134,6 @@ bool ProgrammingLanguage::load() {
         multi_line_start = prog_langs.value( "multi_line_comment_start" ).toString();
         multi_line_end = prog_langs.value( "multi_line_comment_end" ).toString();
         extentions = prog_langs.value( "files_extensions" ).toString().split( " " );
-        qDebug() << extentions;
         prog_langs.endGroup();
         return true;
     } else {
@@ -242,7 +241,6 @@ bool FileData::Examines() {
         if( file.open( QIODevice::ReadOnly ) ) {
             ProgrammingLanguage prog_lang( FilesUtilities::getProgLangName( FilesUtilities::getFileExtension( filename ) ) );
             prog_lang.load();
-            qDebug() << FilesUtilities::getProgLangName( FilesUtilities::getFileExtension( filename ) );
             while( !file.atEnd() ) {
                 QString current_line = file.readLine();
                 int sl_index = current_line.indexOf( prog_lang.getSingleLine() );
@@ -288,6 +286,8 @@ bool FileData::Examines() {
             }
         }
         file_examined = true;
+
+        size = file.size();
     } else {
         file_examined = false;
     }
@@ -303,6 +303,7 @@ bool FileData::Examines() {
 //  -File isn't a text file
 bool FileData::wasFileExamined() {
     return file_examined;
+
 }
 
 //evaluate programming language name

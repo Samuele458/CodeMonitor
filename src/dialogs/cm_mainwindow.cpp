@@ -294,7 +294,6 @@ void CodeMonitorWindow::add_file_button_clicked() {
 }
 
 void CodeMonitorWindow::settings_button_clicked() {
-    qDebug() << "Button settings";
 
     GeneralSettingsDialog* settings_dialog = new GeneralSettingsDialog( monitor.getCurrentFilespath() ,this );
     settings_dialog->exec();
@@ -303,7 +302,6 @@ void CodeMonitorWindow::settings_button_clicked() {
 }
 
 void CodeMonitorWindow::add_folder_button_clicked() {
-    qDebug() << "add folder button clicked";
 
     //file dialog to choose one or more files
     QFileDialog dialog( this );
