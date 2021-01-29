@@ -443,6 +443,9 @@ void CodeMonitorWindow::refresh_monitor_table() {
             size += current_file.getSize();
         }
 
+        //size from bytes to KB
+        size /= 1024;
+
         MonitorTable->insertRow( MonitorTable->rowCount() );
 
         MonitorTable->setItem( MonitorTable->rowCount() - 1,
