@@ -15,5 +15,6 @@
         <file>img/icons/add_folder.png</file>
         <file>img/icons/monitor_now.png</file>
         <file>img/icons/monitor_settings.png</file>
+        <file>img/icons/applogo.ico</file>
     </qresource>
 </RCC>
