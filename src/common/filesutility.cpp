@@ -51,9 +51,19 @@ QString FilesUtilities::getProgLangName( QString extension ) {
 void FilesUtilities::dirCheck( QString dir ) {
 
     QDir dir_obj( dir );
-
+    qDebug() << dir;
     if( !dir_obj.exists() ) {
-        dir_obj.mkdir( "." );
+
+#ifdef __linux__
+    dir_obj.mkpath( "." );
+#elif _WIN32
+    dir_obj.mkdir( "." );
+#else
+    //OS != WIN, LINUX.
+    //Not tested
+    dir_obj.mkpath( "." );
+#endif
+
     }
 }
 
