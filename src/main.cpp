@@ -30,8 +30,6 @@
 #include "common/filesutility.h"
 
 
-
-
 // main function
 int main(int argc, char *argv[])
 {
