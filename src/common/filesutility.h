@@ -25,6 +25,7 @@
 #include <QSettings>
 #include <QFile>
 #include <QDir>
+#include <QDebug>
 
 class FilesUtilities {
 public:
